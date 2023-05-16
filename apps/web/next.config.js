@@ -16,6 +16,7 @@ const nextConfig = {
   experimental: {
     appDir: true,
     serverActions: true,
+    serverComponentsExternalPackages: ["mysql2"],
   },
 };
 

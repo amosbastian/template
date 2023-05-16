@@ -5,7 +5,27 @@
     {
       "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
       "rules": {
-        "@next/next/no-html-link-for-pages": ["error", "apps/web/pages"]
+        "@nx/enforce-module-boundaries": [
+          "error",
+          {
+            "enforceBuildableLibDependency": true,
+            "allow": [],
+            "depConstraints": [
+              {
+                "sourceTag": "type:application",
+                "onlyDependOnLibsWithTags": ["type:feature", "type:utility"]
+              },
+              {
+                "sourceTag": "type:feature",
+                "onlyDependOnLibsWithTags": ["type:feature", "type:utility"]
+              },
+              {
+                "sourceTag": "type:utility",
+                "onlyDependOnLibsWithTags": ["type:utility"]
+              }
+            ]
+          }
+        ]
       }
     },
     {
