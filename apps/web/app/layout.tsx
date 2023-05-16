@@ -1,4 +1,4 @@
-import { BASE_URL, BRAND_DESCRIPTION, BRAND_NAME } from "@template/config";
+import { BASE_URL, BRAND_DESCRIPTION, BRAND_NAME } from "@template/configuration";
 import { ThemeProvider } from "@template/ui";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
