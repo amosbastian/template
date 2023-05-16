@@ -1,14 +1,14 @@
 {
-  "name": "config",
+  "name": "authentication",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/config/src",
+  "sourceRoot": "libs/authentication/src",
   "projectType": "library",
   "targets": {
     "lint": {
       "executor": "@nx/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["libs/config/**/*.ts"]
+        "lintFilePatterns": ["libs/authentication/**/*.ts"]
       }
     }
   },

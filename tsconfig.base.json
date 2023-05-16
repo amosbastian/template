@@ -15,9 +15,11 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@template/auth": ["libs/auth/src/index.ts"],
-      "@template/config": ["libs/config/src/index.ts"],
+      "@template/authentication": ["libs/authentication/src/index.ts"],
+      "@template/configuration": ["libs/configuration/src/index.ts"],
       "@template/db": ["libs/db/src/index.ts"],
+      "@template/feature/authentication": ["libs/feature/authentication/src/index.ts"],
+      "@template/feature/authentication/server": ["libs/feature/authentication/src/server.ts"],
       "@template/ui": ["libs/ui/src/index.ts"],
       "@template/ui/web/server": ["libs/ui/web/src/server.ts"]
     }

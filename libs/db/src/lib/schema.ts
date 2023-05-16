@@ -1,10 +1,17 @@
-import { mysqlTable, bigint, varchar, boolean } from "drizzle-orm/mysql-core";
+import { bigint, boolean, mysqlTable, uniqueIndex, varchar } from "drizzle-orm/mysql-core";
 
-export const user = mysqlTable("user", {
-  id: varchar("id", {
-    length: 15,
-  }).primaryKey(),
-});
+export const user = mysqlTable(
+  "user",
+  {
+    id: varchar("id", {
+      length: 15,
+    }).primaryKey(),
+    email: varchar("email", { length: 256 }),
+  },
+  (users) => ({
+    emailIndex: uniqueIndex("email_idx").on(users.email),
+  }),
+);
 
 export const session = mysqlTable("authentication_session", {
   id: varchar("id", {
