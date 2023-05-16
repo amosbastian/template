@@ -13,7 +13,7 @@ import * as mysql from "mysql2/promise";
 // export const db = drizzle(connection);
 
 // Local
-const poolConnection = mysql.createPool({
+export const poolConnection = mysql.createPool({
   host: "localhost",
   user: "root",
   database: "template",

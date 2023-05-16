@@ -15,8 +15,13 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@template/db": ["libs/db/src/index.ts"]
+      "@template/auth": ["libs/auth/src/index.ts"],
+      "@template/config": ["libs/config/src/index.ts"],
+      "@template/db": ["libs/db/src/index.ts"],
+      "@template/ui": ["libs/ui/src/index.ts"],
+      "@template/ui/web/server": ["libs/ui/web/src/server.ts"]
     }
   },
+  "include": ["types/lucia.d.ts"],
   "exclude": ["node_modules", "tmp"]
 }
