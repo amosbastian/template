@@ -1,6 +1,5 @@
 import { BASE_URL, BRAND_DESCRIPTION, BRAND_NAME } from "@template/configuration";
 import { ThemeProvider } from "@template/ui";
-import { Header } from "@template/ui/server";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./styles.css";
@@ -19,14 +18,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html
       lang="en"
       suppressHydrationWarning
-      className={`flex h-full min-h-screen flex-col antialiased bg-background ${inter.className}`}
+      className={`bg-background flex h-full min-h-screen flex-col antialiased ${inter.className}`}
     >
       <body className="h-full">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <div className="relative flex h-full flex-col">
-            <Header />
-            <main className="mx-auto flex h-full max-w-2xl flex-col gap-4 pb-4 pt-16">{children}</main>
-          </div>
+          {children}
         </ThemeProvider>
       </body>
     </html>
