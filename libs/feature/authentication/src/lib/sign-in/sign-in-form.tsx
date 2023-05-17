@@ -2,21 +2,21 @@ import { Button, CardContent, Input, Label } from "@template/ui";
 import { classnames } from "@template/utility";
 import { z } from "zod";
 import { zfd } from "zod-form-data";
-import { signUp } from "./action";
+import { signIn } from "./action";
 
-export const signUpSchema = zfd.formData({
+export const signInSchema = zfd.formData({
   email: zfd.text(z.string().email().min(5)),
   password: zfd.text(z.string().min(1)),
 });
 
-export interface SignUpFormProps {
+export interface SignInFormProps {
   className?: string;
 }
 
-export function SignUpForm({ className }: SignUpFormProps) {
+export function SignInForm({ className }: SignInFormProps) {
   return (
     <CardContent className={classnames("pt-6", className)}>
-      <form className="space-y-6" action={signUp}>
+      <form className="space-y-6" action={signIn}>
         <div>
           <Label htmlFor="email">Email address</Label>
           <Input className="mt-2" id="email" name="email" type="email" autoComplete="email" required />
@@ -35,7 +35,7 @@ export function SignUpForm({ className }: SignUpFormProps) {
         </div>
 
         <Button className="w-full" type="submit">
-          Sign up
+          Sign in
         </Button>
       </form>
 
@@ -79,4 +79,4 @@ export function SignUpForm({ className }: SignUpFormProps) {
   );
 }
 
-export default SignUpForm;
+export default SignInForm;
