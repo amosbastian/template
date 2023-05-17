@@ -4,7 +4,7 @@ import { zfd } from "zod-form-data";
 import { z } from "zod";
 
 export const signUpSchema = zfd.formData({
-  username: zfd.text(z.string().min(1)),
+  email: zfd.text(z.string().email().min(5)),
   password: zfd.text(z.string().min(1)),
 });
 
@@ -16,9 +16,9 @@ export function SignUpForm(props: SignUpFormProps) {
     <div>
       <h1>Create an account</h1>
       <form action={signUp}>
-        <label htmlFor="username">username</label>
+        <label htmlFor="email">email</label>
         <br />
-        <input id="username" name="username" />
+        <input id="email" type="email" name="email" />
         <br />
         <label htmlFor="password">password</label>
         <br />

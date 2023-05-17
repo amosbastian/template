@@ -1,5 +1,6 @@
 {
   "schema": "./libs/db/src/lib/schema.ts",
   "out": "./libs/db/src/lib/drizzle",
-  "breakpoints": true
+  "breakpoints": true,
+  "connectionString": "mysql://root@127.0.0.1:3306/template"
 }

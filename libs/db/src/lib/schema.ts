@@ -1,7 +1,7 @@
 import { bigint, boolean, mysqlTable, uniqueIndex, varchar } from "drizzle-orm/mysql-core";
 
 export const user = mysqlTable(
-  "user",
+  "auth_user",
   {
     id: varchar("id", {
       length: 15,
@@ -13,7 +13,7 @@ export const user = mysqlTable(
   }),
 );
 
-export const session = mysqlTable("authentication_session", {
+export const session = mysqlTable("auth_session", {
   id: varchar("id", {
     length: 128,
   }).primaryKey(),
@@ -30,7 +30,7 @@ export const session = mysqlTable("authentication_session", {
   }).notNull(),
 });
 
-export const key = mysqlTable("uthentication_key", {
+export const key = mysqlTable("auth_key", {
   id: varchar("id", {
     length: 255,
   }).primaryKey(),

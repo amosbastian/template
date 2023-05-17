@@ -21,7 +21,7 @@
       "@template/feature/authentication": ["libs/feature/authentication/src/index.ts"],
       "@template/feature/authentication/server": ["libs/feature/authentication/src/server.ts"],
       "@template/ui": ["libs/ui/src/index.ts"],
-      "@template/ui/web/server": ["libs/ui/web/src/server.ts"],
+      "@template/ui/server": ["libs/ui/src/server.ts"],
       "@template/utility": ["libs/utility/src/index.ts"]
     }
   },

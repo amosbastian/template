@@ -14,9 +14,10 @@ import * as mysql from "mysql2/promise";
 
 // Local
 export const poolConnection = mysql.createPool({
-  host: "localhost",
+  host: "127.0.0.1",
   user: "root",
   database: "template",
+  port: 3306,
 });
 
 export const db = drizzle(poolConnection);
