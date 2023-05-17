@@ -10,7 +10,15 @@ const inter = Inter({
   display: "swap",
 });
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+  signInModal,
+  signUpModal,
+}: {
+  children: React.ReactNode;
+  signInModal: React.ReactNode;
+  signUpModal: React.ReactNode;
+}) {
   return (
     // Note! If you do not add suppressHydrationWarning to your <html> you will get warnings
     // because next-themes updates that element. This property only applies one level deep,
@@ -23,6 +31,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="h-full">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           {children}
+          {signInModal}
+          {signUpModal}
         </ThemeProvider>
       </body>
     </html>
