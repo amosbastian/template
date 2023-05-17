@@ -1,8 +1,10 @@
+"use client";
+
 import { Button, CardContent, Input, Label } from "@template/ui";
 import { classnames } from "@template/utility";
+import { useRouter } from "next/navigation";
 import { z } from "zod";
 import { zfd } from "zod-form-data";
-import { signIn } from "./action";
 
 export const signInSchema = zfd.formData({
   email: zfd.text(z.string().email().min(5)),
@@ -14,9 +16,30 @@ export interface SignInFormProps {
 }
 
 export function SignInForm({ className }: SignInFormProps) {
+  const router = useRouter();
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const input = signInSchema.parse(formData);
+    const { email, password } = input;
+
+    const response = await fetch("http://localhost:4200/api/sign-in", {
+      method: "POST",
+      body: JSON.stringify({
+        email,
+        password,
+      }),
+    });
+
+    if (response.redirected) {
+      return router.push(response.url);
+    }
+  };
+
   return (
     <CardContent className={classnames("pt-6", className)}>
-      <form className="space-y-6" action={signIn}>
+      <form className="space-y-6" method="post" onSubmit={handleSubmit}>
         <div>
           <Label htmlFor="email">Email address</Label>
           <Input className="mt-2" id="email" name="email" type="email" autoComplete="email" required />

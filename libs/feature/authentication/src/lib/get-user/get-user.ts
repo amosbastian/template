@@ -1,7 +1,8 @@
+import { authentication } from "@template/authentication";
 import { headers } from "next/headers";
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function createAuthenticationRequest() {
+export async function getUser() {
   const requestHeaders = new Headers();
   requestHeaders.append("origin", headers().get("origin") || "");
   requestHeaders.append("cookie", headers().get("cookie") || "");
@@ -11,5 +12,10 @@ export async function createAuthenticationRequest() {
     headers().get("x-invoke-path") || ""
   }`;
 
-  return new NextRequest(requestUrl, { method: "GET", headers: requestHeaders });
+  const request = new NextRequest(requestUrl, { method: "GET", headers: requestHeaders });
+  const response = NextResponse.next();
+  const authenticationRequest = authentication.handleRequest(request, response.headers);
+  const user = await authenticationRequest.validateUser();
+
+  return user;
 }

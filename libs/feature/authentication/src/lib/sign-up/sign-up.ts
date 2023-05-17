@@ -24,7 +24,7 @@ export async function signUp(request: NextRequest) {
         email,
       },
     });
-    const session = await authentication.createSession(user.id);
+    const session = await authentication.createSession(user.userId);
     authenticationRequest.setSession(session);
     response.headers.set("location", "/");
   } catch (error) {

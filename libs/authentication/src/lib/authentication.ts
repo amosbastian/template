@@ -14,7 +14,7 @@ export const authentication = lucia({
   middleware: web(),
   transformDatabaseUser: (userData) => {
     return {
-      id: userData.id,
+      userId: userData.id,
       email: userData.email,
     };
   },
