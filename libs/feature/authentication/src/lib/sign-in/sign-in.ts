@@ -1,12 +1,6 @@
 import { authentication } from "@template/authentication";
 import { NextRequest, NextResponse } from "next/server";
-import { z } from "zod";
-import { zfd } from "zod-form-data";
-
-export const signInSchema = zfd.formData({
-  email: zfd.text(z.string().email().min(5)),
-  password: zfd.text(z.string().min(1)),
-});
+import { signInSchema } from "./schema";
 
 export async function signIn(request: NextRequest) {
   if (!request.url) {

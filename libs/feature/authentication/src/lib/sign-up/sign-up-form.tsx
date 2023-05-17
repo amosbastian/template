@@ -1,22 +1,42 @@
+"use client";
+
 import { Button, CardContent, Input, Label } from "@template/ui";
 import { classnames } from "@template/utility";
-import { z } from "zod";
-import { zfd } from "zod-form-data";
-import { signUp } from "./action";
-
-export const signUpSchema = zfd.formData({
-  email: zfd.text(z.string().email().min(5)),
-  password: zfd.text(z.string().min(1)),
-});
+import { useRouter } from "next/navigation";
+import * as React from "react";
+import { signUpSchema } from "./schema";
 
 export interface SignUpFormProps {
   className?: string;
 }
 
 export function SignUpForm({ className }: SignUpFormProps) {
+  const router = useRouter();
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const input = signUpSchema.parse(formData);
+    const { email, password } = input;
+
+    const response = await fetch("http://localhost:4200/api/register", {
+      method: "POST",
+      body: JSON.stringify({
+        email,
+        password,
+      }),
+    });
+
+    console.log({ response });
+
+    if (response.redirected) {
+      return router.push(response.url);
+    }
+  };
+
   return (
     <CardContent className={classnames("pt-6", className)}>
-      <form className="space-y-6" action={signUp}>
+      <form className="space-y-6" method="post" onSubmit={handleSubmit}>
         <div>
           <Label htmlFor="email">Email address</Label>
           <Input className="mt-2" id="email" name="email" type="email" autoComplete="email" required />

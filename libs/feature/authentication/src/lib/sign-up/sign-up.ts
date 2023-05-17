@@ -1,9 +1,11 @@
 import { authentication } from "@template/authentication";
 import { NextRequest, NextResponse } from "next/server";
-import { signUpSchema } from "./sign-up-form";
+import { signUpSchema } from "./schema";
 
 export async function signUp(request: NextRequest) {
-  if (!request.url) return new Response("Not found", { status: 404 });
+  if (!request.url) {
+    return new Response("Not found", { status: 404 });
+  }
 
   const redirectUrl = request.nextUrl.clone();
   redirectUrl.pathname = "/";
@@ -13,6 +15,7 @@ export async function signUp(request: NextRequest) {
 
   const response = NextResponse.redirect(redirectUrl, 302);
   const authenticationRequest = authentication.handleRequest(request, response.headers);
+
   try {
     const user = await authentication.createUser({
       primaryKey: {
@@ -24,14 +27,20 @@ export async function signUp(request: NextRequest) {
         email,
       },
     });
+
     const session = await authentication.createSession(user.userId);
+
     authenticationRequest.setSession(session);
     response.headers.set("location", "/");
+
+    return new Response(null, {
+      status: 302,
+      headers: response.headers,
+    });
   } catch (error) {
+    // Email already in use
     console.error(error);
 
     return NextResponse.json({}, { status: 400 });
   }
-
-  return response;
 }

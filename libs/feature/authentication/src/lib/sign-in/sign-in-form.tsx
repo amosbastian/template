@@ -3,13 +3,7 @@
 import { Button, CardContent, Input, Label } from "@template/ui";
 import { classnames } from "@template/utility";
 import { useRouter } from "next/navigation";
-import { z } from "zod";
-import { zfd } from "zod-form-data";
-
-export const signInSchema = zfd.formData({
-  email: zfd.text(z.string().email().min(5)),
-  password: zfd.text(z.string().min(1)),
-});
+import { signInSchema } from "./schema";
 
 export interface SignInFormProps {
   className?: string;

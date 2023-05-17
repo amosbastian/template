@@ -1,4 +1,4 @@
-import { signInSchema } from "./sign-in-form";
+import { signInSchema } from "./schema";
 
 export async function signIn(formData: FormData) {
   "use server";
