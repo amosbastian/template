@@ -1,9 +1,9 @@
+import { classnames } from "@template/utility";
 import { Menu } from "lucide-react";
 import Link from "next/link";
-import { Button } from "../button/button";
+import { Button, buttonVariants } from "../button/button";
 import { Dialog, DialogContent, DialogTrigger } from "../dialog/dialog";
 import { Logo } from "../logo/logo";
-import { SignInButton } from "../sign-in-button/sign-in-button";
 
 export function Header() {
   return (
@@ -23,7 +23,12 @@ export function Header() {
           </Link>
         </div>
         <div className="flex flex-1 items-center justify-end gap-x-6">
-          <SignInButton />
+          <Link href="/sign-in" className={classnames(buttonVariants({ variant: "secondary", size: "sm" }))}>
+            Sign in
+          </Link>
+          <Link href="/sign-up" className={classnames(buttonVariants({ variant: "default", size: "sm" }))}>
+            Sign up
+          </Link>
         </div>
         <div className="flex lg:hidden">
           <Dialog>
@@ -59,7 +64,12 @@ export function Header() {
                     </Link>
                   </div>
                   <div className="py-6">
-                    <SignInButton />
+                    <Link href="/sign-in" className={classnames(buttonVariants({ variant: "secondary", size: "sm" }))}>
+                      Sign in
+                    </Link>
+                    <Link href="/sign-up" className={classnames(buttonVariants({ variant: "default", size: "sm" }))}>
+                      Sign up
+                    </Link>
                   </div>
                 </div>
               </div>
