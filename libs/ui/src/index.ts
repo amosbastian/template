@@ -4,6 +4,7 @@ export * from "./lib/button/button";
 export * from "./lib/card/card";
 export * from "./lib/command/command";
 export * from "./lib/dialog/dialog";
+export * from "./lib/hello-from-client/hello-from-client";
 export * from "./lib/input/input";
 export * from "./lib/intercept-dialog/intercept-dialog";
 export * from "./lib/label/label";
