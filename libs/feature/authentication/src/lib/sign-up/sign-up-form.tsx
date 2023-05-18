@@ -12,9 +12,11 @@ export interface SignUpFormProps {
 
 export function SignUpForm({ className }: SignUpFormProps) {
   const router = useRouter();
+  const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setIsLoading(true);
     const formData = new FormData(event.currentTarget);
     const input = signUpSchema.parse(formData);
     const { email, password } = input;
@@ -28,7 +30,7 @@ export function SignUpForm({ className }: SignUpFormProps) {
     });
 
     console.log({ response });
-
+    setIsLoading(false);
     if (response.redirected) {
       return router.push(response.url);
     }
@@ -54,7 +56,7 @@ export function SignUpForm({ className }: SignUpFormProps) {
           />
         </div>
 
-        <Button className="w-full" type="submit">
+        <Button className="w-full" type="submit" isLoading={isLoading}>
           Sign up
         </Button>
       </form>

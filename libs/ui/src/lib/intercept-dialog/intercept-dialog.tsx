@@ -1,25 +1,27 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Dialog, DialogContent } from "../dialog/dialog";
 
 interface InterceptDialogProps {
   children: React.ReactNode;
+  pathname: string;
 }
 
-export function InterceptDialog({ children }: InterceptDialogProps) {
+export function InterceptDialog({ children, pathname }: InterceptDialogProps) {
   const router = useRouter();
+  const currentPathname = usePathname();
 
   return (
     <Dialog
-      open
+      open={currentPathname === pathname}
       onOpenChange={(open) => {
         if (!open) {
           router.back();
         }
       }}
     >
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[420px]">
         <div className="grid gap-4">{children}</div>
       </DialogContent>
     </Dialog>

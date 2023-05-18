@@ -3,7 +3,7 @@ import { InterceptDialog } from "@template/ui";
 
 export default async function Page() {
   return (
-    <InterceptDialog>
+    <InterceptDialog pathname="/sign-in">
       <SignInForm className="p-0" />
     </InterceptDialog>
   );
