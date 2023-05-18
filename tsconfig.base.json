@@ -22,7 +22,12 @@
       "@template/feature/authentication/server": ["libs/feature/authentication/src/server.ts"],
       "@template/ui": ["libs/ui/src/index.ts"],
       "@template/ui/server": ["libs/ui/src/server.ts"],
-      "@template/utility/shared": ["libs/utility/shared/src/index.ts"]
+      "@template/utility/shared": ["libs/utility/shared/src/index.ts"],
+      "@template/utility/trpc": ["libs/utility/trpc/src/index.ts"],
+      "@template/utility/trpc-next-client": ["libs/utility/trpc-next-client/src/index.ts"],
+      "@template/utility/trpc-next-client/server": ["libs/utility/trpc-next-client/src/server.ts"],
+      "@template/utility/trpc-next-server": ["libs/utility/trpc-next-server/src/index.ts"],
+      "@template/utility/trpc-next-server/server": ["libs/utility/trpc-next-server/src/server.ts"]
     }
   },
   "include": ["types/lucia.d.ts"],

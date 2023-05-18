@@ -1,0 +1,16 @@
+{
+  "name": "utility-trpc-next-client",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/utility/trpc-next-client/src",
+  "projectType": "library",
+  "tags": ["type:utility"],
+  "targets": {
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/utility/trpc-next-client/**/*.{ts,tsx,js,jsx}"]
+      }
+    }
+  }
+}

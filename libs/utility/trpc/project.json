@@ -1,0 +1,16 @@
+{
+  "name": "utility-trpc",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/utility/trpc/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/utility/trpc/**/*.ts"]
+      }
+    }
+  },
+  "tags": ["type:utility"]
+}
