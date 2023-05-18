@@ -2,6 +2,7 @@ import { BASE_URL, BRAND_DESCRIPTION, BRAND_NAME } from "@template/configuration
 import { ThemeProvider } from "@template/ui";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { ClientProviders } from "./client-providers";
 import "./styles.css";
 
 // If loading a variable font, you don't need to specify the font weight
@@ -28,13 +29,15 @@ export default function RootLayout({
       suppressHydrationWarning
       className={`bg-background flex h-full min-h-screen flex-col antialiased ${inter.className}`}
     >
-      <body className="h-full">
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          {children}
-          {signInModal}
-          {signUpModal}
-        </ThemeProvider>
-      </body>
+      <ClientProviders>
+        <body className="h-full">
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+            {children}
+            {signInModal}
+            {signUpModal}
+          </ThemeProvider>
+        </body>
+      </ClientProviders>
     </html>
   );
 }
