@@ -1,14 +1,14 @@
 {
-  "name": "utility",
-  "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/utility/src",
+  "name": "utility-shared",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/utility/shared/src",
   "projectType": "library",
   "targets": {
     "lint": {
       "executor": "@nx/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["libs/utility/**/*.ts"]
+        "lintFilePatterns": ["libs/utility/shared/**/*.ts"]
       }
     }
   },

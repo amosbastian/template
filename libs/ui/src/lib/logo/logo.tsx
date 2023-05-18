@@ -1,5 +1,5 @@
 import { BRAND_NAME } from "@template/configuration";
-import { classnames } from "@template/utility";
+import { classnames } from "@template/utility/shared";
 
 export const Logo = ({ className }: { className?: string }) => {
   return (

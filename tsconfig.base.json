@@ -22,7 +22,7 @@
       "@template/feature/authentication/server": ["libs/feature/authentication/src/server.ts"],
       "@template/ui": ["libs/ui/src/index.ts"],
       "@template/ui/server": ["libs/ui/src/server.ts"],
-      "@template/utility": ["libs/utility/src/index.ts"]
+      "@template/utility/shared": ["libs/utility/shared/src/index.ts"]
     }
   },
   "include": ["types/lucia.d.ts"],

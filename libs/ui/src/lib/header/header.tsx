@@ -1,4 +1,4 @@
-import { classnames } from "@template/utility";
+import { classnames } from "@template/utility/shared";
 import { Menu } from "lucide-react";
 import Link from "next/link";
 import { Button, buttonVariants } from "../button/button";

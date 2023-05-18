@@ -1,7 +1,7 @@
 "use client";
 
 import { Button, CardContent, Input, Label } from "@template/ui";
-import { classnames } from "@template/utility";
+import { classnames } from "@template/utility/shared";
 import { useRouter } from "next/navigation";
 import * as React from "react";
 import { signUpSchema } from "./schema";

@@ -1,4 +1,4 @@
-import { classnames } from "@template/utility";
+import { classnames } from "@template/utility/shared";
 import * as React from "react";
 
 const Card = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(({ className, ...props }, ref) => (

@@ -1,7 +1,7 @@
 import { BRAND_NAME } from "@template/configuration";
 import { SignInForm } from "@template/feature/authentication/server";
 import { Logo, buttonVariants } from "@template/ui";
-import { classnames } from "@template/utility";
+import { classnames } from "@template/utility/shared";
 import { ChevronLeft } from "lucide-react";
 import { type Metadata } from "next";
 import Link from "next/link";
