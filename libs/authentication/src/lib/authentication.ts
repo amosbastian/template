@@ -16,7 +16,7 @@ export const authentication = lucia({
   transformDatabaseUser: (userData) => {
     return {
       userId: userData.id,
-      email: userData.email,
+      ...userData,
     };
   },
   sessionExpiresIn: {

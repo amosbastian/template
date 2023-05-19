@@ -15,7 +15,11 @@ import {
 import { api } from "@template/utility/trpc-next-client";
 
 interface UserButtonProps extends AvatarProps {
-  user: any;
+  user: {
+    email: string;
+    name?: string;
+    image?: string;
+  };
 }
 
 export function UserButton({ user, ...props }: UserButtonProps) {

@@ -2,10 +2,10 @@
 
 import { Button, CardContent, Input, Label } from "@template/ui";
 import { classnames } from "@template/utility/shared";
+import { api } from "@template/utility/trpc-next-client";
 import { useRouter } from "next/navigation";
 import * as React from "react";
 import { authenticationSchema } from "./schema";
-import { api } from "@template/utility/trpc-next-client";
 
 export const AuthenticationForm = ({ action, className }: { action: string; className?: string }) => {
   const router = useRouter();

@@ -6,7 +6,9 @@ export const user = mysqlTable(
     id: varchar("id", {
       length: 15,
     }).primaryKey(),
-    email: varchar("email", { length: 256 }),
+    email: varchar("email", { length: 256 }).notNull(),
+    name: varchar("name", { length: 256 }),
+    image: varchar("image", { length: 256 }),
   },
   (users) => ({
     emailIndex: uniqueIndex("email_idx").on(users.email),

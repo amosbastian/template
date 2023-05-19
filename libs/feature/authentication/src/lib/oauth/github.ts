@@ -6,7 +6,10 @@ export async function githubOauth(request: Request) {
   const code = url.searchParams.get("code");
   const state = url.searchParams.get("state");
   const storedState = cookies().get("oauth_state")?.value ?? null;
-  if (storedState !== state || !code || !state) throw new Response(null, { status: 401 });
+
+  if (storedState !== state || !code || !state) {
+    throw new Response(null, { status: 401 });
+  }
 
   try {
     const { existingUser, providerUser, createUser } = await githubAuthentication.validateCallback(code);
@@ -14,7 +17,9 @@ export async function githubOauth(request: Request) {
     const user = existingUser
       ? existingUser
       : await createUser({
-          username: providerUser.login,
+          email: providerUser.email,
+          name: providerUser.name,
+          image: providerUser.avatar_url,
         });
 
     const session = await authentication.createSession(user.userId);
@@ -27,7 +32,8 @@ export async function githubOauth(request: Request) {
         location: "/",
       },
     });
-  } catch (e) {
+  } catch (error) {
+    console.log((error as any).message);
     return new Response(null, {
       status: 500,
     });
