@@ -1,6 +1,5 @@
 // Use this file to export React server components
 export * from "./lib/authentication-form/schema";
-export * from "./lib/get-user/get-user";
 export * from "./lib/oauth/github";
 export * from "./lib/sign-in/sign-in";
 export * from "./lib/sign-in/sign-in-form";

@@ -1,10 +1,10 @@
-import { getUser } from "@template/feature/authentication/server";
+import { getAuthentication } from "@template/authentication";
 import { HelloFromClient, HelloFromClientProtected } from "@template/ui";
 import { Header } from "@template/ui/server";
 import { api } from "@template/utility/trpc-next-server";
 
 export default async function Page({ children }: { children: React.ReactNode }) {
-  const user = await getUser();
+  const { user } = await getAuthentication();
 
   const { greeting } = await api.example.hello.fetch({
     text: "Test RSC tRPC Call",
@@ -12,11 +12,17 @@ export default async function Page({ children }: { children: React.ReactNode }) 
 
   return (
     <>
+      {/* @ts-expect-error RSC */}
       <Header />
-      <main className="mx-auto flex h-full max-w-2xl flex-col gap-4 pb-4 pt-16">
+      <main className="mx-auto flex h-full max-w-2xl flex-col gap-8 pb-16 pt-16">
         {children}
+        <h2 className="scroll-m-20 border-b pb-2 pt-12 text-3xl font-semibold tracking-tight transition-colors first:mt-0">
+          User data
+        </h2>
         <pre className="bg-accent m-auto rounded p-4">{JSON.stringify(user, null, 2)}</pre>
-        <h2>Fetching data from a client component</h2>
+        <h2 className="scroll-m-20 border-b pb-2 pt-12 text-3xl font-semibold tracking-tight transition-colors first:mt-0">
+          Fetching data (client)
+        </h2>
         <pre className="bg-accent m-auto rounded p-4">
           {`
 "use client";
@@ -40,7 +46,9 @@ export default function HelloFromClient() {
             <HelloFromClient />
           </p>
         </div>
-        <h2>Fetching data from a client component</h2>
+        <h2 className="scroll-m-20 border-b pb-2 pt-12 text-3xl font-semibold tracking-tight transition-colors first:mt-0">
+          Fetching PROTECTED data (client)
+        </h2>
         <pre className="bg-accent m-auto rounded p-4">
           {`
 "use client";
@@ -64,7 +72,9 @@ export default function HelloFromClientProtected() {
             <HelloFromClientProtected />
           </p>
         </div>
-        <h2>Fetching data from a server component with tRPC:</h2>
+        <h2 className="scroll-m-20 border-b pb-2 pt-12 text-3xl font-semibold tracking-tight transition-colors first:mt-0">
+          Fetching data (RSC):
+        </h2>
         <pre className="bg-accent m-auto rounded p-4">
           {`
 import { api } from "@template/utility/trpc-next-server";

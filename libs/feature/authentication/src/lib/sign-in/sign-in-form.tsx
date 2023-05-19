@@ -1,3 +1,5 @@
+"use client";
+
 import { AuthenticationForm } from "../authentication-form/authentication-form";
 
 export interface SignInFormProps {

@@ -1,13 +1,18 @@
+"use client";
+
 import { Button, CardContent, Input, Label } from "@template/ui";
 import { classnames } from "@template/utility/shared";
 import { useRouter } from "next/navigation";
 import * as React from "react";
 import { authenticationSchema } from "./schema";
+import { api } from "@template/utility/trpc-next-client";
 
 export const AuthenticationForm = ({ action, className }: { action: string; className?: string }) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [errorMessage, setErrorMessage] = React.useState<string>();
+
+  const trpcContext = api.useContext();
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -25,6 +30,7 @@ export const AuthenticationForm = ({ action, className }: { action: string; clas
     });
 
     setIsLoading(false);
+    trpcContext.invalidate();
 
     if (response.redirected) {
       return router.push(response.url);
