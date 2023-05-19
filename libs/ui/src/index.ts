@@ -8,6 +8,6 @@ export * from "./lib/hello-from-client/hello-from-client";
 export * from "./lib/input/input";
 export * from "./lib/intercept-dialog/intercept-dialog";
 export * from "./lib/label/label";
-export * from "./lib/logo/logo";
 export * from "./lib/popover/popover";
 export * from "./lib/theme-provider/theme-provider";
+export * from "./lib/user-button/user-button";

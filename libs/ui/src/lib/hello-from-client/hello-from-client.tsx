@@ -15,13 +15,13 @@ export function HelloFromClient() {
 
 export function HelloFromClientProtected() {
   const { data, isLoading, error } = api.example.helloPrivate.useQuery({
-    text: "Test Client tRPC Call (protected)",
+    text: "Test Client tRPC Call",
   });
 
   if (isLoading) return <>Loading...</>;
   if (error) {
     console.log(error.message);
-    return <>Error</>;
+    return <>{error.message}</>;
   }
 
   return <>{data.greeting}</>;
