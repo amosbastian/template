@@ -1,63 +1,49 @@
 import { authentication } from "@template/authentication";
-import { NextRequest, NextResponse } from "next/server";
-import { signInSchema } from "./schema";
+import { LuciaError } from "lucia-auth";
+import { cookies } from "next/headers";
+import { NextResponse } from "next/server";
+import { authenticationSchema } from "../authentication-form/schema";
 
-export async function signIn(request: NextRequest) {
-  if (!request.url) {
-    return new Response("Not found", { status: 404 });
-  }
-
-  const redirectUrl = request.nextUrl.clone();
-  redirectUrl.pathname = "/";
-
+export async function signIn(request: Request) {
   const json = await request.json();
-  const { email, password } = signInSchema.parse(json);
-
-  const response = NextResponse.redirect(redirectUrl, 302);
-  const authenticationRequest = authentication.handleRequest(request, response.headers);
-
-  const session = await authenticationRequest.validate();
-
-  if (session) {
-    response.headers.set("location", "/");
-    return new Response(null, {
-      status: 302,
-      headers: response.headers,
-    });
-  }
-
-  const requestOrigin = request.headers.get("origin");
-
-  const isValidRequest =
-    !!requestOrigin && requestOrigin === (process.env.NEXT_PUBLIC_SITE_URL ?? process.env.NEXT_PUBLIC_VERCEL_URL);
-
-  if (!isValidRequest) {
-    return new Response(null, {
-      status: 403,
-      headers: response.headers,
-    });
-  }
+  const { email, password } = authenticationSchema.parse(json);
 
   try {
+    const authenticationRequest = authentication.handleRequest({ request, cookies: cookies as any });
     const key = await authentication.useKey("email", email, password);
-
     const session = await authentication.createSession(key.userId);
-
     authenticationRequest.setSession(session);
-    // redirect on successful attempt
-    response.headers.set("location", "/");
 
-    return new Response(null, {
-      status: 302,
-      headers: response.headers,
-    });
+    if (session) {
+      return new Response(null, {
+        status: 302,
+        headers: {
+          location: "/",
+        },
+      });
+    }
   } catch (error) {
-    // Invalid password
+    if (
+      (error instanceof LuciaError && error.message === "AUTH_INVALID_KEY_ID") ||
+      (error instanceof LuciaError && error.message === "AUTH_INVALID_PASSWORD")
+    ) {
+      return NextResponse.json(
+        {
+          error: "Incorrect username or email",
+        },
+        {
+          status: 400,
+        },
+      );
+    }
     console.error(error);
-
-    return new Response(null, {
-      status: 400,
-      headers: response.headers,
-    });
+    return NextResponse.json(
+      {
+        error: "Unknown error occurred",
+      },
+      {
+        status: 500,
+      },
+    );
   }
 }

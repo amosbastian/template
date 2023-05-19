@@ -1,16 +1,16 @@
 import { authentication } from "@template/authentication";
 import { appRouter, createContextInner } from "@template/utility/trpc";
 import { fetchRequestHandler } from "@trpc/server/adapters/fetch";
-import { NextResponse, type NextRequest } from "next/server";
+import { cookies } from "next/headers";
+import { type NextRequest } from "next/server";
 
-export default function handler(req: NextRequest) {
+const handler = (req: NextRequest) => {
   return fetchRequestHandler({
     req,
     endpoint: "/api/trpc",
     router: appRouter,
     async createContext() {
-      const response = NextResponse.next();
-      const authenticationRequest = authentication.handleRequest(req as unknown as NextRequest, response.headers);
+      const authenticationRequest = authentication.handleRequest({ request: req, cookies: cookies as any });
       const { session } = await authenticationRequest.validateUser();
 
       return createContextInner({
@@ -25,6 +25,12 @@ export default function handler(req: NextRequest) {
           }
         : undefined,
   });
+};
+
+export async function GET(request: NextRequest) {
+  return handler(request);
 }
 
-export const runtime = "edge";
+export async function POST(request: NextRequest) {
+  return handler(request);
+}

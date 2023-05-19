@@ -1,6 +1,5 @@
 import { signIn } from "@template/feature/authentication/server";
-import { NextRequest } from "next/server";
 
-export async function POST(request: NextRequest) {
+export async function POST(request: Request) {
   return signIn(request);
 }
