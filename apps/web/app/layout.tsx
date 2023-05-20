@@ -1,5 +1,5 @@
 import { BASE_URL, BRAND_DESCRIPTION, BRAND_NAME } from "@template/configuration";
-import { ThemeProvider } from "@template/ui";
+import { ThemeProvider } from "@template/ui/web";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { ClientProviders } from "./client-providers";

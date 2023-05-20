@@ -1,7 +1,15 @@
 import { getAuthentication } from "@template/authentication";
 import { db, users } from "@template/db";
-import { Button, Dialog, DialogContent, DialogTrigger, TeamSwitcher, UserButton, buttonVariants } from "@template/ui";
-import { Logo } from "@template/ui/server";
+import {
+  Button,
+  Dialog,
+  DialogContent,
+  DialogTrigger,
+  TeamSwitcher,
+  UserButton,
+  buttonVariants,
+} from "@template/ui/web";
+import { Logo } from "@template/ui/web/server";
 import { classnames } from "@template/utility/shared";
 import { eq } from "drizzle-orm";
 import { Menu } from "lucide-react";
@@ -103,7 +111,7 @@ export async function Header() {
           </div>
           {activeTeam ? <TeamSwitcher activeTeam={activeTeam} teams={teams} /> : null}
         </div>
-        <nav className="hidden md:flex md:gap-x-10 md:leading-6">
+        <nav className="hidden lg:flex lg:gap-x-10 lg:leading-6">
           {navigation.map((item, itemIdx) => (
             <Link
               key={itemIdx}

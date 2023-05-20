@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, CardContent, Input, Label } from "@template/ui";
+import { Button, CardContent, Input, Label } from "@template/ui/web";
 import { classnames } from "@template/utility/shared";
 import { api } from "@template/utility/trpc-next-client";
 import { useRouter } from "next/navigation";

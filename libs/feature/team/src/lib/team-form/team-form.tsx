@@ -11,7 +11,7 @@ import {
   FormLabel,
   FormMessage,
   Input,
-} from "@template/ui";
+} from "@template/ui/web";
 import { classnames } from "@template/utility/shared";
 import { useForm } from "react-hook-form";
 import * as z from "zod";

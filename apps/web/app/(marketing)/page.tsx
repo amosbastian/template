@@ -1,6 +1,6 @@
 import { getAuthentication } from "@template/authentication";
-import { HelloFromClient, HelloFromClientProtected } from "@template/ui";
-import { Header } from "@template/ui/server";
+import { HelloFromClient, HelloFromClientProtected } from "@template/ui/web";
+import { Header } from "@template/ui/web/server";
 import { api } from "@template/utility/trpc-next-server";
 
 export default async function Page({ children }: { children: React.ReactNode }) {

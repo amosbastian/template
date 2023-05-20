@@ -1,5 +1,5 @@
 import { SignUpForm } from "@template/feature/authentication/server";
-import { DialogContent, InterceptDialog } from "@template/ui";
+import { DialogContent, InterceptDialog } from "@template/ui/web";
 
 export default async function Page() {
   return (
