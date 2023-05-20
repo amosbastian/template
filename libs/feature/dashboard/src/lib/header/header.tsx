@@ -44,7 +44,7 @@ export async function Header() {
   const teams = result?.teams.filter(({ team }) => team.id !== activeTeam?.id).map(({ team }) => team);
 
   return (
-    <header className="absolute inset-x-0 top-0 z-50 flex h-16 border-b border-gray-900/10">
+    <header className="absolute inset-x-0 top-0 z-50 flex h-16 border-b">
       <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <div className="flex flex-1 items-center gap-x-6">
           <div className="flex lg:hidden">
@@ -65,7 +65,7 @@ export async function Header() {
                   </Link>
                 </div>
                 <div className="mt-6 flow-root">
-                  <div className="-my-6 divide-y divide-slate-500/10">
+                  <div className="divide-muted -my-6 divide-y">
                     <div className="space-y-2 py-6">
                       {navigation.map((item, itemIdx) => (
                         <Link
@@ -105,7 +105,11 @@ export async function Header() {
         </div>
         <nav className="hidden md:flex md:gap-x-10 md:leading-6">
           {navigation.map((item, itemIdx) => (
-            <Link key={itemIdx} className="hover:text-primary text-sm font-medium transition-colors" href={item.href}>
+            <Link
+              key={itemIdx}
+              className="hover:text-primary text-muted-foreground text-sm font-medium transition-colors"
+              href={item.href}
+            >
               {item.name}
             </Link>
           ))}
