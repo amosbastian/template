@@ -1,0 +1,19 @@
+{
+  "name": "utility-email",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/utility/email/src",
+  "projectType": "library",
+  "tags": ["type:utility"],
+  "targets": {
+    "serve": {
+      "command": "npm run --prefix libs/utility/email/src dev"
+    },
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/utility/email/**/*.{ts,tsx,js,jsx}"]
+      }
+    }
+  }
+}

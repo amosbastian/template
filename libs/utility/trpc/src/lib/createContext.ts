@@ -3,7 +3,7 @@ import type { NextApiRequest } from "next";
 import { NextRequest } from "next/server";
 
 type CreateContextOptions = {
-  session?: Awaited<ReturnType<Lucia.Authentication["getSession"]>> | null;
+  session?: Awaited<ReturnType<Lucia.Auth["getSession"]>> | null;
   req: NextApiRequest | NextRequest | null;
 };
 
