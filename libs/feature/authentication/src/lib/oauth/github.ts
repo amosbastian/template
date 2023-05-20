@@ -43,7 +43,7 @@ export async function githubOauth(request: Request) {
     return new Response(null, {
       status: 302,
       headers: {
-        location: "/",
+        location: "/dashboard",
       },
     });
   } catch (error) {

@@ -20,6 +20,8 @@
       "@template/db": ["libs/db/src/index.ts"],
       "@template/feature/authentication": ["libs/feature/authentication/src/index.ts"],
       "@template/feature/authentication/server": ["libs/feature/authentication/src/server.ts"],
+      "@template/feature/dashboard": ["libs/feature/dashboard/src/index.ts"],
+      "@template/feature/dashboard/server": ["libs/feature/dashboard/src/server.ts"],
       "@template/ui": ["libs/ui/src/index.ts"],
       "@template/ui/server": ["libs/ui/src/server.ts"],
       "@template/utility/shared": ["libs/utility/shared/src/index.ts"],

@@ -36,7 +36,7 @@ export async function signUp(request: Request) {
     return new Response(null, {
       status: 302,
       headers: {
-        location: "/",
+        location: "/dashboarc",
       },
     });
   } catch (error) {
