@@ -32,7 +32,7 @@ export async function githubOauth(request: Request) {
         await tx
           .insert(teamMembers)
           .values({ userId: user.id, teamId: team[0].insertId, role: "admin", pending: false });
-        await db.update(users).set({ activeTeamId: teamId }).where(eq(users.id, user.id));
+        await tx.update(users).set({ activeTeamId: teamId }).where(eq(users.id, user.id));
       });
     }
 

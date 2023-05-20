@@ -1,7 +1,9 @@
 import { getAuthentication } from "@template/authentication";
+import { db, users } from "@template/db";
 import { Button, Dialog, DialogContent, DialogTrigger, TeamSwitcher, UserButton, buttonVariants } from "@template/ui";
 import { Logo } from "@template/ui/server";
 import { classnames } from "@template/utility/shared";
+import { eq } from "drizzle-orm";
 import { Menu } from "lucide-react";
 import Link from "next/link";
 
@@ -14,6 +16,32 @@ const navigation = [
 
 export async function Header() {
   const { user } = await getAuthentication();
+
+  const result = await db.query.users.findFirst({
+    where: eq(users.id, user.id),
+    with: {
+      activeTeam: {
+        columns: {
+          id: true,
+          name: true,
+        },
+      },
+      teams: {
+        columns: {},
+        with: {
+          team: {
+            columns: {
+              id: true,
+              name: true,
+            },
+          },
+        },
+      },
+    },
+  });
+
+  const activeTeam = result?.activeTeam;
+  const teams = result?.teams.filter(({ team }) => team.id !== activeTeam?.id).map(({ team }) => team);
 
   return (
     <header className="absolute inset-x-0 top-0 z-50 flex h-16 border-b border-gray-900/10">
@@ -39,18 +67,18 @@ export async function Header() {
                 <div className="mt-6 flow-root">
                   <div className="-my-6 divide-y divide-slate-500/10">
                     <div className="space-y-2 py-6">
-                      <Link
-                        href="/about"
-                        className="text-secondary-foreground hover:bg-primary/90 -mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7"
-                      >
-                        About
-                      </Link>
-                      <Link
-                        href="/blog"
-                        className="text-secondary-foreground hover:bg-primary/90 -mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7"
-                      >
-                        Blog
-                      </Link>
+                      {navigation.map((item, itemIdx) => (
+                        <Link
+                          key={itemIdx}
+                          className={classnames(
+                            buttonVariants({ variant: "ghost", size: "sm" }),
+                            "w-full justify-start",
+                          )}
+                          href={item.href}
+                        >
+                          {item.name}
+                        </Link>
+                      ))}
                     </div>
                     {user ? null : (
                       <div className="py-6">
@@ -73,9 +101,9 @@ export async function Header() {
               </DialogContent>
             </Dialog>
           </div>
-          <TeamSwitcher />
+          {activeTeam ? <TeamSwitcher activeTeam={activeTeam} teams={teams} /> : null}
         </div>
-        <nav className="hidden md:flex md:gap-x-11 md:leading-6">
+        <nav className="hidden md:flex md:gap-x-10 md:leading-6">
           {navigation.map((item, itemIdx) => (
             <Link key={itemIdx} className="hover:text-primary text-sm font-medium transition-colors" href={item.href}>
               {item.name}

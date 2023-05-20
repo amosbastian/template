@@ -1,3 +1,4 @@
+import { InferModel, relations } from "drizzle-orm";
 import {
   bigint,
   boolean,
@@ -10,7 +11,6 @@ import {
   uniqueIndex,
   varchar,
 } from "drizzle-orm/mysql-core";
-import { relations } from "drizzle-orm";
 
 export const users = mysqlTable(
   "auth_user",
@@ -38,9 +38,11 @@ export const usersRelations = relations(users, ({ many, one }) => ({
 
 export const teams = mysqlTable("teams", {
   id: serial("id").primaryKey(),
-  name: text("name"),
+  name: text("name").notNull(),
   createdAt: timestamp("created_at", { fsp: 2 }).notNull().defaultNow(),
 });
+
+export type Team = InferModel<typeof teams, "select">;
 
 export const teamsRelations = relations(teams, ({ many }) => ({
   members: many(teamMembers),

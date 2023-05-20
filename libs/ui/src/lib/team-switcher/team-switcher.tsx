@@ -1,5 +1,7 @@
 "use client";
 
+import { Team } from "@template/db";
+import { classnames } from "@template/utility/shared";
 import { Check, ChevronsUpDown, PlusCircle } from "lucide-react";
 import * as React from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "../avatar/avatar";
@@ -26,43 +28,19 @@ import { Input } from "../input/input";
 import { Label } from "../label/label";
 import { Popover, PopoverContent, PopoverTrigger } from "../popover/popover";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../select/select";
-import { classnames } from "@template/utility/shared";
-
-const groups = [
-  {
-    label: "Personal Account",
-    teams: [
-      {
-        label: "Alicia Koch",
-        value: "personal",
-      },
-    ],
-  },
-  {
-    label: "Teams",
-    teams: [
-      {
-        label: "Acme Inc.",
-        value: "acme-inc",
-      },
-      {
-        label: "Monsters Inc.",
-        value: "monsters",
-      },
-    ],
-  },
-];
-
-type Team = (typeof groups)[number]["teams"][number];
 
 type PopoverTriggerProps = React.ComponentPropsWithoutRef<typeof PopoverTrigger>;
+type TeamSwitcherTeam = Pick<Team, "id" | "name">;
 
-type TeamSwitcherProps = PopoverTriggerProps;
+type TeamSwitcherProps = {
+  activeTeam: TeamSwitcherTeam;
+  teams?: TeamSwitcherTeam[];
+} & PopoverTriggerProps;
 
-export function TeamSwitcher({ className }: TeamSwitcherProps) {
+export function TeamSwitcher({ activeTeam, className, teams = [] }: TeamSwitcherProps) {
   const [open, setOpen] = React.useState(false);
   const [showNewTeamDialog, setShowNewTeamDialog] = React.useState(false);
-  const [selectedTeam, setSelectedTeam] = React.useState<Team>(groups[0].teams[0]);
+  const [selectedTeam, setSelectedTeam] = React.useState<TeamSwitcherTeam>(activeTeam);
 
   return (
     <Dialog open={showNewTeamDialog} onOpenChange={setShowNewTeamDialog}>
@@ -77,10 +55,10 @@ export function TeamSwitcher({ className }: TeamSwitcherProps) {
             className={classnames("w-[200px] justify-between", className)}
           >
             <Avatar className="mr-2 h-5 w-5">
-              <AvatarImage src={`https://avatar.vercel.sh/${selectedTeam.value}.png`} alt={selectedTeam.label} />
+              <AvatarImage src={`https://avatar.vercel.sh/random.png`} alt={selectedTeam.name} />
               <AvatarFallback>SC</AvatarFallback>
             </Avatar>
-            {selectedTeam.label}
+            {selectedTeam.name}
             <ChevronsUpDown className="ml-auto h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
@@ -89,32 +67,30 @@ export function TeamSwitcher({ className }: TeamSwitcherProps) {
             <CommandList>
               <CommandInput placeholder="Search team..." />
               <CommandEmpty>No team found.</CommandEmpty>
-              {groups.map((group) => (
-                <CommandGroup key={group.label} heading={group.label}>
-                  {group.teams.map((team) => (
-                    <CommandItem
-                      key={team.value}
-                      onSelect={() => {
-                        setSelectedTeam(team);
-                        setOpen(false);
-                      }}
-                      className="text-sm"
-                    >
-                      <Avatar className="mr-2 h-5 w-5">
-                        <AvatarImage src={`https://avatar.vercel.sh/${team.value}.png`} alt={team.label} />
-                        <AvatarFallback>SC</AvatarFallback>
-                      </Avatar>
-                      {team.label}
-                      <Check
-                        className={classnames(
-                          "ml-auto h-4 w-4",
-                          selectedTeam.value === team.value ? "opacity-100" : "opacity-0",
-                        )}
-                      />
-                    </CommandItem>
-                  ))}
-                </CommandGroup>
-              ))}
+              <CommandGroup heading="Teams">
+                {[activeTeam, ...teams].map((team) => (
+                  <CommandItem
+                    key={team.id}
+                    onSelect={() => {
+                      setSelectedTeam(team);
+                      setOpen(false);
+                    }}
+                    className="text-sm"
+                  >
+                    <Avatar className="mr-2 h-5 w-5">
+                      <AvatarImage src={`https://avatar.vercel.sh/random.png`} alt={team.name} />
+                      <AvatarFallback>SC</AvatarFallback>
+                    </Avatar>
+                    {team.name}
+                    <Check
+                      className={classnames(
+                        "ml-auto h-4 w-4",
+                        selectedTeam.id === team.id ? "opacity-100" : "opacity-0",
+                      )}
+                    />
+                  </CommandItem>
+                ))}
+              </CommandGroup>
             </CommandList>
             <CommandSeparator />
             <CommandList>
@@ -127,7 +103,7 @@ export function TeamSwitcher({ className }: TeamSwitcherProps) {
                     }}
                   >
                     <PlusCircle className="mr-2 h-5 w-5" />
-                    Create Team
+                    Create team
                   </CommandItem>
                 </DialogTrigger>
               </CommandGroup>

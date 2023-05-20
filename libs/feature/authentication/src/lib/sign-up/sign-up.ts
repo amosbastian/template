@@ -26,7 +26,7 @@ export async function signUp(request: Request) {
       const team = await tx.insert(teams).values({ name: "Personal" });
       const teamId = team[0].insertId;
       await tx.insert(teamMembers).values({ userId: user.id, teamId: teamId, role: "admin", pending: false });
-      await db.update(users).set({ activeTeamId: teamId }).where(eq(users.id, user.id));
+      await tx.update(users).set({ activeTeamId: teamId }).where(eq(users.id, user.id));
     });
 
     const session = await authentication.createSession(user.userId);

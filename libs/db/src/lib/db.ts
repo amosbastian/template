@@ -2,6 +2,7 @@
 // import { drizzle } from "drizzle-orm/planetscale-serverless";
 import { drizzle } from "drizzle-orm/mysql2";
 import * as mysql from "mysql2/promise";
+import * as schema from "./schema";
 
 // PlanetScale
 // const connection = connect({
@@ -20,4 +21,4 @@ export const poolConnection = mysql.createPool({
   port: 3306,
 });
 
-export const db = drizzle(poolConnection);
+export const db = drizzle(poolConnection, { schema });
