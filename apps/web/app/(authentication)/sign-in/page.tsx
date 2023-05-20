@@ -9,7 +9,7 @@ import Link from "next/link";
 
 export default function SignInPage() {
   return (
-    <div className="container flex h-screen w-screen flex-col items-center justify-center">
+    <div className="container flex h-full w-full flex-col items-center justify-center">
       <Link
         href="/"
         className={classnames(buttonVariants({ variant: "ghost" }), "absolute left-4 top-4 md:left-8 md:top-8")}
@@ -36,8 +36,5 @@ export default function SignInPage() {
 }
 
 export const metadata: Metadata = {
-  title: {
-    default: `Sign in`,
-    template: `%s | ${BRAND_NAME}`,
-  },
+  title: "Sign in",
 };

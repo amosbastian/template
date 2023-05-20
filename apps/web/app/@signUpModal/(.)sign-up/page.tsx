@@ -1,10 +1,14 @@
 import { SignUpForm } from "@template/feature/authentication/server";
-import { InterceptDialog } from "@template/ui";
+import { DialogContent, InterceptDialog } from "@template/ui";
 
 export default async function Page() {
   return (
     <InterceptDialog pathname="/sign-up">
-      <SignUpForm className="p-0" />
+      <DialogContent className="sm:max-w-[420px]">
+        <div className="grid gap-4">
+          <SignUpForm className="p-0" />
+        </div>
+      </DialogContent>
     </InterceptDialog>
   );
 }

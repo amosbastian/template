@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname, useRouter } from "next/navigation";
-import { Dialog, DialogContent } from "../dialog/dialog";
+import { Dialog } from "../dialog/dialog";
 
 interface InterceptDialogProps {
   children: React.ReactNode;
@@ -21,9 +21,7 @@ export function InterceptDialog({ children, pathname }: InterceptDialogProps) {
         }
       }}
     >
-      <DialogContent className="sm:max-w-[420px]">
-        <div className="grid gap-4">{children}</div>
-      </DialogContent>
+      {children}
     </Dialog>
   );
 }
