@@ -1,9 +1,13 @@
 // lucia.d.ts
 /// <reference types="lucia-auth" />
 declare namespace Lucia {
-  type Authentication = import("../libs/authentication/src/lib/authentication.ts").Authentication;
+  type Auth = import("../libs/authentication/src/lib/authentication.ts").Auth;
   type UserAttributes = {
     email: string;
+    email_verified: string | null;
     name?: string;
+    image?: string;
+    active_team_id: number;
+    created_at: string;
   };
 }

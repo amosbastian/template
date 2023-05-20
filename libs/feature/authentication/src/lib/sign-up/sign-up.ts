@@ -1,4 +1,6 @@
 import { authentication } from "@template/authentication";
+import { db, teamMembers, teams, users } from "@template/db";
+import { eq } from "drizzle-orm";
 import { LuciaError } from "lucia-auth";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
@@ -18,6 +20,13 @@ export async function signUp(request: Request) {
       attributes: {
         email,
       },
+    });
+
+    await db.transaction(async (tx) => {
+      const team = await tx.insert(teams).values({ name: "Personal" });
+      const teamId = team[0].insertId;
+      await tx.insert(teamMembers).values({ userId: user.id, teamId: teamId, role: "admin", pending: false });
+      await db.update(users).set({ activeTeamId: teamId }).where(eq(users.id, user.id));
     });
 
     const session = await authentication.createSession(user.userId);

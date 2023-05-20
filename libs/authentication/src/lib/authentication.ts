@@ -16,7 +16,13 @@ export const authentication = lucia({
   transformDatabaseUser: (userData) => {
     return {
       userId: userData.id,
-      ...userData,
+      id: userData.id,
+      email: userData.email,
+      emailVerified: userData.email_verified,
+      name: userData.name,
+      image: userData.image,
+      activeTeamId: userData.active_team_id,
+      createdAt: userData.created_at,
     };
   },
   sessionExpiresIn: {
@@ -36,4 +42,4 @@ export const githubAuthentication = github(authentication, {
   clientSecret: process.env["GITHUB_CLIENT_SECRET"] ?? "",
 });
 
-export type Authentication = typeof authentication;
+export type Auth = typeof authentication;
