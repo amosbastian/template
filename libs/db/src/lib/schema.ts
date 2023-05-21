@@ -1,4 +1,3 @@
-import { ROLES } from "@template/configuration";
 import { InferModel, relations } from "drizzle-orm";
 import {
   bigint,
@@ -13,6 +12,10 @@ import {
   varchar,
 } from "drizzle-orm/mysql-core";
 import { createInsertSchema } from "drizzle-zod";
+
+export const ADMIN_ROLE = "admin";
+export const MEMBER_ROLE = "member";
+export const ROLES = [ADMIN_ROLE, MEMBER_ROLE] as const;
 
 export const users = mysqlTable(
   "auth_user",
@@ -53,6 +56,7 @@ export type Team = InferModel<typeof teams, "select">;
 export const teamsRelations = relations(teams, ({ many }) => ({
   members: many(teamMembers),
   activeMembers: many(users),
+  invitations: many(invitations),
 }));
 
 export const teamMembers = mysqlTable(
@@ -91,9 +95,20 @@ export const invitations = mysqlTable("invitations", {
   teamId: serial("team_id")
     .notNull()
     .references(() => teams.id),
+  email: varchar("email", { length: 256 }).notNull(),
+  role: mysqlEnum("role", ROLES).notNull(),
+  createdAt: timestamp("created_at", { fsp: 2 }).notNull().defaultNow(),
   expiresAt: timestamp("expires_at", { fsp: 2 }).notNull(),
-  role: mysqlEnum("role", ROLES),
 });
+
+export const insertInvitationSchema = createInsertSchema(invitations);
+
+export const invitationsRelations = relations(invitations, ({ one }) => ({
+  team: one(teams, {
+    fields: [invitations.teamId],
+    references: [teams.id],
+  }),
+}));
 
 export const sessions = mysqlTable("auth_session", {
   id: varchar("id", {

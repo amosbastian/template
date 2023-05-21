@@ -1,5 +1,6 @@
 // Use this file to export React client components (e.g. those with 'use client' directive) or other non-server utilities
 export * from "./lib/avatar/avatar";
+export * from "./lib/badge/badge";
 export * from "./lib/button/button";
 export * from "./lib/calendar/calendar";
 export * from "./lib/card/card";
@@ -7,6 +8,7 @@ export * from "./lib/command/command";
 export * from "./lib/data-table/data-table";
 export * from "./lib/date-range-picker/date-range-picker";
 export * from "./lib/dialog/dialog";
+export * from "./lib/dropdown-menu/dropdown-menu";
 export * from "./lib/form/form";
 export * from "./lib/hello-from-client/hello-from-client";
 export * from "./lib/input/input";

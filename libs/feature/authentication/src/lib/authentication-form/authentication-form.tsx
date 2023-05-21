@@ -64,7 +64,7 @@ export const AuthenticationForm = ({ action, className }: { action: string; clas
         </div>
 
         <Button className="w-full" type="submit" isLoading={isLoading}>
-          Sign in
+          {action.includes("sign-in") ? "Sign in" : "Sign up"}
         </Button>
       </form>
 
