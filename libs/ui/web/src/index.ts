@@ -15,6 +15,7 @@ export * from "./lib/input/input";
 export * from "./lib/intercept-dialog/intercept-dialog";
 export * from "./lib/label/label";
 export * from "./lib/popover/popover";
+export * from "./lib/radio-group/radio-group";
 export * from "./lib/select/select";
 export * from "./lib/tabs/tabs";
 export * from "./lib/team-switcher/team-switcher";
