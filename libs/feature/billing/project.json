@@ -1,0 +1,16 @@
+{
+  "name": "feature-billing",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/feature/billing/src",
+  "projectType": "library",
+  "tags": ["type:feature"],
+  "targets": {
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/feature/billing/**/*.{ts,tsx,js,jsx}"]
+      }
+    }
+  }
+}

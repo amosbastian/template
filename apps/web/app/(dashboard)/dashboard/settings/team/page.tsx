@@ -1,6 +1,7 @@
 import { InviteMembersForm, TeamTabs } from "@template/feature/team";
 import { InviteTable, TeamTable } from "@template/feature/team/server";
 import { TabsContent } from "@template/ui/web";
+import { Metadata } from "next";
 
 export default async function TeamSettings() {
   return (
@@ -22,3 +23,8 @@ export default async function TeamSettings() {
     </div>
   );
 }
+
+export const metadata: Metadata = {
+  title: "Team",
+  description: "Manage your team",
+};
