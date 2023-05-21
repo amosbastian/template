@@ -29,9 +29,7 @@ export async function githubOauth(request: Request) {
       await db.transaction(async (tx) => {
         const team = await tx.insert(teams).values({ name: "Personal" });
         const teamId = team[0].insertId;
-        await tx
-          .insert(teamMembers)
-          .values({ userId: user.id, teamId: team[0].insertId, role: "admin", pending: false });
+        await tx.insert(teamMembers).values({ userId: user.id, teamId: team[0].insertId, role: "admin" });
         await tx.update(users).set({ activeTeamId: teamId }).where(eq(users.id, user.id));
       });
     }

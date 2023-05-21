@@ -1,3 +1,4 @@
+import { ROLES } from "@template/configuration";
 import { InferModel, relations } from "drizzle-orm";
 import {
   bigint,
@@ -11,6 +12,7 @@ import {
   uniqueIndex,
   varchar,
 } from "drizzle-orm/mysql-core";
+import { createInsertSchema } from "drizzle-zod";
 
 export const users = mysqlTable(
   "auth_user",
@@ -28,6 +30,8 @@ export const users = mysqlTable(
   }),
 );
 
+export type User = InferModel<typeof users, "select">;
+
 export const usersRelations = relations(users, ({ many, one }) => ({
   teams: many(teamMembers),
   activeTeam: one(teams, {
@@ -42,6 +46,8 @@ export const teams = mysqlTable("teams", {
   createdAt: timestamp("created_at", { fsp: 2 }).notNull().defaultNow(),
 });
 
+export const insertTeamSchema = createInsertSchema(teams);
+
 export type Team = InferModel<typeof teams, "select">;
 
 export const teamsRelations = relations(teams, ({ many }) => ({
@@ -52,6 +58,7 @@ export const teamsRelations = relations(teams, ({ many }) => ({
 export const teamMembers = mysqlTable(
   "team_members",
   {
+    // FIXME: https://github.com/drizzle-team/drizzle-orm/issues/258
     teamId: serial("team_id")
       .notNull()
       .references(() => teams.id),
@@ -60,8 +67,7 @@ export const teamMembers = mysqlTable(
     })
       .notNull()
       .references(() => users.id),
-    role: mysqlEnum("role", ["admin", "member"]),
-    pending: boolean("pending").notNull().default(true),
+    role: mysqlEnum("role", ROLES),
   },
   (t) => ({
     pk: primaryKey(t.userId, t.teamId),
@@ -78,6 +84,16 @@ export const teamMembersRelations = relations(teamMembers, ({ one }) => ({
     references: [users.id],
   }),
 }));
+
+export const invitations = mysqlTable("invitations", {
+  token: varchar("token", { length: 255 }).primaryKey(),
+  // FIXME: https://github.com/drizzle-team/drizzle-orm/issues/258
+  teamId: serial("team_id")
+    .notNull()
+    .references(() => teams.id),
+  expiresAt: timestamp("expires_at", { fsp: 2 }).notNull(),
+  role: mysqlEnum("role", ROLES),
+});
 
 export const sessions = mysqlTable("auth_session", {
   id: varchar("id", {
