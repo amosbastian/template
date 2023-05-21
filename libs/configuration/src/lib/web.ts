@@ -6,3 +6,5 @@ export const BRAND_DESCRIPTION =
 export const ADMIN_ROLE = "admin";
 export const MEMBER_ROLE = "member";
 export const ROLES = [ADMIN_ROLE, MEMBER_ROLE] as const;
+
+export const TRIAL_LENGTH_IN_DAYS = 7;
