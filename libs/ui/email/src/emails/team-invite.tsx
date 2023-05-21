@@ -14,7 +14,7 @@ import { Section } from "@react-email/section";
 import { Tailwind } from "@react-email/tailwind";
 import { Text } from "@react-email/text";
 
-interface VercelInviteUserEmailProps {
+export interface TeamInviteProps {
   username?: string;
   userImage?: string;
   invitedByUsername?: string;
@@ -28,7 +28,7 @@ interface VercelInviteUserEmailProps {
 
 const baseUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "";
 
-export const VercelInviteUserEmail = ({
+export const TeamInvite = ({
   username = "zenorocha",
   userImage = `${baseUrl}/static/vercel-user.png`,
   invitedByUsername = "bukinoshita",
@@ -38,7 +38,7 @@ export const VercelInviteUserEmail = ({
   inviteLink = "https://vercel.com/teams/invite/foo",
   inviteFromIp = "204.13.186.218",
   inviteFromLocation = "São Paulo, Brazil",
-}: VercelInviteUserEmailProps) => {
+}: TeamInviteProps) => {
   const previewText = `Join ${invitedByUsername} on Vercel`;
 
   return (
@@ -112,4 +112,4 @@ export const VercelInviteUserEmail = ({
   );
 };
 
-export default VercelInviteUserEmail;
+export default TeamInvite;
