@@ -39,7 +39,7 @@ const formSchema = z.object({
 type CardProps = React.ComponentProps<typeof Card>;
 type FormValue = z.infer<typeof formSchema>;
 
-export function InviteMembersForm({ className, ...props }: CardProps) {
+export function InviteMembersForm({ className, ...rest }: CardProps) {
   const defaultValues: Partial<FormValue> = {
     invitations: [{ email: "", role: MEMBER_ROLE }],
   };
@@ -65,7 +65,7 @@ export function InviteMembersForm({ className, ...props }: CardProps) {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
-        <Card className={className} {...props}>
+        <Card className={className} {...rest}>
           <CardHeader>
             <CardTitle>Invite team members</CardTitle>
           </CardHeader>
