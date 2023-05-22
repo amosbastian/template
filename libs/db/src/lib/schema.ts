@@ -2,6 +2,8 @@ import { InferModel, relations } from "drizzle-orm";
 import {
   bigint,
   boolean,
+  datetime,
+  int,
   mysqlEnum,
   mysqlTable,
   primaryKey,
@@ -47,16 +49,22 @@ export const teams = mysqlTable("teams", {
   id: serial("id").primaryKey(),
   name: text("name").notNull(),
   createdAt: timestamp("created_at", { fsp: 2 }).notNull().defaultNow(),
+  // Used for billing
+  customerId: int("customer_id"),
 });
 
 export const insertTeamSchema = createInsertSchema(teams);
 
 export type Team = InferModel<typeof teams, "select">;
 
-export const teamsRelations = relations(teams, ({ many }) => ({
+export const teamsRelations = relations(teams, ({ many, one }) => ({
   members: many(teamMembers),
   activeMembers: many(users),
   invitations: many(invitations),
+  subscription: one(subscriptions, {
+    fields: [teams.customerId],
+    references: [subscriptions.teamId],
+  }),
 }));
 
 export const teamMembers = mysqlTable(
@@ -110,6 +118,39 @@ export const invitationsRelations = relations(invitations, ({ one }) => ({
   }),
 }));
 
+export const subscriptions = mysqlTable("subscriptions", {
+  id: varchar("id", { length: 255 }).primaryKey(),
+  productId: int("product_id").notNull(),
+  variantId: int("variant_id").notNull(),
+  teamId: int("team_id").notNull(),
+  status: mysqlEnum("status", ["on_trial", "active", "paused", "past_due", "unpaid", "cancelled", "expired"]).notNull(),
+  trialEndsAt: datetime("trial_ends_at"),
+  renewsAt: datetime("renews_at"),
+  endsAt: datetime("ends_at"),
+  cardBrand: mysqlEnum("card_brand", [
+    "visa",
+    "mastercard",
+    "american_express",
+    "discover",
+    "jcb",
+    "diners_club",
+  ]).notNull(),
+  cardLastFour: varchar("card_last_four", { length: 4 }).notNull(),
+  updatePaymentUrl: varchar("update_payment_method", { length: 255 }).notNull(),
+  createdAt: timestamp("created_at", { fsp: 2 }).notNull().defaultNow(),
+  updatedAt: timestamp("updated_at", { fsp: 2 }),
+});
+
+export const insertSubscriptionSchema = createInsertSchema(subscriptions);
+
+export const subscriptionsRelations = relations(subscriptions, ({ one }) => ({
+  team: one(teams, {
+    fields: [subscriptions.teamId],
+    references: [teams.customerId],
+  }),
+}));
+
+// Lucia
 export const sessions = mysqlTable("auth_session", {
   id: varchar("id", {
     length: 128,

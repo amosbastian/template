@@ -10,6 +10,7 @@ export const billingRouter = router({
       }),
     )
     .mutation(async ({ input, ctx }) => {
-      return createCheckout(input.variant);
+      const activeTeam = ctx.session.user.activeTeamId;
+      return createCheckout({ teamId: activeTeam, variant: input.variant });
     }),
 });

@@ -1,4 +1,5 @@
 import { ProfileForm } from "@template/feature/settings";
+import { Card, CardContent, CardHeader, CardTitle } from "@template/ui/web";
 import { Metadata } from "next";
 
 export default async function NotificationsSettings() {
@@ -7,7 +8,14 @@ export default async function NotificationsSettings() {
       <h2 className="mt-10 scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0">
         General
       </h2>
-      <ProfileForm className="max-w-[360px]" />
+      <Card>
+        <CardHeader>
+          <CardTitle>Profile</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <ProfileForm className="max-w-[360px]" />
+        </CardContent>
+      </Card>
     </div>
   );
 }

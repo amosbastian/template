@@ -17,7 +17,7 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 
 const formSchema = z.object({
-  username: z
+  name: z
     .string()
     .min(2, {
       message: "Username must be at least 2 characters.",
@@ -64,10 +64,10 @@ export function ProfileForm({ className }: ProfileFormProps) {
       <form onSubmit={form.handleSubmit(onSubmit)} className={classnames("space-y-8", className)}>
         <FormField
           control={form.control}
-          name="username"
+          name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Username</FormLabel>
+              <FormLabel>Name</FormLabel>
               <FormControl>
                 <Input placeholder="Amos Bastian" {...field} />
               </FormControl>

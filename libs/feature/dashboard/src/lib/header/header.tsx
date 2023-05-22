@@ -16,10 +16,9 @@ import { Menu } from "lucide-react";
 import Link from "next/link";
 
 const navigation = [
-  { name: "Home", href: "#" },
-  { name: "Invoices", href: "#" },
-  { name: "Clients", href: "#" },
-  { name: "Expenses", href: "#" },
+  { name: "Link 1", href: "#" },
+  { name: "Link 2", href: "#" },
+  { name: "Link 3", href: "#" },
 ];
 
 export async function Header() {

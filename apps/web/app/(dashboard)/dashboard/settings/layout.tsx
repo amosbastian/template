@@ -1,11 +1,10 @@
-import { BellIcon, CreditCardIcon, UserIcon, UsersIcon } from "lucide-react";
+import { CreditCardIcon, UserCircle2Icon, UsersIcon } from "lucide-react";
 import { AsideLink } from "./aside-link";
 
 const secondaryNavigation = [
-  { name: "General", href: "/dashboard/settings", icon: UserIcon, current: true },
-  { name: "Notifications", href: "/dashboard/settings/notifications", icon: BellIcon, current: false },
+  { name: "General", href: "/dashboard/settings", icon: UserCircle2Icon, current: true },
   { name: "Billing", href: "/dashboard/settings/billing", icon: CreditCardIcon, current: false },
-  { name: "Team members", href: "/dashboard/settings/team", icon: UsersIcon, current: false },
+  { name: "Team", href: "/dashboard/settings/team", icon: UsersIcon, current: false },
 ];
 
 export default function SettingsLayout({ children }: { children: React.ReactNode }) {
@@ -25,7 +24,6 @@ export default function SettingsLayout({ children }: { children: React.ReactNode
           </ul>
         </nav>
       </aside>
-
       <main className="px-4 py-16 sm:px-6 lg:flex-auto lg:px-0 lg:py-20">
         <div className="mx-auto max-w-2xl space-y-16 sm:space-y-20 lg:mx-0 lg:max-w-none">{children}</div>
       </main>

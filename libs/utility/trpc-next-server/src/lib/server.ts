@@ -10,10 +10,9 @@ export const api = createTRPCNextLayout({
   transformer: superjson,
   async createContext() {
     const authenticationRequest = authentication.handleRequest({ cookies: cookies as any });
-    const { session } = await authenticationRequest.validateUser();
 
     return createContextInner({
-      session,
+      session: await authenticationRequest.validateUser(),
       req: null,
     });
   },

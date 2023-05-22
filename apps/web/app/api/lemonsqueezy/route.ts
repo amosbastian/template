@@ -1,6 +1,47 @@
-import { LemonsqueezySubscription } from "@template/utility/payment";
+import { db, insertSubscriptionSchema, subscriptions, teams } from "@template/db";
 import crypto from "crypto";
+import { eq } from "drizzle-orm";
 import { NextRequest } from "next/server";
+
+export interface LemonsqueezySubscription {
+  id: string;
+  type: string;
+  attributes: Attributes;
+  relationships: any;
+}
+
+export interface Attributes {
+  store_id: number;
+  customer_id: number;
+  order_id: number;
+  order_item_id: number;
+  product_id: number;
+  variant_id: number;
+  product_name: string;
+  variant_name: string;
+  user_name: string;
+  user_email: string;
+  status: string;
+  status_formatted: string;
+  card_brand: string;
+  card_last_four: string;
+  pause: string | null;
+  cancelled: boolean;
+  trial_ends_at: string | null;
+  billing_anchor: number;
+  urls: {
+    update_payment_method: string;
+  };
+  renews_at: string;
+  ends_at: string | null;
+  created_at: string;
+  updated_at: string;
+  test_mode: boolean;
+}
+
+const isError = (error: unknown): error is Error => {
+  return error instanceof Error;
+};
 
 // Add more events here if you want
 // https://docs.lemonsqueezy.com/api/webhooks#event-types
@@ -8,6 +49,7 @@ type EventName =
   | "order_created"
   | "order_refunded"
   | "subscription_created"
+  | "subscription_updated"
   | "subscription_cancelled"
   | "subscription_resumed"
   | "subscription_expired"
@@ -21,95 +63,12 @@ type Payload = {
   meta: {
     test_mode: boolean;
     event_name: EventName;
+    custom_data: {
+      teamId: string;
+    };
   };
   data: LemonsqueezySubscription;
 };
-
-// {
-//   "meta": {
-//     "test_mode": true,
-//     "event_name": "subscription_created"
-//   },
-//   "data": {
-//     "type": "subscriptions",
-//     "id": "61133",
-//     "attributes": {
-//       "store_id": 19927,
-//       "customer_id": 747143,
-//       "order_id": 770133,
-//       "order_item_id": 736019,
-//       "product_id": 76954,
-//       "variant_id": 79553,
-//       "product_name": "Pro",
-//       "variant_name": "Yearly",
-//       "user_name": "Amos Bastian",
-//       "user_email": "amosbastian@googlemail.com",
-//       "status": "active",
-//       "status_formatted": "Active",
-//       "card_brand": "visa",
-//       "card_last_four": "4242",
-//       "pause": null,
-//       "cancelled": false,
-//       "trial_ends_at": null,
-//       "billing_anchor": 21,
-//       "urls": {
-//         "update_payment_method": "https://amos.lemonsqueezy.com/subscription/61133/payment-details?expires=1684793564&signature=65ebeded069986ad1086b860ee751c57cf00e8066266aef44a8d97ee22424423"
-//       },
-//       "renews_at": "2023-06-21T22:12:39.000000Z",
-//       "ends_at": null,
-//       "created_at": "2023-05-21T22:12:41.000000Z",
-//       "updated_at": "2023-05-21T22:12:43.000000Z",
-//       "test_mode": true
-//     },
-//     "relationships": {
-//       "store": {
-//         "links": {
-//           "related": "https://api.lemonsqueezy.com/v1/subscriptions/61133/store",
-//           "self": "https://api.lemonsqueezy.com/v1/subscriptions/61133/relationships/store"
-//         }
-//       },
-//       "customer": {
-//         "links": {
-//           "related": "https://api.lemonsqueezy.com/v1/subscriptions/61133/customer",
-//           "self": "https://api.lemonsqueezy.com/v1/subscriptions/61133/relationships/customer"
-//         }
-//       },
-//       "order": {
-//         "links": {
-//           "related": "https://api.lemonsqueezy.com/v1/subscriptions/61133/order",
-//           "self": "https://api.lemonsqueezy.com/v1/subscriptions/61133/relationships/order"
-//         }
-//       },
-//       "order-item": {
-//         "links": {
-//           "related": "https://api.lemonsqueezy.com/v1/subscriptions/61133/order-item",
-//           "self": "https://api.lemonsqueezy.com/v1/subscriptions/61133/relationships/order-item"
-//         }
-//       },
-//       "product": {
-//         "links": {
-//           "related": "https://api.lemonsqueezy.com/v1/subscriptions/61133/product",
-//           "self": "https://api.lemonsqueezy.com/v1/subscriptions/61133/relationships/product"
-//         }
-//       },
-//       "variant": {
-//         "links": {
-//           "related": "https://api.lemonsqueezy.com/v1/subscriptions/61133/variant",
-//           "self": "https://api.lemonsqueezy.com/v1/subscriptions/61133/relationships/variant"
-//         }
-//       },
-//       "subscription-invoices": {
-//         "links": {
-//           "related": "https://api.lemonsqueezy.com/v1/subscriptions/61133/subscription-invoices",
-//           "self": "https://api.lemonsqueezy.com/v1/subscriptions/61133/relationships/subscription-invoices"
-//         }
-//       }
-//     },
-//     "links": {
-//       "self": "https://api.lemonsqueezy.com/v1/subscriptions/61133"
-//     }
-//   }
-// }
 
 export const POST = async (req: NextRequest) => {
   try {
@@ -127,9 +86,14 @@ export const POST = async (req: NextRequest) => {
     const payload = JSON.parse(rawBody);
 
     const {
-      meta: { event_name: eventName },
+      meta: {
+        event_name: eventName,
+        custom_data: { teamId },
+      },
       data: subscription,
     } = payload as Payload;
+
+    console.log({ teamId });
 
     switch (eventName) {
       case "order_created":
@@ -139,6 +103,7 @@ export const POST = async (req: NextRequest) => {
         // Do stuff here if you are using orders
         break;
       case "subscription_created":
+      case "subscription_updated":
       case "subscription_cancelled":
       case "subscription_resumed":
       case "subscription_expired":
@@ -147,25 +112,51 @@ export const POST = async (req: NextRequest) => {
       case "subscription_payment_failed":
       case "subscription_payment_success":
       case "subscription_payment_recovered":
-        console.log("Update subscription");
+        await db.transaction(async (tx) => {
+          console.log(`Updating team: ${teamId}`);
+          await tx
+            .update(teams)
+            .set({ customerId: subscription.attributes.customer_id })
+            .where(eq(teams.id, Number.parseInt(teamId, 10)));
+
+          console.log(`Updating subscription: ${subscription.id}`);
+          const parsedSubscription = insertSubscriptionSchema.parse({
+            cardBrand: subscription.attributes.card_brand,
+            cardLastFour: subscription.attributes.card_last_four,
+            id: subscription.id,
+            productId: subscription.attributes.product_id,
+            status: subscription.attributes.status,
+            teamId: Number.parseInt(teamId, 10),
+            updatePaymentUrl: subscription.attributes.urls.update_payment_method,
+            variantId: subscription.attributes.variant_id,
+            endsAt: subscription.attributes.ends_at ? new Date(subscription.attributes.ends_at) : null,
+            renewsAt: subscription.attributes.renews_at ? new Date(subscription.attributes.renews_at) : null,
+            trialEndsAt: subscription.attributes.trial_ends_at ? new Date(subscription.attributes.trial_ends_at) : null,
+          });
+
+          await tx
+            .insert(subscriptions)
+            .values(parsedSubscription)
+            .onDuplicateKeyUpdate({ set: { ...parsedSubscription, updatedAt: new Date() } });
+        });
+
         break;
       default:
         throw new Error(`🤷‍♀️ Unhandled event: ${eventName}`);
     }
   } catch (error: unknown) {
-    if (typeof error === "string") {
-      return new Response("Webhook error", {
-        status: 400,
-      });
-    }
-
-    if (error instanceof Error) {
+    if (isError(error)) {
+      console.error(error.message);
       return new Response(`Webhook error: ${error.message}`, {
         status: 400,
       });
     }
 
-    throw error;
+    console.error(error);
+
+    return new Response("Webhook error", {
+      status: 400,
+    });
   }
 
   return new Response(null, {

@@ -11,11 +11,10 @@ const handler = (req: NextRequest) => {
     router: appRouter,
     async createContext() {
       const authenticationRequest = authentication.handleRequest({ request: req, cookies: cookies as any });
-      const { session } = await authenticationRequest.validateUser();
 
       return createContextInner({
         req,
-        session,
+        session: await authenticationRequest.validateUser(),
       });
     },
     onError:

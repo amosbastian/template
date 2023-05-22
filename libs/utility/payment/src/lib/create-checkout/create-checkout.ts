@@ -14,7 +14,7 @@ export async function createCheckout({
         attributes: {
           checkout_data: {
             custom: {
-              teamId,
+              teamId: `${teamId}`,
             },
           },
         },
