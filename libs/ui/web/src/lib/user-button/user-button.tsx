@@ -1,7 +1,9 @@
 "use client";
 
 import { AvatarProps } from "@radix-ui/react-avatar";
+import { api } from "@template/utility/trpc-next-client";
 import { UserIcon } from "lucide-react";
+import { useTheme } from "next-themes";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "../avatar/avatar";
@@ -12,7 +14,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../dropdown-menu/dropdown-menu";
-import { api } from "@template/utility/trpc-next-client";
+import { Label } from "../label/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../select/select";
 
 interface UserButtonProps extends AvatarProps {
   user: {
@@ -25,6 +28,7 @@ interface UserButtonProps extends AvatarProps {
 export function UserButton({ user, ...props }: UserButtonProps) {
   const router = useRouter();
   const trpcContext = api.useContext();
+  const { setTheme, theme } = useTheme();
 
   return (
     <DropdownMenu>
@@ -56,6 +60,22 @@ export function UserButton({ user, ...props }: UserButtonProps) {
         <DropdownMenuItem asChild>
           <Link href="/dashboard/settings">Settings</Link>
         </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <div className="p-2 text-sm">
+          <div className="flex items-center space-x-4">
+            <Label htmlFor="theme">Theme</Label>
+            <Select value={theme} onValueChange={setTheme} defaultValue={theme}>
+              <SelectTrigger id="theme" className="h-8">
+                <SelectValue placeholder="Theme" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="light">Light</SelectItem>
+                <SelectItem value="dark">Dark</SelectItem>
+                <SelectItem value="system">System</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
         <DropdownMenuSeparator />
         <DropdownMenuItem
           className="cursor-pointer"
