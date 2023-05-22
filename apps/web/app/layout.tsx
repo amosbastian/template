@@ -94,9 +94,9 @@ export const metadata: Metadata = {
     creator: "@amosbastian",
   },
   icons: {
-    icon: "/favicon.ico",
-    shortcut: "/favicon-32x32.png",
-    apple: "/apple-touch-icon.png",
+    icon: "/images/favicon-196.png",
+    shortcut: "/images/favicon-196.png",
+    apple: "/images/apple-icon-180.png",
   },
   manifest: `${BASE_URL}/site.webmanifest`,
 };

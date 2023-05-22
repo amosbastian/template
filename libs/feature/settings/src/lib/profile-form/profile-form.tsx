@@ -13,6 +13,7 @@ import {
   Input,
 } from "@template/ui/web";
 import { classnames } from "@template/utility/shared";
+import { api } from "@template/utility/trpc-next-client";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
@@ -32,31 +33,32 @@ const formSchema = z.object({
     .email(),
 });
 
-type ProfileFormValues = z.infer<typeof formSchema>;
-
-// This can come from your database or API.
-const defaultValues: Partial<ProfileFormValues> = {};
+type FormValues = z.infer<typeof formSchema>;
 
 type ProfileFormProps = {
   className?: string;
+  defaultValues?: Partial<FormValues>;
 };
 
-export function ProfileForm({ className }: ProfileFormProps) {
-  const form = useForm<ProfileFormValues>({
+export function ProfileForm({ className, defaultValues }: ProfileFormProps) {
+  const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues,
-    mode: "onChange",
   });
 
-  function onSubmit(data: ProfileFormValues) {
-    // toast({
-    //   title: "You submitted the following values:",
-    //   description: (
-    //     <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-    //       <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-    //     </pre>
-    //   ),
-    // });
+  const { mutate: updateUser, isLoading: isUpdatingUser } = api.user.update.useMutation({
+    onSuccess: () => {
+      console.log("updated");
+    },
+  });
+
+  function onSubmit(data: FormValues) {
+    updateUser({
+      email: data.email,
+      name: data.name,
+      // If email changed, then set email to not verified
+      emailVerified: defaultValues?.email !== data.email ? null : undefined,
+    });
   }
 
   return (
@@ -95,7 +97,7 @@ export function ProfileForm({ className }: ProfileFormProps) {
             </FormItem>
           )}
         />
-        <Button type="submit" size="sm">
+        <Button type="submit" size="sm" isLoading={isUpdatingUser}>
           Update profile
         </Button>
       </form>

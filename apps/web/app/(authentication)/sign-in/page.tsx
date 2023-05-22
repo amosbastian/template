@@ -21,7 +21,7 @@ export default function SignInPage() {
       </Link>
       <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[420px]">
         <div className="flex flex-col space-y-2 text-center">
-          <Logo className="mx-auto h-6" />
+          <Logo className="mx-auto mb-6 h-6" />
           <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">Sign in to {BRAND_NAME}</h1>
         </div>
         <SignInForm />
