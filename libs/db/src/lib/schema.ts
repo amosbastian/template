@@ -35,6 +35,10 @@ export const users = mysqlTable(
   }),
 );
 
+export const updateUserSchema = createInsertSchema(users, {
+  id: (schema) => schema.id.optional(),
+  email: (schema) => schema.email.email().optional(),
+});
 export type User = InferModel<typeof users, "select">;
 
 export const usersRelations = relations(users, ({ many, one }) => ({

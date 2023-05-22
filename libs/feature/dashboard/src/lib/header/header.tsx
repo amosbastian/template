@@ -1,14 +1,7 @@
 import { getAuthentication } from "@template/authentication";
 import { db, users } from "@template/db";
-import {
-  Button,
-  Dialog,
-  DialogContent,
-  DialogTrigger,
-  TeamSwitcher,
-  UserButton,
-  buttonVariants,
-} from "@template/ui/web";
+import { TeamSwitcher } from "@template/feature/team";
+import { Button, Dialog, DialogContent, DialogTrigger, UserButton, buttonVariants } from "@template/ui/web";
 import { Logo } from "@template/ui/web/server";
 import { classnames } from "@template/utility/shared";
 import { eq } from "drizzle-orm";
@@ -48,7 +41,7 @@ export async function Header() {
   });
 
   const activeTeam = result?.activeTeam;
-  const teams = result?.teams.filter(({ team }) => team.id !== activeTeam?.id).map(({ team }) => team);
+  const teams = (result?.teams ?? []).map(({ team }) => team);
 
   return (
     <header className="absolute inset-x-0 top-0 z-50 flex h-16 border-b">

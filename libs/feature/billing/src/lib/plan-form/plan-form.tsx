@@ -32,7 +32,6 @@ interface PlanFormProps {
 }
 
 export function PlanForm({ defaultValues = {}, plans }: PlanFormProps) {
-  console.log({ defaultValues });
   const interval = "month";
 
   const { mutate, isLoading } = api.billing.checkout.useMutation({
