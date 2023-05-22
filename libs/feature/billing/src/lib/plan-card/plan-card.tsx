@@ -35,16 +35,23 @@ export async function PlanCard({ className, ...rest }: CardProps) {
   }
 
   const trialEnded = addDays(activeTeam.createdAt, 7) < new Date();
-
   const plans = await getPlans();
+  const activePlan = activeTeam.subscription
+    ? plans.find(
+        (plan) =>
+          `${plan.productId}` === `${activeTeam.subscription.productId}` &&
+          `${plan.variantId}` === `${activeTeam.subscription.variantId}`,
+      )
+    : undefined;
 
   return (
     <Card className={className} {...rest}>
       <CardHeader>
         <CardTitle>Plan</CardTitle>
         <CardDescription>
+          {/* TODO: improve this */}
           {activeTeam.subscription
-            ? "You are currently on the X plan. Free or charge"
+            ? `You are currently on the ${activeTeam.subscription.productName} (${activeTeam.subscription.variantName}) plan.`
             : trialEnded
             ? `Your free trial has ended. Upgrade to continue using ${BRAND_NAME}`
             : `You are currently on the free trial. ${formatDistance(
@@ -54,7 +61,7 @@ export async function PlanCard({ className, ...rest }: CardProps) {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <PlanForm plans={plans} />
+        <PlanForm defaultValues={activePlan ? { plan: activePlan?.productSlug } : undefined} plans={plans} />
       </CardContent>
     </Card>
   );

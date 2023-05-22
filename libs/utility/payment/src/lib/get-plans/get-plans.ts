@@ -14,8 +14,9 @@ export async function getPlans() {
 
     return [
       {
-        id: variant.id,
-        slug: variant.attributes.slug,
+        variantId: variant.id,
+        variantSlug: variant.attributes.slug,
+        productId: product.id,
         productSlug: product.attributes.slug,
         interval: variant.attributes.interval,
         price: variant.attributes.price,

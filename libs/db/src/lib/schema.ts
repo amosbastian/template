@@ -62,7 +62,7 @@ export const teamsRelations = relations(teams, ({ many, one }) => ({
   activeMembers: many(users),
   invitations: many(invitations),
   subscription: one(subscriptions, {
-    fields: [teams.customerId],
+    fields: [teams.id],
     references: [subscriptions.teamId],
   }),
 }));
@@ -118,10 +118,15 @@ export const invitationsRelations = relations(invitations, ({ one }) => ({
   }),
 }));
 
+// Billing
 export const subscriptions = mysqlTable("subscriptions", {
   id: varchar("id", { length: 255 }).primaryKey(),
   productId: int("product_id").notNull(),
+  // If we sync products, then remove this
+  productName: varchar("productName", { length: 255 }).notNull(),
   variantId: int("variant_id").notNull(),
+  // If we sync variants, then remove this
+  variantName: varchar("variantName", { length: 255 }).notNull(),
   teamId: int("team_id").notNull(),
   status: mysqlEnum("status", ["on_trial", "active", "paused", "past_due", "unpaid", "cancelled", "expired"]).notNull(),
   trialEndsAt: datetime("trial_ends_at"),
@@ -149,6 +154,23 @@ export const subscriptionsRelations = relations(subscriptions, ({ one }) => ({
     references: [teams.customerId],
   }),
 }));
+
+// TODO: think about if we want to sync these too
+// export const products = mysqlTable("products", {
+//   id: varchar("id", { length: 255 }).primaryKey(),
+//   slug: varchar("slug", { length: 255 }).notNull(),
+//   createdAt: timestamp("created_at", { fsp: 2 }).notNull().defaultNow(),
+//   updatedAt: timestamp("updated_at", { fsp: 2 }),
+// });
+
+// // If you want to change LemonSqueezy for Stripe for example, then this would be the price
+// export const variants = mysqlTable("variants", {
+//   id: varchar("id", { length: 255 }).primaryKey(),
+//   slug: varchar("slug", { length: 255 }).notNull(),
+//   interval: mysqlEnum("status", ["month", "year"]).notNull(),
+//   createdAt: timestamp("created_at", { fsp: 2 }).notNull().defaultNow(),
+//   updatedAt: timestamp("updated_at", { fsp: 2 }),
+// });
 
 // Lucia
 export const sessions = mysqlTable("auth_session", {

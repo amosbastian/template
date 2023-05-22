@@ -19,17 +19,21 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 
 const formSchema = z.object({
-  plan: z.enum(["basic", "pro", "business"], {
-    required_error: "You need to select a notification type.",
+  plan: z.string({
+    required_error: "You need to select a plan",
   }),
 });
 
+type FormValues = z.infer<typeof formSchema>;
+
 interface PlanFormProps {
+  defaultValues?: Partial<FormValues>;
   plans: Awaited<ReturnType<typeof getPlans>>;
 }
 
-export function PlanForm({ plans }: PlanFormProps) {
-  const [interval, setInterval] = React.useState<"year" | "month">("month");
+export function PlanForm({ defaultValues = {}, plans }: PlanFormProps) {
+  console.log({ defaultValues });
+  const interval = "month";
 
   const { mutate, isLoading } = api.billing.checkout.useMutation({
     onSuccess: (data) => {
@@ -41,13 +45,14 @@ export function PlanForm({ plans }: PlanFormProps) {
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
+    defaultValues,
   });
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
-    const variant = plans.find((plan) => plan.interval === interval && plan.productSlug === data.plan);
+    const plan = plans.find((plan) => plan.interval === interval && plan.productSlug === data.plan);
 
-    if (variant) {
-      mutate({ variant: variant.id });
+    if (plan) {
+      mutate({ variant: plan.variantSlug });
     }
     // toast({
     //   title: "You submitted the following values:",
@@ -79,7 +84,7 @@ export function PlanForm({ plans }: PlanFormProps) {
                 >
                   {filteredPlans.map((plan) => {
                     return (
-                      <FormItem key={plan.id} className="flex items-center space-x-3 space-y-0">
+                      <FormItem key={plan.productId} className="flex items-center space-x-3 space-y-0">
                         <FormControl>
                           <RadioGroupItem value={plan.productSlug} />
                         </FormControl>
