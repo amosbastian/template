@@ -95,7 +95,7 @@ export function TeamSwitcher({ activeTeam, className, teams = [] }: TeamSwitcher
           >
             <Avatar className="mr-2 h-5 w-5">
               <AvatarImage src={`https://avatar.vercel.sh/random.png`} alt={activeTeam.name} />
-              <AvatarFallback>SC</AvatarFallback>
+              <AvatarFallback>AB</AvatarFallback>
             </Avatar>
             <p className="truncate">{activeTeam.name}</p>
             <ChevronsUpDown className="ml-auto h-4 w-4 shrink-0 opacity-50" />
@@ -119,7 +119,7 @@ export function TeamSwitcher({ activeTeam, className, teams = [] }: TeamSwitcher
                       <AvatarImage src={`https://avatar.vercel.sh/random.png`} alt={team.name} />
                       <AvatarFallback>SC</AvatarFallback>
                     </Avatar>
-                    {team.name}
+                    <p className="truncate">{team.name}</p>
                     <Check
                       className={classnames("ml-auto h-4 w-4", activeTeam.id === team.id ? "opacity-100" : "opacity-0")}
                     />
