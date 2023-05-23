@@ -2,10 +2,11 @@
 
 import { AvatarProps } from "@radix-ui/react-avatar";
 import { api } from "@template/utility/trpc-next-client";
-import { UserIcon } from "lucide-react";
+import { Loader2, UserIcon } from "lucide-react";
 import { useTheme } from "next-themes";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
+import * as React from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "../avatar/avatar";
 import {
   DropdownMenu,
@@ -26,9 +27,14 @@ interface UserButtonProps extends AvatarProps {
 }
 
 export function UserButton({ user, ...props }: UserButtonProps) {
+  const [isSigningOut, setIsSigningOut] = React.useState<boolean>(false);
+
+  const params = useParams();
   const router = useRouter();
   const trpcContext = api.useContext();
   const { setTheme, theme } = useTheme();
+
+  const teamSlug = params.teamSlug;
 
   return (
     <DropdownMenu>
@@ -55,10 +61,10 @@ export function UserButton({ user, ...props }: UserButtonProps) {
         </div>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
-          <Link href="/dashboard">Dashboard</Link>
+          <Link href={`/${teamSlug}/dashboard`}>Dashboard</Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
-          <Link href="/dashboard/settings">Settings</Link>
+          <Link href={`/${teamSlug}/settings`}>Settings</Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <div className="p-2 text-sm">
@@ -80,17 +86,21 @@ export function UserButton({ user, ...props }: UserButtonProps) {
         <DropdownMenuItem
           className="cursor-pointer"
           onSelect={async () => {
+            setIsSigningOut(true);
             const response = await fetch("/api/sign-out", {
               method: "POST",
             });
 
             trpcContext.invalidate();
 
+            setIsSigningOut(false);
+
             if (response.redirected) {
               return router.push(response.url);
             }
           }}
         >
+          {isSigningOut ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
           Sign out
         </DropdownMenuItem>
       </DropdownMenuContent>

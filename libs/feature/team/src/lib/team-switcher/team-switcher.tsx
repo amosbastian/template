@@ -34,7 +34,7 @@ import {
 import { classnames } from "@template/utility/shared";
 import { api } from "@template/utility/trpc-next-client";
 import { Check, ChevronsUpDown, PlusCircle } from "lucide-react";
-import { revalidatePath } from "next/cache";
+import { useRouter } from "next/navigation";
 import * as React from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -54,12 +54,12 @@ type TeamSwitcherProps = {
 export function TeamSwitcher({ activeTeam, className, teams = [] }: TeamSwitcherProps) {
   const [open, setOpen] = React.useState(false);
   const [showNewTeamDialog, setShowNewTeamDialog] = React.useState(false);
+  const router = useRouter();
 
-  const { mutate: updateUser, isLoading: isUpdatingUser } = api.user.update.useMutation({
-    onSuccess: () => {
+  const { mutate: updateUser, isLoading: isUpdatingUser } = api.user.changeTeam.useMutation({
+    onSuccess: (team) => {
       setShowNewTeamDialog(false);
-      // TODO: find a better solution for this because it's SLOW AF
-      revalidatePath("/");
+      router.push(`/${team?.slug}/dashboard`);
     },
   });
 
