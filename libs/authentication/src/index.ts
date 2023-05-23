@@ -1,2 +1,2 @@
 export * from "./lib/authentication";
-export * from "./lib/getAuthentication";
+export * from "./lib/get-authentication";

@@ -24,6 +24,7 @@ export async function Header() {
         columns: {
           id: true,
           name: true,
+          slug: true,
         },
       },
       teams: {
@@ -33,6 +34,7 @@ export async function Header() {
             columns: {
               id: true,
               name: true,
+              slug: true,
             },
           },
         },

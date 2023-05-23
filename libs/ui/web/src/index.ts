@@ -16,6 +16,7 @@ export * from "./lib/label/label";
 export * from "./lib/popover/popover";
 export * from "./lib/radio-group/radio-group";
 export * from "./lib/select/select";
+export * from "./lib/sign-out-button/sign-out-button";
 export * from "./lib/tabs/tabs";
 export * from "./lib/theme-provider/theme-provider";
 export * from "./lib/user-button/user-button";

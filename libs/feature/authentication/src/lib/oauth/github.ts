@@ -1,6 +1,7 @@
 import { authentication, githubAuthentication } from "@template/authentication";
-import { createTeam } from "@template/db";
+import { createTeam, db, teams } from "@template/db";
 import { getFirstPartOfEmail } from "@template/utility/shared";
+import { eq } from "drizzle-orm";
 import { cookies } from "next/headers";
 import slugify from "url-slug";
 
@@ -34,6 +35,13 @@ export async function githubOauth(request: Request) {
       });
     }
 
+    const team = await db.query.teams.findFirst({
+      where: eq(teams.id, user.activeTeamId),
+      columns: {
+        slug: true,
+      },
+    });
+
     const session = await authentication.createSession(user.userId);
     const authenticationRequest = authentication.handleRequest({ request, cookies: cookies as any });
     authenticationRequest.setSession(session);
@@ -41,7 +49,7 @@ export async function githubOauth(request: Request) {
     return new Response(null, {
       status: 302,
       headers: {
-        location: "/dashboard",
+        location: team ? `/${team.slug}/dashboard` : "/",
       },
     });
   } catch (error) {

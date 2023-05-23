@@ -91,13 +91,13 @@ export function TeamSwitcher({ activeTeam, className, teams = [] }: TeamSwitcher
             role="combobox"
             aria-expanded={open}
             aria-label="Select a team"
-            className={classnames("w-[200px] justify-between", className)}
+            className={classnames("w-[200px] justify-between truncate", className)}
           >
             <Avatar className="mr-2 h-5 w-5">
               <AvatarImage src={`https://avatar.vercel.sh/random.png`} alt={activeTeam.name} />
               <AvatarFallback>SC</AvatarFallback>
             </Avatar>
-            {activeTeam.name}
+            <p className="truncate">{activeTeam.name}</p>
             <ChevronsUpDown className="ml-auto h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>

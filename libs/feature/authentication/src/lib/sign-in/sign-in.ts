@@ -1,4 +1,6 @@
 import { authentication } from "@template/authentication";
+import { db, teams } from "@template/db";
+import { eq } from "drizzle-orm";
 import { LuciaError } from "lucia-auth";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
@@ -15,10 +17,28 @@ export async function signIn(request: Request) {
     authenticationRequest.setSession(session);
 
     if (session) {
+      const { user } = await authenticationRequest.validateUser();
+
+      if (!user) {
+        return new Response(null, {
+          status: 302,
+          headers: {
+            location: "/",
+          },
+        });
+      }
+
+      const team = await db.query.teams.findFirst({
+        where: eq(teams.id, user.activeTeamId),
+        columns: {
+          slug: true,
+        },
+      });
+
       return new Response(null, {
         status: 302,
         headers: {
-          location: "/",
+          location: team ? `/${team.slug}/dashboard` : "/",
         },
       });
     }
@@ -36,7 +56,9 @@ export async function signIn(request: Request) {
         },
       );
     }
+
     console.error(error);
+
     return NextResponse.json(
       {
         error: "Unknown error occurred",

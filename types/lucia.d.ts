@@ -4,10 +4,10 @@ declare namespace Lucia {
   type Auth = import("../libs/authentication/src/lib/authentication.ts").Auth;
   type UserAttributes = {
     email: string;
-    email_verified: string | null;
+    email_verified?: Date | null;
     name?: string;
     image?: string;
-    active_team_id: number;
-    created_at: string;
+    active_team_id?: number;
+    created_at?: string;
   };
 }

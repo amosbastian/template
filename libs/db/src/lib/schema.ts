@@ -39,6 +39,7 @@ export const updateUserSchema = createInsertSchema(users, {
   id: (schema) => schema.id.optional(),
   email: (schema) => schema.email.email().optional(),
 });
+
 export type User = InferModel<typeof users, "select">;
 
 export const usersRelations = relations(users, ({ many, one }) => ({
@@ -52,13 +53,16 @@ export const usersRelations = relations(users, ({ many, one }) => ({
 export const teams = mysqlTable("teams", {
   id: serial("id").primaryKey(),
   name: text("name").notNull(),
+  // Add unique constraint when implemented in Drizzle
   slug: text("slug").notNull(),
   createdAt: timestamp("created_at", { fsp: 2 }).notNull().defaultNow(),
   // Used for billing
   customerId: int("customer_id"),
 });
 
-export const insertTeamSchema = createInsertSchema(teams);
+export const insertTeamSchema = createInsertSchema(teams, {
+  slug: (schema) => schema.slug.optional(),
+});
 
 export type Team = InferModel<typeof teams, "select">;
 
