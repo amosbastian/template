@@ -4,9 +4,9 @@ import { Header } from "@template/feature/dashboard/server";
 import { eq, sql } from "drizzle-orm";
 import { notFound, redirect } from "next/navigation";
 
-type DashboardParams = { children: React.ReactNode; params: { teamSlug: string } };
+type DashboardLayoutProps = { children: React.ReactNode; params: { teamSlug: string } };
 
-export default async function DashboardLayout({ children, params }: DashboardParams) {
+export default async function DashboardLayout({ children, params }: DashboardLayoutProps) {
   const { user } = await getAuthentication();
 
   if (!user) {
