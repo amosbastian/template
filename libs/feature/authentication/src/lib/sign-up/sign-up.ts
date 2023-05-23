@@ -1,11 +1,12 @@
 import { authentication } from "@template/authentication";
-import { createTeam } from "@template/db";
+import { createTeam, db, teams } from "@template/db";
 import { getFirstPartOfEmail } from "@template/utility/shared";
 import { LuciaError } from "lucia-auth";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import slugify from "url-slug";
 import { authenticationSchema } from "../authentication-form/schema";
+import { eq } from "drizzle-orm";
 
 export async function signUp(request: Request) {
   const json = await request.json();
@@ -35,10 +36,17 @@ export async function signUp(request: Request) {
     const authenticationRequest = authentication.handleRequest({ request, cookies: cookies as any });
     authenticationRequest.setSession(session);
 
+    const team = await db.query.teams.findFirst({
+      where: eq(teams.id, user.activeTeamId),
+      columns: {
+        slug: true,
+      },
+    });
+
     return new Response(null, {
       status: 302,
       headers: {
-        location: "/dashboard",
+        location: team ? `/${team.slug}/dashboard` : "/",
       },
     });
   } catch (error) {
