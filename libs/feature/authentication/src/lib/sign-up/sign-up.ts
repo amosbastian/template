@@ -1,9 +1,10 @@
 import { authentication } from "@template/authentication";
-import { db, teamMembers, teams, users } from "@template/db";
-import { eq } from "drizzle-orm";
+import { createTeam } from "@template/db";
+import { getFirstPartOfEmail } from "@template/utility/shared";
 import { LuciaError } from "lucia-auth";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
+import slugify from "url-slug";
 import { authenticationSchema } from "../authentication-form/schema";
 
 export async function signUp(request: Request) {
@@ -22,11 +23,12 @@ export async function signUp(request: Request) {
       },
     });
 
-    await db.transaction(async (tx) => {
-      const team = await tx.insert(teams).values({ name: "Personal" });
-      const teamId = team[0].insertId;
-      await tx.insert(teamMembers).values({ userId: user.id, teamId: teamId, role: "admin" });
-      await tx.update(users).set({ activeTeamId: teamId }).where(eq(users.id, user.id));
+    const firstPartOfEmail = getFirstPartOfEmail(user.email);
+
+    await createTeam({
+      slug: slugify(firstPartOfEmail),
+      name: `${user.name ?? firstPartOfEmail}'s team`,
+      userId: user.id,
     });
 
     const session = await authentication.createSession(user.userId);

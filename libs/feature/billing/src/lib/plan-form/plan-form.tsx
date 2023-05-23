@@ -14,7 +14,6 @@ import {
 } from "@template/ui/web";
 import { getPlans } from "@template/utility/payment";
 import { api } from "@template/utility/trpc-next-client";
-import * as React from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 

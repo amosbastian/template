@@ -52,6 +52,7 @@ export const usersRelations = relations(users, ({ many, one }) => ({
 export const teams = mysqlTable("teams", {
   id: serial("id").primaryKey(),
   name: text("name").notNull(),
+  slug: text("slug").notNull(),
   createdAt: timestamp("created_at", { fsp: 2 }).notNull().defaultNow(),
   // Used for billing
   customerId: int("customer_id"),

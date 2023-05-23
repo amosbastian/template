@@ -1,7 +1,8 @@
 import { authentication, githubAuthentication } from "@template/authentication";
-import { db, teamMembers, teams, users } from "@template/db";
-import { eq } from "drizzle-orm";
+import { createTeam } from "@template/db";
+import { getFirstPartOfEmail } from "@template/utility/shared";
 import { cookies } from "next/headers";
+import slugify from "url-slug";
 
 export async function githubOauth(request: Request) {
   const url = new URL(request.url);
@@ -26,11 +27,10 @@ export async function githubOauth(request: Request) {
         });
 
     if (!existingUser) {
-      await db.transaction(async (tx) => {
-        const team = await tx.insert(teams).values({ name: "Personal" });
-        const teamId = team[0].insertId;
-        await tx.insert(teamMembers).values({ userId: user.id, teamId: team[0].insertId, role: "admin" });
-        await tx.update(users).set({ activeTeamId: teamId }).where(eq(users.id, user.id));
+      await createTeam({
+        slug: slugify(getFirstPartOfEmail(user.email)),
+        name: `${user.name}'s team`,
+        userId: user.id,
       });
     }
 
