@@ -93,8 +93,6 @@ export const POST = async (req: NextRequest) => {
       data: subscription,
     } = payload as Payload;
 
-    console.log({ teamId });
-
     switch (eventName) {
       case "order_created":
         // Do stuff here if you are using orders

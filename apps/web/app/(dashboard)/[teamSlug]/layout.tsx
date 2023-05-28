@@ -19,8 +19,6 @@ export default async function DashboardLayout({ children, params }: DashboardLay
     .leftJoin(teamMembers, eq(teamMembers.userId, user.id))
     .where(eq(teams.slug, params.teamSlug));
 
-  console.log({ result, teamSlug: params.teamSlug });
-
   const count = result[0].count;
 
   // User is not a member of the current team

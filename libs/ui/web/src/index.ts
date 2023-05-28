@@ -19,4 +19,5 @@ export * from "./lib/select/select";
 export * from "./lib/sign-out-button/sign-out-button";
 export * from "./lib/tabs/tabs";
 export * from "./lib/theme-provider/theme-provider";
+export * from "./lib/toaster/toaster";
 export * from "./lib/user-button/user-button";

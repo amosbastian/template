@@ -1,5 +1,5 @@
 import { BASE_URL, BRAND_DESCRIPTION, BRAND_NAME } from "@template/configuration";
-import { ThemeProvider } from "@template/ui/web";
+
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { ClientProviders } from "./client-providers";
@@ -31,11 +31,9 @@ export default function RootLayout({
     >
       <ClientProviders>
         <body className="h-full">
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-            {children}
-            {signInModal}
-            {signUpModal}
-          </ThemeProvider>
+          {children}
+          {signInModal}
+          {signUpModal}
         </body>
       </ClientProviders>
     </html>

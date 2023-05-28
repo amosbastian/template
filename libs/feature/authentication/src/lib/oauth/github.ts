@@ -53,7 +53,7 @@ export async function githubOauth(request: Request) {
       },
     });
   } catch (error) {
-    console.log((error as any).message);
+    console.error((error as any).message);
     return new Response(null, {
       status: 500,
     });

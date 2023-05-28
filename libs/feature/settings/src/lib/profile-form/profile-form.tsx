@@ -11,6 +11,7 @@ import {
   FormLabel,
   FormMessage,
   Input,
+  toast,
 } from "@template/ui/web";
 import { classnames } from "@template/utility/shared";
 import { api } from "@template/utility/trpc-next-client";
@@ -21,14 +22,14 @@ const formSchema = z.object({
   name: z
     .string()
     .min(2, {
-      message: "Username must be at least 2 characters.",
+      message: "Name must be at least 2 characters.",
     })
     .max(30, {
-      message: "Username must not be longer than 30 characters.",
+      message: "Name must not be longer than 30 characters.",
     }),
   email: z
     .string({
-      required_error: "Please select an email to display.",
+      required_error: "An email is required",
     })
     .email(),
 });
@@ -48,7 +49,7 @@ export function ProfileForm({ className, defaultValues }: ProfileFormProps) {
 
   const { mutate: updateUser, isLoading: isUpdatingUser } = api.user.update.useMutation({
     onSuccess: () => {
-      console.log("updated");
+      toast({ title: "Profile updated" });
     },
   });
 
