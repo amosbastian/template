@@ -30,8 +30,20 @@ export const users = mysqlTable(
     activeTeamId: serial("active_team_id"),
     createdAt: timestamp("created_at", { fsp: 2 }).notNull().defaultNow(),
   },
-  (users) => ({
-    emailIndex: uniqueIndex("email_idx").on(users.email),
+  (table) => ({
+    emailIndex: uniqueIndex("email_idx").on(table.email),
+  }),
+);
+
+export const verificationTokens = mysqlTable(
+  "verification_tokens",
+  {
+    token: varchar("token", { length: 255 }).primaryKey(),
+    email: varchar("email", { length: 256 }).notNull(),
+    expiresAt: timestamp("expires_at", { fsp: 2 }).notNull(),
+  },
+  (table) => ({
+    emailIndex: uniqueIndex("email_idx").on(table.email),
   }),
 );
 
