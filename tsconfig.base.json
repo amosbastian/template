@@ -32,6 +32,7 @@
       "@template/ui/email": ["libs/ui/email/src/index.ts"],
       "@template/ui/web": ["libs/ui/web/src/index.ts"],
       "@template/ui/web/server": ["libs/ui/web/src/server.ts"],
+      "@template/utility/email": ["libs/utility/email/src/index.ts"],
       "@template/utility/payment": ["libs/utility/payment/src/index.ts"],
       "@template/utility/shared": ["libs/utility/shared/src/index.ts"],
       "@template/utility/trpc": ["libs/utility/trpc/src/index.ts"],
