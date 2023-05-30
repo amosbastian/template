@@ -1,4 +1,4 @@
-import { db, teams, updateUserSchema, users } from "@template/db";
+import { db, keys, teams, updateUserSchema, users } from "@template/db";
 import { eq } from "drizzle-orm";
 import * as z from "zod";
 import { protectedProcedure, router } from "../../createRouter";
@@ -16,5 +16,9 @@ export const userRouter = router({
         slug: true,
       },
     });
+  }),
+  removeConnectedAccount: protectedProcedure.input(z.object({ id: z.string() })).mutation(async ({ input, ctx }) => {
+    console.log(`Deleting key: ${input.id}`);
+    return db.delete(keys).where(eq(keys.id, input.id)).execute();
   }),
 });

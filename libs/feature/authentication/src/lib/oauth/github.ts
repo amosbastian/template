@@ -1,5 +1,5 @@
 import { authentication, githubAuthentication } from "@template/authentication";
-import { createTeam, db, teams } from "@template/db";
+import { User, createTeam, db, teams, users } from "@template/db";
 import { getFirstPartOfEmail } from "@template/utility/shared";
 import { eq } from "drizzle-orm";
 import { cookies } from "next/headers";
@@ -16,10 +16,29 @@ export async function githubOauth(request: Request) {
   }
 
   try {
-    const { existingUser, providerUser, createUser } = await githubAuthentication.validateCallback(code);
+    const { existingUser, providerUser, createUser, createPersistentKey } = await githubAuthentication.validateCallback(
+      code,
+    );
+
+    let currentUser: User | undefined;
+
+    // Create persistent key if a user with the current email already exists
+    if (!existingUser) {
+      currentUser = await db.query.users
+        .findFirst({
+          where: eq(users.email, providerUser.email),
+        })
+        .execute();
+
+      if (currentUser) {
+        await createPersistentKey(currentUser.id);
+      }
+    }
 
     const user = existingUser
       ? existingUser
+      : currentUser
+      ? currentUser
       : await createUser({
           email: providerUser.email,
           name: providerUser.name,
@@ -27,7 +46,7 @@ export async function githubOauth(request: Request) {
           email_verified: new Date(),
         });
 
-    if (!existingUser) {
+    if (!existingUser && !currentUser) {
       await createTeam({
         slug: slugify(getFirstPartOfEmail(user.email)),
         name: `${user.name}'s team`,
@@ -42,14 +61,26 @@ export async function githubOauth(request: Request) {
       },
     });
 
-    const session = await authentication.createSession(user.userId);
+    const session = await authentication.createSession(user.id);
     const authenticationRequest = authentication.handleRequest({ request, cookies: cookies as any });
     authenticationRequest.setSession(session);
+
+    let location = "/";
+
+    if (team) {
+      location += team.slug;
+
+      if (currentUser) {
+        location += "/settings/accounts";
+      } else {
+        location += "/dashboard";
+      }
+    }
 
     return new Response(null, {
       status: 302,
       headers: {
-        location: team ? `/${team.slug}/dashboard` : "/",
+        location,
       },
     });
   } catch (error) {

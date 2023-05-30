@@ -1,20 +1,25 @@
 import { getAuthentication } from "@template/authentication";
 import { Avatar, AvatarFallback, AvatarImage } from "@template/ui/web";
-import { CreditCardIcon, UserCircle2Icon, UsersIcon } from "lucide-react";
+import { CreditCardIcon, LayoutDashboardIcon, UserCircle2Icon, UsersIcon } from "lucide-react";
 import { AsideLink } from "./aside-link";
 
 function getTeamNavigation(teamSlug: string) {
   return [
-    { name: "General", href: `/${teamSlug}/settings`, icon: UserCircle2Icon, current: true },
-    { name: "Billing", href: `/${teamSlug}/settings/billing`, icon: CreditCardIcon, current: false },
-    { name: "Team", href: `/${teamSlug}/settings/team`, icon: UsersIcon, current: false },
+    { name: "General", href: `/${teamSlug}/settings`, icon: LayoutDashboardIcon },
+    { name: "Billing", href: `/${teamSlug}/settings/billing`, icon: CreditCardIcon },
+    { name: "Team", href: `/${teamSlug}/settings/team`, icon: UsersIcon },
   ];
+}
+
+function getAccountNavigation(teamSlug: string) {
+  return [{ name: "Connected accounts", href: `/${teamSlug}/settings/accounts`, icon: UserCircle2Icon }];
 }
 
 type SettingsLayoutProps = { children: React.ReactNode; params: { teamSlug: string } };
 
 export default async function SettingsLayout({ children, params }: SettingsLayoutProps) {
   const teamNavigation = getTeamNavigation(params.teamSlug);
+  const accountNavigation = getAccountNavigation(params.teamSlug);
 
   const { user } = await getAuthentication();
 
@@ -41,13 +46,25 @@ export default async function SettingsLayout({ children, params }: SettingsLayou
           </ul>
         </nav>
         {user ? (
-          <div className="mb-4 flex flex-row gap-x-2 px-3">
-            <Avatar className="h-5 w-5">
-              <AvatarImage src={user.image} alt={user.name ?? user.email} />
-              <AvatarFallback>{user.name ?? user.email}</AvatarFallback>
-            </Avatar>
-            <p className="text-muted-foreground text-sm">Account</p>
-          </div>
+          <>
+            <div className="mb-4 flex flex-row gap-x-2 px-3">
+              <Avatar className="h-5 w-5">
+                <AvatarImage src={user.image} alt={user.name ?? user.email} />
+                <AvatarFallback>{user.name ?? user.email}</AvatarFallback>
+              </Avatar>
+              <p className="text-muted-foreground text-sm">Account</p>
+            </div>
+            <ul role="list" className="mb-6 flex gap-x-3 gap-y-1 whitespace-nowrap lg:flex-col">
+              {accountNavigation.map((item) => (
+                <li key={item.name}>
+                  <AsideLink href={item.href}>
+                    <item.icon className="mr-4 h-4 w-4 shrink-0" aria-hidden="true" />
+                    {item.name}
+                  </AsideLink>
+                </li>
+              ))}
+            </ul>
+          </>
         ) : null}
       </aside>
       <main className="px-4 py-16 sm:px-6 lg:flex-auto lg:px-0 lg:py-20">
