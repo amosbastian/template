@@ -48,7 +48,6 @@ export const AuthenticationForm = ({ action, className }: { action: string; clas
     setIsLoading(true);
     const { email, password } = data;
 
-    console.log({ email, password });
     if (!email || !password) {
       console.log("WTF BRO");
       setIsLoading(false);
@@ -89,7 +88,7 @@ export const AuthenticationForm = ({ action, className }: { action: string; clas
               <FormItem>
                 <FormLabel>Email address</FormLabel>
                 <FormControl>
-                  <Input type="email" placeholder="johndoe@acmecorp.com" {...field} />
+                  <Input type="email" placeholder="jane@example.com" disabled={Boolean(email)} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

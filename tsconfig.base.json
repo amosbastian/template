@@ -34,6 +34,7 @@
       "@template/ui/web/server": ["libs/ui/web/src/server.ts"],
       "@template/utility/email": ["libs/utility/email/src/index.ts"],
       "@template/utility/payment": ["libs/utility/payment/src/index.ts"],
+      "@template/utility/schema": ["libs/utility/schema/src/index.ts"],
       "@template/utility/shared": ["libs/utility/shared/src/index.ts"],
       "@template/utility/trpc": ["libs/utility/trpc/src/index.ts"],
       "@template/utility/trpc-next-client": ["libs/utility/trpc-next-client/src/index.ts"],

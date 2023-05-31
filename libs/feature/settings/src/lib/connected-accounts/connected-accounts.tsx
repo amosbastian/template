@@ -11,8 +11,8 @@ import {
 } from "@template/ui/web";
 import { eq } from "drizzle-orm";
 import { UserIcon } from "lucide-react";
-import { RemoveConnectedAccount } from "../remove-connected-account/remove-connected-account";
 import { AddConnectedAccount } from "../add-connected-account/add-connected-account";
+import { RemoveConnectedAccount } from "../remove-connected-account/remove-connected-account";
 
 type ConnectedAccountsProps = {
   className?: string;

@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ADMIN_ROLE, MEMBER_ROLE, ROLES } from "@template/configuration";
+import { ADMIN_ROLE, MEMBER_ROLE } from "@template/configuration";
 import {
   Button,
   Card,
@@ -21,40 +21,44 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
+  toast,
 } from "@template/ui/web";
+import { inviteMembersSchema } from "@template/utility/schema";
 import { classnames } from "@template/utility/shared";
+import { api } from "@template/utility/trpc-next-client";
 import { PlusCircleIcon } from "lucide-react";
+import { useParams, useRouter } from "next/navigation";
 import { useFieldArray, useForm } from "react-hook-form";
 import * as z from "zod";
 
-const formSchema = z.object({
-  invitations: z.array(
-    z.object({
-      email: z.string().email(),
-      role: z.enum(ROLES),
-    }),
-  ),
-});
-
 type CardProps = React.ComponentProps<typeof Card>;
-type FormValue = z.infer<typeof formSchema>;
+type FormValue = z.infer<typeof inviteMembersSchema>;
 
 export function InviteMembersForm({ className, ...rest }: CardProps) {
+  const router = useRouter();
+  const params = useParams();
+  const teamSlug = params.teamSlug;
+
   const defaultValues: Partial<FormValue> = {
+    teamSlug,
     invitations: [{ email: "", role: MEMBER_ROLE }],
   };
 
-  // 1. Define your form.
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof inviteMembersSchema>>({
+    resolver: zodResolver(inviteMembersSchema),
     defaultValues,
   });
 
-  // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
+  const { mutate, isLoading } = api.team.invite.useMutation({
+    onSuccess: (data) => {
+      toast({ title: "Invite(s) sent!" });
+      form.reset();
+      router.refresh();
+    },
+  });
+
+  function onSubmit(values: z.infer<typeof inviteMembersSchema>) {
+    mutate(values);
   }
 
   const { fields, append } = useFieldArray({
@@ -73,27 +77,32 @@ export function InviteMembersForm({ className, ...rest }: CardProps) {
             <div className="flex flex-col gap-x-4 gap-y-2">
               {fields.map((field, index) => {
                 return (
-                  <FormField
-                    control={form.control}
-                    key={field.id}
-                    name={`invitations.${index}`}
-                    render={() => {
-                      const onRoleChange = (value: typeof ADMIN_ROLE | typeof MEMBER_ROLE) =>
-                        form.setValue(`invitations.${index}.role`, value);
-                      const roleValue = form.getValues(`invitations.${index}.role`);
-
-                      return (
-                        <div className="flex flex-col gap-4 md:flex-row">
+                  <div key={field.id} className="flex flex-col gap-4 md:flex-row">
+                    <FormField
+                      control={form.control}
+                      key={field.id}
+                      name={`invitations.${index}.email`}
+                      render={({ field }) => {
+                        return (
                           <FormItem className="flex-1 md:basis-1/2 lg:basis-2/3">
                             <FormLabel className={classnames(index !== 0 && "sr-only")}>Email address</FormLabel>
                             <FormControl>
-                              <Input placeholder="jane@example.com" {...form.register(`invitations.${index}.email`)} />
+                              <Input type="email" placeholder="jane@example.com" disabled={isLoading} {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
+                        );
+                      }}
+                    />
+                    <FormField
+                      control={form.control}
+                      key={field.id}
+                      name={`invitations.${index}.role`}
+                      render={({ field }) => {
+                        return (
                           <FormItem className="flex-1 md:basis-1/2 lg:basis-1/3">
                             <FormLabel className={classnames(index !== 0 && "sr-only")}>Role</FormLabel>
-                            <Select onValueChange={onRoleChange} defaultValue={roleValue}>
+                            <Select onValueChange={field.onChange} defaultValue={field.value} disabled={isLoading}>
                               <FormControl>
                                 <SelectTrigger>
                                   <SelectValue placeholder="Member" />
@@ -106,10 +115,10 @@ export function InviteMembersForm({ className, ...rest }: CardProps) {
                             </Select>
                             <FormMessage />
                           </FormItem>
-                        </div>
-                      );
-                    }}
-                  />
+                        );
+                      }}
+                    />
+                  </div>
                 );
               })}
             </div>
@@ -119,13 +128,16 @@ export function InviteMembersForm({ className, ...rest }: CardProps) {
               size="sm"
               className="mt-4"
               onClick={() => append({ email: "", role: MEMBER_ROLE })}
+              disabled={isLoading}
             >
               <PlusCircleIcon className="mr-2 h-4 w-4" />
               Add more
             </Button>
           </CardContent>
           <CardFooter>
-            <Button size="sm">Invite</Button>
+            <Button isLoading={isLoading} size="sm">
+              Invite
+            </Button>
           </CardFooter>
         </Card>
       </form>

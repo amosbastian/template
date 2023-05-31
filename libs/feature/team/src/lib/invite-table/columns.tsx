@@ -2,6 +2,7 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "@template/ui/web";
+import { InviteTableRowActions } from "./row-actions";
 
 export const columns: ColumnDef<{
   email: string;
@@ -37,5 +38,9 @@ export const columns: ColumnDef<{
         </Badge>
       );
     },
+  },
+  {
+    id: "actions",
+    cell: ({ row }) => <InviteTableRowActions row={row} />,
   },
 ];

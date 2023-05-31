@@ -7,7 +7,6 @@ import {
   mysqlEnum,
   mysqlTable,
   primaryKey,
-  serial,
   text,
   timestamp,
   uniqueIndex,
@@ -28,7 +27,7 @@ export const users = mysqlTable(
     emailVerified: timestamp("email_verified", { fsp: 2 }),
     name: varchar("name", { length: 256 }),
     image: text("image"),
-    activeTeamId: serial("active_team_id"),
+    activeTeamId: int("active_team_id"),
     createdAt: timestamp("created_at", { fsp: 2 }).notNull().defaultNow(),
   },
   (table) => ({
@@ -64,7 +63,7 @@ export const usersRelations = relations(users, ({ many, one }) => ({
 }));
 
 export const teams = mysqlTable("teams", {
-  id: serial("id").primaryKey(),
+  id: int("id").autoincrement().notNull().primaryKey(),
   name: text("name").notNull(),
   // Add unique constraint when implemented in Drizzle
   slug: text("slug").notNull(),
@@ -93,7 +92,7 @@ export const teamMembers = mysqlTable(
   "team_members",
   {
     // FIXME: https://github.com/drizzle-team/drizzle-orm/issues/258
-    teamId: serial("team_id")
+    teamId: int("team_id")
       .notNull()
       .references(() => teams.id),
     userId: varchar("user_id", {
@@ -122,7 +121,7 @@ export const teamMembersRelations = relations(teamMembers, ({ one }) => ({
 export const invitations = mysqlTable("invitations", {
   token: varchar("token", { length: 255 }).primaryKey(),
   // FIXME: https://github.com/drizzle-team/drizzle-orm/issues/258
-  teamId: serial("team_id")
+  teamId: int("team_id")
     .notNull()
     .references(() => teams.id),
   email: varchar("email", { length: 256 }).notNull(),

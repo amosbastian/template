@@ -2,7 +2,7 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "@template/ui/web";
-import { DataTableRowActions } from "./row-actions";
+import { TeamTableRowActions } from "./row-actions";
 
 export const columns: ColumnDef<{
   role: "admin" | "member" | null;
@@ -36,6 +36,6 @@ export const columns: ColumnDef<{
   },
   {
     id: "actions",
-    cell: ({ row }) => <DataTableRowActions row={row} />,
+    cell: ({ row }) => <TeamTableRowActions row={row} />,
   },
 ];

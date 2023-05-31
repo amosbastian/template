@@ -15,7 +15,6 @@ import {
 } from "@template/ui/web";
 import { api } from "@template/utility/trpc-next-client";
 import { Loader2 } from "lucide-react";
-import { revalidatePath } from "next/cache";
 import { useRouter } from "next/navigation";
 
 type RemoveConnectedAccountProps = {

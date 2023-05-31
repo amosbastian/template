@@ -12,11 +12,11 @@ import {
 } from "@template/ui/web";
 import { MoreHorizontal, Pen, Trash } from "lucide-react";
 
-interface TeamTableRowActionsProps<TData> {
+interface InviteTableRowActionsProps<TData> {
   row: Row<TData>;
 }
 
-export function TeamTableRowActions<TData>({ row }: TeamTableRowActionsProps<TData>) {
+export function InviteTableRowActions<TData>({ row }: InviteTableRowActionsProps<TData>) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>

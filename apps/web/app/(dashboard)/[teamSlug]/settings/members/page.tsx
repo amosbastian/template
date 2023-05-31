@@ -7,7 +7,7 @@ export default async function TeamSettings() {
   return (
     <div className="flex flex-col gap-4">
       <h2 className="mt-10 scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0">
-        Team
+        Members
       </h2>
       <InviteMembersForm />
       <TeamTabs>
@@ -25,6 +25,6 @@ export default async function TeamSettings() {
 }
 
 export const metadata: Metadata = {
-  title: "Team",
-  description: "Manage your team",
+  title: "Members",
+  description: "Manage your team members",
 };

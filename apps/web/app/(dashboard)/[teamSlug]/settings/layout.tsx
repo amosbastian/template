@@ -7,7 +7,7 @@ function getTeamNavigation(teamSlug: string) {
   return [
     { name: "General", href: `/${teamSlug}/settings`, icon: LayoutDashboardIcon },
     { name: "Billing", href: `/${teamSlug}/settings/billing`, icon: CreditCardIcon },
-    { name: "Team", href: `/${teamSlug}/settings/team`, icon: UsersIcon },
+    { name: "Members", href: `/${teamSlug}/settings/members`, icon: UsersIcon },
   ];
 }
 
@@ -52,7 +52,10 @@ export default async function SettingsLayout({ children, params }: SettingsLayou
           <>
             <div className="mb-4 flex flex-row gap-x-2 px-3">
               <Avatar className="h-5 w-5">
-                <AvatarImage src={user.image} alt={user.name ?? user.email} />
+                <AvatarImage
+                  src={user.image ?? `https://avatar.vercel.sh/amosbastian.png`}
+                  alt={user.name ?? user.email}
+                />
                 <AvatarFallback>{user.name ?? user.email}</AvatarFallback>
               </Avatar>
               <p className="text-muted-foreground text-sm">Account</p>
