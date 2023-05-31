@@ -1,5 +1,4 @@
 import { BASE_URL, BRAND_DESCRIPTION, BRAND_NAME } from "@template/configuration";
-
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { ClientProviders } from "./client-providers";
@@ -29,13 +28,13 @@ export default function RootLayout({
       suppressHydrationWarning
       className={`bg-background flex h-full min-h-screen flex-col antialiased ${inter.className}`}
     >
-      <ClientProviders>
-        <body className="h-full">
+      <body className="h-full">
+        <ClientProviders>
           {children}
           {signInModal}
           {signUpModal}
-        </body>
-      </ClientProviders>
+        </ClientProviders>
+      </body>
     </html>
   );
 }

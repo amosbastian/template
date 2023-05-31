@@ -18,6 +18,7 @@ import { createInsertSchema } from "drizzle-zod";
 export const ADMIN_ROLE = "admin";
 export const MEMBER_ROLE = "member";
 export const ROLES = [ADMIN_ROLE, MEMBER_ROLE] as const;
+export type Role = (typeof ROLES)[number];
 
 export const users = mysqlTable(
   "auth_user",

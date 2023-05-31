@@ -11,12 +11,38 @@ import {
   FormLabel,
   FormMessage,
   Input,
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
   toast,
 } from "@template/ui/web";
 import { classnames } from "@template/utility/shared";
 import { api } from "@template/utility/trpc-next-client";
+import { AlertCircleIcon, CheckCircle2Icon } from "lucide-react";
+import * as React from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
+
+type EmailVerifiedIconProps = {
+  className?: string;
+  emailVerified?: Date | null;
+};
+
+const EmailVerifiedIcon = React.forwardRef<HTMLDivElement, EmailVerifiedIconProps>(
+  ({ className, emailVerified }, ref) => {
+    return (
+      <div className={className} ref={ref}>
+        {emailVerified ? (
+          <CheckCircle2Icon className="h-4 w-4" />
+        ) : (
+          <AlertCircleIcon className="text-destructive h-4 w-4" />
+        )}
+        <span className="sr-only">{emailVerified ? "Verified" : "Not verified"}</span>
+      </div>
+    );
+  },
+);
 
 const formSchema = z.object({
   name: z
@@ -39,9 +65,10 @@ type FormValues = z.infer<typeof formSchema>;
 type ProfileFormProps = {
   className?: string;
   defaultValues?: Partial<FormValues>;
+  emailVerified?: Date | null;
 };
 
-export function ProfileForm({ className, defaultValues }: ProfileFormProps) {
+export function ProfileForm({ className, defaultValues, emailVerified }: ProfileFormProps) {
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues,
@@ -50,6 +77,15 @@ export function ProfileForm({ className, defaultValues }: ProfileFormProps) {
   const { mutate: updateUser, isLoading: isUpdatingUser } = api.user.update.useMutation({
     onSuccess: () => {
       toast({ title: "Profile updated" });
+    },
+  });
+
+  const { mutate: sendEmailVerification } = api.user.sendEmailVerification.useMutation({
+    onSuccess: async () => {
+      toast({ title: "Verification email sent", description: "Please check your inbox" });
+    },
+    onError: (error) => {
+      toast({ title: error.message, variant: "destructive" });
     },
   });
 
@@ -88,11 +124,35 @@ export function ProfileForm({ className, defaultValues }: ProfileFormProps) {
             <FormItem>
               <FormLabel>Email address</FormLabel>
               <FormControl>
-                <Input placeholder="jane@example.com" type="email" {...field} />
+                <div className="relative">
+                  <Input placeholder="jane@example.com" type="email" {...field} />
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger className="absolute right-3 top-3">
+                        <EmailVerifiedIcon emailVerified={emailVerified} />
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>{emailVerified ? "Email verified" : "Email not verified"}</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                </div>
               </FormControl>
               <FormDescription>
                 We will send relevant emails to this address. Your email must be verified before you can use our
                 platform.
+                {emailVerified ? null : (
+                  <span>
+                    {" "}
+                    <button
+                      type="button"
+                      onClick={() => sendEmailVerification()}
+                      className="hover:text-brand underline underline-offset-4"
+                    >
+                      Verify your email.
+                    </button>
+                  </span>
+                )}
               </FormDescription>
               <FormMessage />
             </FormItem>

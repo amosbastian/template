@@ -33,11 +33,11 @@ const welcomeStyle = `
 `;
 
 type VerifyEmailProps = {
-  username: string;
+  name: string;
   verificationLink?: string;
 };
 
-const VerifyEmail = ({ username, verificationLink }: VerifyEmailProps) => {
+export const VerifyEmail = ({ name, verificationLink }: VerifyEmailProps) => {
   return (
     <BaseLayout width={600} style={welcomeStyle}>
       <Header />
@@ -48,7 +48,7 @@ const VerifyEmail = ({ username, verificationLink }: VerifyEmailProps) => {
               Verify your email for <strong>{BRAND_NAME}</strong>
             </Heading>
             <Text cssClass="p" fontSize={fontSize.sm} paddingBottom={spacing.s7}>
-              Hello, {username}
+              Hello, {name}
             </Text>
             <Text cssClass="p" fontSize={fontSize.sm} paddingBottom={spacing.s7}>
               To verify your email address on {BRAND_NAME}, please click the button below:
@@ -70,9 +70,9 @@ const VerifyEmail = ({ username, verificationLink }: VerifyEmailProps) => {
             </Text>
             <MjmlDivider border-width="1px" border-color={colors.border} />
             <Text color={colors.gray500} cssClass="p" fontSize={fontSize.xs} paddingTop={spacing.s7}>
-              This email was intended for <span style={{ fontWeight: fontWeight.medium }}>{username}</span>. If you were
-              not expecting this invitation, you can ignore this email. If you are concerned about your account's
-              safety, please reply to this email to get in touch with us.
+              This email was intended for <span style={{ fontWeight: fontWeight.medium }}>{name}</span>. If you were not
+              expecting this invitation, you can ignore this email. If you are concerned about your account's safety,
+              please reply to this email to get in touch with us.
             </Text>
           </MjmlColumn>
         </MjmlSection>

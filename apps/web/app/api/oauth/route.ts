@@ -2,8 +2,8 @@ import { githubAuthentication } from "@template/authentication";
 import { cookies } from "next/headers";
 
 export const GET = async (request: Request) => {
-  const url = new URL(request.url);
-  const provider = url.searchParams.get("provider");
+  const requestUrl = new URL(request.url);
+  const provider = requestUrl.searchParams.get("provider");
 
   if (provider === "github") {
     const [url, state] = await githubAuthentication.getAuthorizationUrl();

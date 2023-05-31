@@ -1,6 +1,6 @@
 import { getAuthentication } from "@template/authentication";
 import { Avatar, AvatarFallback, AvatarImage } from "@template/ui/web";
-import { CreditCardIcon, LayoutDashboardIcon, UserCircle2Icon, UsersIcon } from "lucide-react";
+import { CreditCardIcon, LayoutDashboardIcon, UnplugIcon, UserCircle2Icon, UsersIcon } from "lucide-react";
 import { AsideLink } from "./aside-link";
 
 function getTeamNavigation(teamSlug: string) {
@@ -12,7 +12,10 @@ function getTeamNavigation(teamSlug: string) {
 }
 
 function getAccountNavigation(teamSlug: string) {
-  return [{ name: "Connected accounts", href: `/${teamSlug}/settings/accounts`, icon: UserCircle2Icon }];
+  return [
+    { name: "Profile", href: `/${teamSlug}/settings/profile`, icon: UserCircle2Icon },
+    { name: "Connected accounts", href: `/${teamSlug}/settings/accounts`, icon: UnplugIcon },
+  ];
 }
 
 type SettingsLayoutProps = { children: React.ReactNode; params: { teamSlug: string } };

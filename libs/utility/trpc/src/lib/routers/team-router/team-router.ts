@@ -19,6 +19,10 @@ export const teamRouter = router({
     return createTeam({ slug: slugify(input.name), name: input.name, userId });
   }),
   invite: protectedProcedure.input(insertInvitationSchema).mutation(async ({ input, ctx }) => {
+    if (!input.teamId) {
+      throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
+    }
+
     const teamMember = await db.query.teamMembers.findFirst({
       where: and(eq(teamMembers.userId, ctx.session.user.id), eq(teamMembers.teamId, input.teamId)),
       columns: {

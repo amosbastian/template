@@ -1,5 +1,6 @@
 // import { connect } from "@planetscale/database";
 // import { drizzle } from "drizzle-orm/planetscale-serverless";
+import { generateToken } from "@template/utility/shared";
 import { eq, placeholder, sql } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
 import * as mysql from "mysql2/promise";
@@ -57,4 +58,27 @@ export async function generateTeamSlug(slug: string) {
   while (slugs.includes(slug + "-" + ++addition));
 
   return `${slug}-${addition}`;
+}
+
+export async function createEmailVerificationToken(userId: string) {
+  const user = await db.query.users
+    .findFirst({
+      where: eq(schema.users.id, userId),
+      columns: {
+        email: true,
+        name: true,
+      },
+    })
+    .execute();
+
+  if (!user) {
+    throw new Error("Could not find user");
+  }
+
+  const token = generateToken();
+  const oneDayFromNow = new Date(Date.now() + 60 * 60 * 24 * 1000);
+
+  await db.insert(schema.verificationTokens).values({ email: user.email, expiresAt: oneDayFromNow, token });
+
+  return { token, user };
 }
