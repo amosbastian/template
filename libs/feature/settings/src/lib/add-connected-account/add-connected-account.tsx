@@ -30,7 +30,7 @@ export function AddConnectedAccount({ providers }: AddConnectedAccountProps) {
           <AlertDialogDescription className="flex flex-col gap-y-4">
             <p>Select the provider you want to connect to your account</p>
             {canConnectGitHub ? (
-              <GithubButton callbackUrl="/settings/accounts" />
+              <GithubButton />
             ) : (
               <p className="text-foreground">There aren't any more providers to connect</p>
             )}

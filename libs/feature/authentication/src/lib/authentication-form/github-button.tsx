@@ -1,13 +1,7 @@
-"use client";
-
-type GithubButtonProps = {
-  callbackUrl?: string;
-};
-
-export const GithubButton = ({ callbackUrl }: GithubButtonProps) => {
+export const GithubButton = () => {
   return (
     <a
-      href={callbackUrl ? `/api/oauth?provider=github&callbackUrl=${callbackUrl}` : `/api/oauth?provider=github`}
+      href="/api/oauth?provider=github"
       className="flex w-full items-center justify-center gap-3 rounded-md bg-[#24292F] px-3 py-1.5 text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#24292F]"
     >
       <svg className="h-5 w-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
