@@ -9,7 +9,6 @@
       "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
       "options": {
-        "root": "apps/web",
         "outputPath": "dist/apps/web"
       },
       "configurations": {
