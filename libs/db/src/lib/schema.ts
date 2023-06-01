@@ -62,15 +62,22 @@ export const usersRelations = relations(users, ({ many, one }) => ({
   }),
 }));
 
-export const teams = mysqlTable("teams", {
-  id: int("id").autoincrement().notNull().primaryKey(),
-  name: text("name").notNull(),
-  // Add unique constraint when implemented in Drizzle
-  slug: text("slug").notNull(),
-  createdAt: timestamp("created_at", { fsp: 2 }).notNull().defaultNow(),
-  // Used for billing
-  customerId: int("customer_id"),
-});
+export const teams = mysqlTable(
+  "teams",
+  {
+    id: int("id").autoincrement().notNull().primaryKey(),
+    name: text("name").notNull(),
+    image: text("image"),
+    // Add unique constraint when implemented in Drizzle
+    slug: text("slug").notNull(),
+    createdAt: timestamp("created_at", { fsp: 2 }).notNull().defaultNow(),
+    // Used for billing
+    customerId: int("customer_id"),
+  },
+  (table) => ({
+    slugIndex: uniqueIndex("slug_idx").on(table.slug),
+  }),
+);
 
 export const insertTeamSchema = createInsertSchema(teams, {
   slug: (schema) => schema.slug.optional(),
