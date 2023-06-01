@@ -30,11 +30,11 @@ const welcomeStyle = `
 type TeamInvitationProps = {
   inviteLink: string;
   invitedByEmail: string;
-  invitedByName?: string;
-  name?: string;
-  teamImage?: string;
+  invitedByName?: string | null;
+  name?: string | null;
+  teamImage?: string | null;
   teamName: string;
-  userImage?: string;
+  userImage?: string | null;
   userEmail: string;
 };
 

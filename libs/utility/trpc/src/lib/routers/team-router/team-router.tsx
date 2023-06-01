@@ -1,5 +1,6 @@
-import { BASE_URL } from "@template/configuration";
-import { createTeam, db, insertTeamSchema, invitations, teamMembers, teams } from "@template/db";
+import { BASE_URL, BRAND_NAME } from "@template/configuration";
+import { createTeam, db, insertTeamSchema, invitations, teamMembers, teams, users } from "@template/db";
+import sendEmail, { TeamInvitation } from "@template/utility/email";
 import { inviteMembersSchema } from "@template/utility/schema";
 import { generateToken } from "@template/utility/shared";
 import { TRPCError } from "@trpc/server";
@@ -58,8 +59,33 @@ export const teamRouter = router({
         })
         .execute();
 
+      const user = await db.query.users.findFirst({
+        where: eq(users.email, invitation.email),
+      });
+
       console.log(`${BASE_URL}/api/accept-team-invitation/${token}`);
-      // TODO: send email
+      // FIXME: this doesn't work because: https://github.com/vercel/next.js/issues/50042
+
+      const invitedByName = ctx.session.user.name;
+      const invitedByEmail = ctx.session.user.email;
+      await sendEmail({
+        subject: invitedByName
+          ? `${invitedByName} invited you to ${team.name} team on ${BRAND_NAME}`
+          : `You've been invited to ${team.name} team on ${BRAND_NAME}`,
+        to: invitation.email,
+        component: (
+          <TeamInvitation
+            invitedByEmail={invitedByEmail}
+            teamName={team.name}
+            userEmail={invitation.email}
+            invitedByName={invitedByName ?? invitedByEmail}
+            name={user?.name ?? invitation.email}
+            teamImage={team.image}
+            userImage={user?.image}
+            inviteLink={`${BASE_URL}/api/accept-team-invitation/${token}`}
+          />
+        ),
+      });
     }
   }),
 });
