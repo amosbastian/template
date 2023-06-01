@@ -1,5 +1,5 @@
 import { Mjml, MjmlAll, MjmlAttributes, MjmlBody, MjmlFont, MjmlHead, MjmlStyle } from "@faire/mjml-react";
-import React from "react";
+import * as React from "react";
 import { borderRadius, colors, screens, spacing, themeDefaults } from "../theme";
 
 type BaseLayoutProps = {
@@ -8,7 +8,7 @@ type BaseLayoutProps = {
   children: React.ReactNode;
 };
 
-export default function BaseLayout({ width, children, style }: BaseLayoutProps) {
+export function BaseLayout({ width, children, style }: BaseLayoutProps) {
   return (
     <Mjml>
       <MjmlHead>

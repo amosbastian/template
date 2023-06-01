@@ -22,6 +22,7 @@ export const sendEmail = buildSendMail({
   configPath: "./mailing.config.json",
 });
 
-export * from "./VerifyEmail";
+export * from "./emails/team-invitation";
+export * from "./emails/verify-email";
 
 export default sendEmail;

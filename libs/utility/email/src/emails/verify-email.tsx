@@ -1,12 +1,7 @@
 import { MjmlColumn, MjmlDivider, MjmlSection, MjmlWrapper } from "@faire/mjml-react";
 import { BRAND_NAME } from "@template/configuration";
-import BaseLayout from "./components/BaseLayout";
-import Button from "./components/Button";
-import Header from "./components/Header";
-import Heading from "./components/Heading";
-import Link from "./components/Link";
-import Text from "./components/Text";
-import { colors, fontSize, fontWeight, screens, spacing } from "./theme";
+import { BaseLayout, Button, Header, Heading, Link, Text } from "../components";
+import { colors, fontSize, fontWeight, screens, spacing } from "../theme";
 
 const welcomeStyle = `
   .h1 > * {
@@ -54,12 +49,7 @@ export const VerifyEmail = ({ name, verificationLink }: VerifyEmailProps) => {
               To verify your email address on {BRAND_NAME}, please click the button below:
             </Text>
 
-            <Button
-              href="https://github.com/sofn-xyz/mailing-templates"
-              backgroundColor={colors.black}
-              color={colors.white}
-              align="center"
-            >
+            <Button href={verificationLink} backgroundColor={colors.black} color={colors.white} align="center">
               Verify email
             </Button>
             <Text cssClass="p" fontSize={fontSize.sm} paddingTop={spacing.s7} paddingBottom={spacing.s7}>

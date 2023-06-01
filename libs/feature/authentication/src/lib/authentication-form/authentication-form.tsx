@@ -49,7 +49,6 @@ export const AuthenticationForm = ({ action, className }: { action: string; clas
     const { email, password } = data;
 
     if (!email || !password) {
-      console.log("WTF BRO");
       setIsLoading(false);
       return;
     }

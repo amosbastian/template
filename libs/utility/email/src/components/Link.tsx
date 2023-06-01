@@ -1,5 +1,5 @@
-import React from "react";
 import { MjmlText } from "@faire/mjml-react";
+import * as React from "react";
 import { colors } from "../theme";
 
 type HrefProps = {
@@ -51,7 +51,7 @@ const getStylePropsFromProps = (props: LinkProps): StyleProps => {
   );
 };
 
-export default function Link({ children, ...props }: LinkProps) {
+export function Link({ children, ...props }: LinkProps) {
   return (
     <a
       target="_blank"

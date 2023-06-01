@@ -1,12 +1,12 @@
-import React from "react";
-import cx from "classnames";
 import { MjmlText } from "@faire/mjml-react";
+import cx from "classnames";
+import * as React from "react";
 
 type TextProps = {
   maxWidth?: number;
 } & React.ComponentProps<typeof MjmlText>;
 
-export default function Text({ children, maxWidth, ...props }: TextProps) {
+export function Text({ children, maxWidth, ...props }: TextProps) {
   if (maxWidth) {
     return (
       <MjmlText {...props} cssClass={cx("button", props.cssClass)}>

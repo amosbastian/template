@@ -1,10 +1,10 @@
 import { MjmlColumn, MjmlSection, MjmlWrapper } from "@faire/mjml-react";
 import { BASE_URL } from "@template/configuration";
 import { colors, fontSize, fontWeight } from "../theme";
-import Link from "./Link";
-import Text from "./Text";
+import { Link } from "./link";
+import { Text } from "./text";
 
-export default function Header() {
+export function Header() {
   return (
     <MjmlWrapper padding="0 0 40px">
       <MjmlSection cssClass="gutter">

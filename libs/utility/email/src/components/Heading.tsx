@@ -1,6 +1,6 @@
-import React from "react";
-import Text from "./Text";
-import { fontFamily, lineHeight, fontWeight, fontSize } from "../theme";
+import * as React from "react";
+import { fontFamily, fontSize, fontWeight, lineHeight } from "../theme";
+import { Text } from "./text";
 
 type HeadingProps = React.ComponentProps<typeof Text>;
 
@@ -11,7 +11,7 @@ const defaultProps = {
   fontSize: fontSize.xl,
 };
 
-export default function Heading(props: HeadingProps) {
+export function Heading(props: HeadingProps) {
   return (
     <Text {...defaultProps} {...props}>
       {props.children}

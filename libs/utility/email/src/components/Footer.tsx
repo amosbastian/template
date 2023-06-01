@@ -5,7 +5,7 @@ type FooterProps = {
   includeUnsubscribe?: boolean;
 };
 
-export default function Footer({ includeUnsubscribe = false }: FooterProps) {
+export function Footer({ includeUnsubscribe = false }: FooterProps) {
   return (
     <MjmlWrapper backgroundColor={colors.gray800}>
       <MjmlSection></MjmlSection>
