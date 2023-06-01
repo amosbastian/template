@@ -2,19 +2,11 @@
   "migrations": [
     {
       "cli": "nx",
-      "version": "16.3.0-beta.9",
-      "description": "Remove root build option from project configurations since it is not needed.",
-      "implementation": "./src/migrations/update-16-3-0/remove-root-build-option",
-      "package": "@nx/next",
-      "name": "update-16-3-0-remove-root-build-option"
-    },
-    {
-      "cli": "nx",
-      "version": "16.3.0-beta.2",
-      "description": "Remove @types/react-router-dom from package.json",
-      "implementation": "./src/migrations/update-16-3-0/remove-types-react-router-dom-package",
-      "package": "@nx/react",
-      "name": "remove-types-react-router-dom"
+      "version": "16.3.1-beta.0",
+      "description": "Replace @nx/node:webpack with @nx/node:webpack for all project targets",
+      "implementation": "./src/migrations/update-16-3-1/update-webpack-executor",
+      "package": "@nx/node",
+      "name": "update-16-3-1-update-executor"
     }
   ]
 }
