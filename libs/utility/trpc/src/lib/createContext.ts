@@ -27,7 +27,7 @@ export const createContextInner = async (options: CreateContextOptions) => {
 
 //   const authenticationRequest = authentication.handleRequest({
 //     request: req as unknown as Request,
-//     cookies: cookies as any,
+//     cookies,
 //   });
 
 //   const { session } = await authenticationRequest.validateUser();

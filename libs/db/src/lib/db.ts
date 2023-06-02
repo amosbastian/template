@@ -28,7 +28,7 @@ export const db = drizzle(poolConnection, { schema });
 export async function createTeam(data: { slug: string; name: string; userId: string }) {
   return db.transaction(async (tx) => {
     const slug = await generateTeamSlug(data.slug);
-    const team = await tx.insert(schema.teams).values({ name: data.name, slug });
+    const team = await tx.insert(schema.teams).values({ name: data.name, slug, ownerId: data.userId });
     const teamId = team[0].insertId;
     await tx.insert(schema.teamMembers).values({ userId: data.userId, teamId: teamId, role: "admin" });
     await tx.update(schema.users).set({ activeTeamId: teamId }).where(eq(schema.users.id, data.userId));

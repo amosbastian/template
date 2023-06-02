@@ -17,7 +17,7 @@ const nextConfig = {
     appDir: true,
     serverActions: true,
     // FIXME: remove uglify-js: https://github.com/vercel/next.js/issues/50042
-    serverComponentsExternalPackages: ["mysql2", "uglify-js"],
+    serverComponentsExternalPackages: ["mysql2"],
   },
 };
 

@@ -1,6 +1,6 @@
 import { BASE_URL } from "@template/configuration";
 import { createEmailVerificationToken, db, keys, teams, updateUserSchema, users } from "@template/db";
-import { VerifyEmail, sendEmail } from "@template/utility/email";
+// import { VerifyEmail, sendEmail } from "@template/utility/email";
 import { eq } from "drizzle-orm";
 import * as z from "zod";
 import { protectedProcedure, router } from "../../createRouter";
@@ -25,11 +25,19 @@ export const userRouter = router({
   sendEmailVerification: protectedProcedure.mutation(async ({ ctx }) => {
     const { user, token } = await createEmailVerificationToken(ctx.session.user.id);
     console.log(`${BASE_URL}/api/verify-email/${token}`);
-    // FIXME: this doesn't work because: https://github.com/vercel/next.js/issues/50042
-    await sendEmail({
-      subject: "Verify your email",
-      to: user.email,
-      component: <VerifyEmail name={user.name ?? ""} verificationLink={`${BASE_URL}/api/verify-email/${token}`} />,
+    await fetch(`${BASE_URL}/api/verification-email`, {
+      method: "POST",
+      body: JSON.stringify({
+        email: user.email,
+        name: user.name ?? "",
+        verificationLink: `${BASE_URL}/api/verify-email/${token}`,
+      }),
     });
+    // FIXME: this doesn't work because: https://github.com/vercel/next.js/issues/50042
+    // await sendEmail({
+    //   subject: "Verify your email",
+    //   to: user.email,
+    //   component: <VerifyEmail name={user.name ?? ""} verificationLink={`${BASE_URL}/api/verify-email/${token}`} />,
+    // });
   }),
 });

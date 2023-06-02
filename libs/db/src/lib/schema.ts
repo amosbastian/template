@@ -73,6 +73,11 @@ export const teams = mysqlTable(
     createdAt: timestamp("created_at", { fsp: 2 }).notNull().defaultNow(),
     // Used for billing
     customerId: int("customer_id"),
+    ownerId: varchar("owner_id", {
+      length: 15,
+    })
+      .notNull()
+      .references(() => users.id),
   },
   (table) => ({
     slugIndex: uniqueIndex("slug_idx").on(table.slug),
@@ -92,6 +97,10 @@ export const teamsRelations = relations(teams, ({ many, one }) => ({
   subscription: one(subscriptions, {
     fields: [teams.id],
     references: [subscriptions.teamId],
+  }),
+  owner: one(users, {
+    fields: [teams.ownerId],
+    references: [users.id],
   }),
 }));
 
