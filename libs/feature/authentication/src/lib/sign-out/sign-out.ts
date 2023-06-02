@@ -3,7 +3,7 @@ import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
 export async function signOut(request: Request) {
-  const authenticationRequest = authentication.handleRequest({ request, cookies: cookies as any });
+  const authenticationRequest = authentication.handleRequest({ request, cookies });
   const session = await authenticationRequest.validate();
 
   if (!session) {

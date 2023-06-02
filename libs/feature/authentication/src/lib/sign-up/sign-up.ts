@@ -27,7 +27,7 @@ export async function signUp(request: Request) {
     });
 
     const session = await authentication.createSession(user.userId);
-    const authenticationRequest = authentication.handleRequest({ request, cookies: cookies as any });
+    const authenticationRequest = authentication.handleRequest({ request, cookies });
     authenticationRequest.setSession(session);
 
     if (token) {
@@ -40,14 +40,15 @@ export async function signUp(request: Request) {
     }
 
     const firstPartOfEmail = getFirstPartOfEmail(user.email);
-    await createTeam({
+
+    const result = await createTeam({
       slug: slugify(firstPartOfEmail),
       name: `${user.name ?? firstPartOfEmail}'s team`,
       userId: user.id,
     });
 
     const team = await db.query.teams.findFirst({
-      where: eq(teams.id, user.activeTeamId),
+      where: eq(teams.id, result.insertId),
       columns: {
         id: true,
         slug: true,

@@ -11,7 +11,7 @@ export async function signIn(request: Request) {
   const { email, password } = authenticationSchema.parse(json);
 
   try {
-    const authenticationRequest = authentication.handleRequest({ request, cookies: cookies as any });
+    const authenticationRequest = authentication.handleRequest({ request, cookies });
     const key = await authentication.useKey("email", email, password);
     const session = await authentication.createSession(key.userId);
     authenticationRequest.setSession(session);

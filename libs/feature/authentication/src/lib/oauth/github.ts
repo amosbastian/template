@@ -62,7 +62,7 @@ export async function githubOauth(request: Request) {
     });
 
     const session = await authentication.createSession(user.id);
-    const authenticationRequest = authentication.handleRequest({ request, cookies: cookies as any });
+    const authenticationRequest = authentication.handleRequest({ request, cookies });
     authenticationRequest.setSession(session);
 
     let location = "/";

@@ -9,5 +9,3 @@ export interface SignUpFormProps {
 export function SignUpForm({ className }: SignUpFormProps) {
   return <AuthenticationForm action="/api/sign-up" className={className} />;
 }
-
-export default SignUpForm;

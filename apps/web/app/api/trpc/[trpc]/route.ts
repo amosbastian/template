@@ -10,7 +10,7 @@ const handler = (req: NextRequest) => {
     endpoint: "/api/trpc",
     router: appRouter,
     async createContext() {
-      const authenticationRequest = authentication.handleRequest({ request: req, cookies: cookies as any });
+      const authenticationRequest = authentication.handleRequest({ request: req, cookies });
 
       return createContextInner({
         req,

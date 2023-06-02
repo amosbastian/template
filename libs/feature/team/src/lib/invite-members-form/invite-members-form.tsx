@@ -49,7 +49,7 @@ export function InviteMembersForm({ className, ...rest }: CardProps) {
     defaultValues,
   });
 
-  const { mutate, isLoading } = api.team.invite.useMutation({
+  const { mutate, isLoading } = api.team.inviteMember.useMutation({
     onSuccess: (data) => {
       toast({ title: "Invite(s) sent!" });
       form.reset();

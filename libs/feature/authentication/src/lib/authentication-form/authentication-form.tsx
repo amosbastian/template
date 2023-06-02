@@ -151,5 +151,3 @@ export const AuthenticationForm = ({ action, className }: { action: string; clas
     </CardContent>
   );
 };
-
-export default AuthenticationForm;

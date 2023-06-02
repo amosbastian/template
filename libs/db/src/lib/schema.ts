@@ -69,7 +69,7 @@ export const teams = mysqlTable(
     name: text("name").notNull(),
     image: text("image"),
     // Add unique constraint when implemented in Drizzle
-    slug: text("slug").notNull(),
+    slug: varchar("slug", { length: 255 }).notNull(),
     createdAt: timestamp("created_at", { fsp: 2 }).notNull().defaultNow(),
     // Used for billing
     customerId: int("customer_id"),
