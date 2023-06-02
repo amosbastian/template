@@ -159,8 +159,8 @@ export const teamRouter = router({
       }
 
       // TODO: use rbac
-      if (currentUserMember.role !== "admin") {
-        throw new TRPCError({ code: "FORBIDDEN", message: "You are not an admin of the team" });
+      if (currentUserMember.role !== "admin" && ctx.session.user.id !== team.ownerId) {
+        throw new TRPCError({ code: "FORBIDDEN", message: "You are not an admin or owner of the team" });
       }
 
       const toBeRemovedMember = await db.query.teamMembers.findFirst({
@@ -206,4 +206,39 @@ export const teamRouter = router({
         .delete(teamMembers)
         .where(and(eq(teamMembers.userId, input.userId), eq(teamMembers.teamId, input.teamId)));
     }),
+  revokeInvite: protectedProcedure.input(z.object({ token: z.string() })).mutation(async ({ input, ctx }) => {
+    const invitation = await db.query.invitations.findFirst({
+      where: eq(invitations.token, input.token),
+      columns: { teamId: true },
+      with: {
+        team: {
+          columns: {
+            ownerId: true,
+          },
+        },
+      },
+    });
+
+    if (!invitation) {
+      throw new TRPCError({ code: "NOT_FOUND", message: "Could not find invitation" });
+    }
+
+    const currentUserMember = await db.query.teamMembers.findFirst({
+      where: and(eq(teamMembers.userId, ctx.session.user.id), eq(teamMembers.teamId, invitation.teamId)),
+      columns: {
+        role: true,
+      },
+    });
+
+    if (!currentUserMember) {
+      throw new TRPCError({ code: "FORBIDDEN", message: "You are not a member of the team" });
+    }
+
+    // TODO: use rbac
+    if (currentUserMember.role !== "admin" && ctx.session.user.id !== invitation.team.ownerId) {
+      throw new TRPCError({ code: "FORBIDDEN", message: "You are not an admin or owner of the team" });
+    }
+
+    return db.delete(invitations).where(eq(invitations.token, input.token));
+  }),
 });
