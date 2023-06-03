@@ -1,1 +1,1 @@
-export * from "./lib/team/invite-members-schema";
+export * from "./lib/team";

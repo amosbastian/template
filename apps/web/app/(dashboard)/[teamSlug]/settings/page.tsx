@@ -1,10 +1,29 @@
 import { getAuthentication } from "@template/authentication";
-import { ProfileForm } from "@template/feature/settings";
+import { db, teams } from "@template/db";
+import { TeamForm } from "@template/feature/team";
 import { Card, CardContent, CardHeader, CardTitle } from "@template/ui/web";
+import { eq } from "drizzle-orm";
 import { Metadata } from "next";
 
 export default async function GeneralSettings() {
   const { user } = await getAuthentication();
+
+  if (!user) {
+    return null;
+  }
+
+  const team = await db.query.teams.findFirst({
+    where: eq(teams.id, user.activeTeamId),
+    columns: {
+      id: true,
+      name: true,
+      image: true,
+    },
+  });
+
+  if (!team) {
+    return null;
+  }
 
   return (
     <div className="flex flex-col gap-4">
@@ -13,14 +32,10 @@ export default async function GeneralSettings() {
       </h2>
       <Card>
         <CardHeader>
-          <CardTitle>Profile</CardTitle>
+          <CardTitle>Team</CardTitle>
         </CardHeader>
         <CardContent>
-          <ProfileForm
-            className="max-w-[360px]"
-            defaultValues={user ?? undefined}
-            emailVerified={user?.emailVerified}
-          />
+          <TeamForm className="max-w-[360px]" defaultValues={team} />
         </CardContent>
       </Card>
     </div>
@@ -29,5 +44,5 @@ export default async function GeneralSettings() {
 
 export const metadata: Metadata = {
   title: "Settings",
-  description: "Manage your general settings",
+  description: "Manage your team",
 };
