@@ -8,7 +8,6 @@ export const GET = async (request: Request) => {
   if (provider === "github") {
     const [url, state] = await githubAuthentication.getAuthorizationUrl();
 
-    // @ts-expect-error FIXME: cookies are read only
     cookies().set("oauth_state", state, {
       path: "/",
       maxAge: 60 * 60,

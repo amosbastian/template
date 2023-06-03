@@ -12,11 +12,9 @@ export default async function TeamSettings() {
       <InviteMembersForm />
       <TeamTabs>
         <TabsContent value="members">
-          {/* @ts-expect-error RSC */}
           <TeamTable />
         </TabsContent>
         <TabsContent value="invitations">
-          {/* @ts-expect-error RSC */}
           <InviteTable />
         </TabsContent>
       </TeamTabs>

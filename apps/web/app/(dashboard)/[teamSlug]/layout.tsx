@@ -28,7 +28,6 @@ export default async function DashboardLayout({ children, params }: DashboardLay
 
   return (
     <div className="h-full w-full">
-      {/* @ts-expect-error RSC */}
       <Header />
       <div className="h-full w-full">{children}</div>
     </div>

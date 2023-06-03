@@ -38,12 +38,10 @@ export async function ConnectedAccounts({ className }: ConnectedAccountsProps) {
           const provider = key.id.split(":")[0];
 
           if (provider === "github") {
-            // @ts-expect-error: RSC
             return <GithubAccordion key={key.id} id={key.id} />;
           }
 
           if (provider === "email") {
-            // @ts-expect-error: RSC
             return <EmailAccordion key={key.id} id={key.id} />;
           }
 
