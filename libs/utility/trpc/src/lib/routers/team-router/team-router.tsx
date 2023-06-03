@@ -1,5 +1,14 @@
 import { BASE_URL } from "@template/configuration";
-import { createTeam, db, insertTeamSchema, invitations, teamMembers, teams, users } from "@template/db";
+import {
+  createTeam,
+  db,
+  insertTeamMemberSchema,
+  insertTeamSchema,
+  invitations,
+  teamMembers,
+  teams,
+  users,
+} from "@template/db";
 // import sendEmail, { TeamInvitation } from "@template/utility/email";
 import { inviteMembersSchema } from "@template/utility/schema";
 import { generateToken } from "@template/utility/shared";
@@ -239,5 +248,13 @@ export const teamRouter = router({
     }
 
     return db.delete(invitations).where(eq(invitations.token, input.token));
+  }),
+  updateMemberRole: protectedProcedure.input(insertTeamMemberSchema).mutation(async ({ input, ctx }) => {
+    // TODO: use rbac
+
+    return db
+      .update(teamMembers)
+      .set({ role: input.role })
+      .where(and(eq(teamMembers.teamId, input.teamId), eq(teamMembers.userId, input.userId)));
   }),
 });

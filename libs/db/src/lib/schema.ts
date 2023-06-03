@@ -124,6 +124,8 @@ export const teamMembers = mysqlTable(
   }),
 );
 
+export const insertTeamMemberSchema = createInsertSchema(teamMembers);
+
 export const teamMembersRelations = relations(teamMembers, ({ one }) => ({
   team: one(teams, {
     fields: [teamMembers.teamId],

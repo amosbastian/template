@@ -1,6 +1,5 @@
 "use client";
 
-import { Row } from "@tanstack/react-table";
 import {
   Button,
   DropdownMenu,
@@ -12,14 +11,14 @@ import {
 } from "@template/ui/web";
 import { MoreHorizontal, Pen, Trash } from "lucide-react";
 
-interface TeamTableRowActionsProps<TData> {
-  row: Row<TData>;
+interface TeamTableRowActionsProps {
+  disabled: boolean;
 }
 
-export function TeamTableRowActions<TData>({ row }: TeamTableRowActionsProps<TData>) {
+export function TeamTableRowActions({ disabled }: TeamTableRowActionsProps) {
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
+      <DropdownMenuTrigger asChild disabled={disabled}>
         <Button variant="ghost" className="data-[state=open]:bg-muted flex h-8 w-8 p-0">
           <MoreHorizontal className="h-4 w-4" />
           <span className="sr-only">Open menu</span>

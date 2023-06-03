@@ -3,7 +3,7 @@ import { db, teamMembers, teams } from "@template/db";
 import { and, eq } from "drizzle-orm";
 import { Table } from "./table";
 
-export async function InviteTable() {
+export async function TeamTable() {
   const { user } = await getAuthentication();
 
   if (!user) {
@@ -17,13 +17,21 @@ export async function InviteTable() {
       ownerId: true,
     },
     with: {
-      invitations: {
+      members: {
         columns: {
-          createdAt: true,
-          email: true,
-          expiresAt: true,
+          teamId: true,
           role: true,
-          token: true,
+        },
+        with: {
+          user: {
+            columns: {
+              id: true,
+              email: true,
+              emailVerified: true,
+              image: true,
+              name: true,
+            },
+          },
         },
       },
     },
@@ -38,7 +46,7 @@ export async function InviteTable() {
   if (isOwner) {
     return (
       <div className="mx-auto">
-        <Table data={team.invitations ?? []} isAdmin={isOwner} />
+        <Table data={team?.members ?? []} isAdmin userId={user.id} isOwner />
       </div>
     );
   }
@@ -58,7 +66,7 @@ export async function InviteTable() {
 
   return (
     <div className="mx-auto">
-      <Table data={team.invitations ?? []} isAdmin={isAdmin} />
+      <Table data={team?.members ?? []} isAdmin={isAdmin} userId={user.id} isOwner={false} />
     </div>
   );
 }
