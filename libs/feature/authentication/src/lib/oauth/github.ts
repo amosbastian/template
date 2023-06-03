@@ -54,12 +54,14 @@ export async function githubOauth(request: Request) {
       });
     }
 
-    const team = await db.query.teams.findFirst({
-      where: eq(teams.id, user.activeTeamId),
-      columns: {
-        slug: true,
-      },
-    });
+    const team = user.activeTeamId
+      ? await db.query.teams.findFirst({
+          where: eq(teams.id, user.activeTeamId),
+          columns: {
+            slug: true,
+          },
+        })
+      : null;
 
     const session = await authentication.createSession(user.id);
     const authenticationRequest = authentication.handleRequest({ request, cookies });

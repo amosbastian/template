@@ -30,6 +30,7 @@ export const teamRouter = router({
     const members = await db.query.teamMembers.findMany({
       where: eq(teamMembers.teamId, team.id),
       columns: {
+        userId: true,
         role: true,
       },
       with: {
@@ -41,7 +42,7 @@ export const teamRouter = router({
       },
     });
 
-    const userAsMember = members.find((member) => member.id === ctx.session.user.id);
+    const userAsMember = members.find((member) => member.userId === ctx.session.user.id);
 
     if (!userAsMember) {
       throw new TRPCError({ code: "UNAUTHORIZED", message: "Not a member of the team" });
@@ -88,8 +89,6 @@ export const teamRouter = router({
       const user = await db.query.users.findFirst({
         where: eq(users.email, invitation.email),
       });
-
-      console.log(`${BASE_URL}/api/accept-team-invitation/${token}`);
 
       const invitedByName = ctx.session.user.name;
       const invitedByEmail = ctx.session.user.email;

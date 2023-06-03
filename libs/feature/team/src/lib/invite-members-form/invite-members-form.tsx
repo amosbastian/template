@@ -50,10 +50,13 @@ export function InviteMembersForm({ className, ...rest }: CardProps) {
   });
 
   const { mutate, isLoading } = api.team.inviteMember.useMutation({
-    onSuccess: (data) => {
+    onSuccess: () => {
       toast({ title: "Invite(s) sent!" });
       form.reset();
       router.refresh();
+    },
+    onError: () => {
+      toast({ title: "Could not send invitation", variant: "destructive" });
     },
   });
 

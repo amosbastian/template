@@ -86,6 +86,7 @@ export const teams = mysqlTable(
 
 export const insertTeamSchema = createInsertSchema(teams, {
   slug: (schema) => schema.slug.optional(),
+  ownerId: (schema) => schema.ownerId.optional(),
 });
 
 export type Team = InferModel<typeof teams, "select">;

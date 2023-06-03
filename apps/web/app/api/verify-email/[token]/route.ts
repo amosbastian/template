@@ -54,14 +54,14 @@ export async function GET(
     await tx.delete(verificationTokens).where(eq(verificationTokens.token, token));
   });
 
-  const team = await db.query.teams
-    .findFirst({
-      where: eq(teams.id, user.activeTeamId),
-      columns: {
-        slug: true,
-      },
-    })
-    .execute();
+  const team = user.activeTeamId
+    ? await db.query.teams.findFirst({
+        where: eq(teams.id, user.activeTeamId),
+        columns: {
+          slug: true,
+        },
+      })
+    : null;
 
   return new Response(null, {
     status: 302,
