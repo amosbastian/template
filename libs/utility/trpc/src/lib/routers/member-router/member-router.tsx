@@ -12,7 +12,15 @@ import { protectedProcedure, router } from "../../createRouter";
 
 export const memberRouter = router({
   update: protectedProcedure.input(insertTeamMemberSchema).mutation(async ({ input, ctx }) => {
-    // TODO: use rbac
+    const userId = ctx.session.user.id;
+    const teamId = ctx.session.user.activeTeamId;
+    const ability = await defineAbilityFor({ userId, teamId });
+
+    try {
+      ForbiddenError.from(ability).throwUnlessCan("update", { kind: "Member", role: input.role });
+    } catch {
+      throw new TRPCError({ code: "FORBIDDEN", message: `You aren't allowed to change their role to ${input.role}` });
+    }
 
     return db
       .update(teamMembers)
