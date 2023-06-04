@@ -1,6 +1,6 @@
 import { getAuthentication } from "@template/authentication";
-import { db, teamMembers, teams } from "@template/db";
-import { and, eq } from "drizzle-orm";
+import { db, teams } from "@template/db";
+import { eq } from "drizzle-orm";
 import { Table } from "./table";
 
 export async function InviteTable() {
@@ -14,9 +14,14 @@ export async function InviteTable() {
     where: eq(teams.id, user.activeTeamId),
     columns: {
       id: true,
-      ownerId: true,
     },
     with: {
+      members: {
+        columns: {
+          userId: true,
+          role: true,
+        },
+      },
       invitations: {
         columns: {
           createdAt: true,
@@ -29,36 +34,27 @@ export async function InviteTable() {
     },
   });
 
-  if (!team) {
+  const member = team?.members.find((m) => m.userId === user.id);
+
+  if (!member) {
     return null;
   }
 
-  const isOwner = user.id === team.ownerId;
+  const isOwner = member.role === "owner";
 
   if (isOwner) {
     return (
       <div className="mx-auto">
-        <Table data={team.invitations ?? []} isAdmin={isOwner} />
+        <Table data={team?.invitations ?? []} isAdmin={isOwner} />
       </div>
     );
-  }
-
-  const member = await db.query.teamMembers.findFirst({
-    where: and(eq(teamMembers.teamId, team.id), eq(teamMembers.userId, user.id)),
-    columns: {
-      role: true,
-    },
-  });
-
-  if (!member) {
-    return null;
   }
 
   const isAdmin = member.role === "admin";
 
   return (
     <div className="mx-auto">
-      <Table data={team.invitations ?? []} isAdmin={isAdmin} />
+      <Table data={team?.invitations ?? []} isAdmin={isAdmin} />
     </div>
   );
 }

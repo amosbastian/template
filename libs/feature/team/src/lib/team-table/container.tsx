@@ -1,6 +1,6 @@
 import { getAuthentication } from "@template/authentication";
-import { db, teamMembers, teams } from "@template/db";
-import { and, eq } from "drizzle-orm";
+import { db, teams } from "@template/db";
+import { eq } from "drizzle-orm";
 import { Table } from "./table";
 
 export async function TeamTable() {
@@ -14,11 +14,11 @@ export async function TeamTable() {
     where: eq(teams.id, user.activeTeamId),
     columns: {
       id: true,
-      ownerId: true,
     },
     with: {
       members: {
         columns: {
+          userId: true,
           teamId: true,
           role: true,
         },
@@ -37,11 +37,13 @@ export async function TeamTable() {
     },
   });
 
-  if (!team) {
+  const member = team?.members.find((m) => m.userId === user.id);
+
+  if (!member) {
     return null;
   }
 
-  const isOwner = user.id === team.ownerId;
+  const isOwner = member.role === "owner";
 
   if (isOwner) {
     return (
@@ -49,17 +51,6 @@ export async function TeamTable() {
         <Table data={team?.members ?? []} isAdmin userId={user.id} isOwner />
       </div>
     );
-  }
-
-  const member = await db.query.teamMembers.findFirst({
-    where: and(eq(teamMembers.teamId, team.id), eq(teamMembers.userId, user.id)),
-    columns: {
-      role: true,
-    },
-  });
-
-  if (!member) {
-    return null;
   }
 
   const isAdmin = member.role === "admin";

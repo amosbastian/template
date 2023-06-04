@@ -16,7 +16,8 @@ import { createInsertSchema } from "drizzle-zod";
 
 export const ADMIN_ROLE = "admin";
 export const MEMBER_ROLE = "member";
-export const ROLES = [ADMIN_ROLE, MEMBER_ROLE] as const;
+export const OWNER_ROLE = "owner";
+export const ROLES = [OWNER_ROLE, ADMIN_ROLE, MEMBER_ROLE] as const;
 export type Role = (typeof ROLES)[number];
 
 export const users = mysqlTable(
@@ -73,11 +74,6 @@ export const teams = mysqlTable(
     createdAt: timestamp("created_at", { fsp: 2 }).notNull().defaultNow(),
     // Used for billing
     customerId: int("customer_id"),
-    ownerId: varchar("owner_id", {
-      length: 15,
-    })
-      .notNull()
-      .references(() => users.id),
   },
   (table) => ({
     slugIndex: uniqueIndex("slug_idx").on(table.slug),
@@ -86,7 +82,6 @@ export const teams = mysqlTable(
 
 export const insertTeamSchema = createInsertSchema(teams, {
   slug: (schema) => schema.slug.optional(),
-  ownerId: (schema) => schema.ownerId.optional(),
 });
 
 export type Team = InferModel<typeof teams, "select">;
@@ -98,10 +93,6 @@ export const teamsRelations = relations(teams, ({ many, one }) => ({
   subscription: one(subscriptions, {
     fields: [teams.id],
     references: [subscriptions.teamId],
-  }),
-  owner: one(users, {
-    fields: [teams.ownerId],
-    references: [users.id],
   }),
 }));
 
