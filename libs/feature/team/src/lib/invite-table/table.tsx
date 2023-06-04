@@ -11,11 +11,10 @@ dayjs.extend(relativeTime);
 
 type TableProps = {
   data: any[];
-  isAdmin: boolean;
+  disabled: boolean;
 };
 
-export function Table({ data, isAdmin }: TableProps) {
-  console.log("data:", data);
+export function Table({ data, disabled }: TableProps) {
   const columns = React.useMemo(
     () =>
       [
@@ -48,7 +47,7 @@ export function Table({ data, isAdmin }: TableProps) {
         {
           id: "actions",
           cell: ({ row }) => {
-            return <InviteTableRowActions disabled={!isAdmin} token={row.original.token} />;
+            return <InviteTableRowActions disabled={disabled} token={row.original.token} />;
           },
         },
       ] as ColumnDef<{
@@ -57,7 +56,7 @@ export function Table({ data, isAdmin }: TableProps) {
         createdAt: Date;
         token: string;
       }>[],
-    [isAdmin],
+    [disabled],
   );
 
   return (

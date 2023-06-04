@@ -1,4 +1,5 @@
 import { getAuthentication } from "@template/authentication";
+import { defineAbilityFor } from "@template/authorisation";
 import { db, teams } from "@template/db";
 import { eq } from "drizzle-orm";
 import { Table } from "./table";
@@ -16,12 +17,6 @@ export async function InviteTable() {
       id: true,
     },
     with: {
-      members: {
-        columns: {
-          userId: true,
-          role: true,
-        },
-      },
       invitations: {
         columns: {
           createdAt: true,
@@ -34,27 +29,11 @@ export async function InviteTable() {
     },
   });
 
-  const member = team?.members.find((m) => m.userId === user.id);
-
-  if (!member) {
-    return null;
-  }
-
-  const isOwner = member.role === "owner";
-
-  if (isOwner) {
-    return (
-      <div className="mx-auto">
-        <Table data={team?.invitations ?? []} isAdmin={isOwner} />
-      </div>
-    );
-  }
-
-  const isAdmin = member.role === "admin";
+  const ability = await defineAbilityFor({ userId: user.id, teamId: user.activeTeamId });
 
   return (
     <div className="mx-auto">
-      <Table data={team?.invitations ?? []} isAdmin={isAdmin} />
+      <Table data={team?.invitations ?? []} disabled={ability.can("revoke", "Invitation")} />
     </div>
   );
 }

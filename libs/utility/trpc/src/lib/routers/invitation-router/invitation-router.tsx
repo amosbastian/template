@@ -14,7 +14,7 @@ export const invitationRouter = router({
     const ability = await defineAbilityFor({ userId, teamId });
 
     try {
-      ForbiddenError.from(ability).throwUnlessCan("invite", "Member");
+      ForbiddenError.from(ability).throwUnlessCan("revoke", "Invitation");
     } catch {
       throw new TRPCError({ code: "FORBIDDEN", message: "You aren't allowed to invite" });
     }

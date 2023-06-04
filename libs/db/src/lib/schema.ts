@@ -140,6 +140,8 @@ export const invitations = mysqlTable("invitations", {
   expiresAt: timestamp("expires_at", { fsp: 2 }).notNull(),
 });
 
+export type Invitation = InferModel<typeof invitations, "select">;
+
 export const insertInvitationSchema = createInsertSchema(invitations);
 
 export const invitationsRelations = relations(invitations, ({ one }) => ({

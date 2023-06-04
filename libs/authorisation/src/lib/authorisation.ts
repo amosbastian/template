@@ -1,5 +1,5 @@
 import { AbilityBuilder, CreateAbility, MongoAbility, createMongoAbility } from "@casl/ability";
-import { Team as DbTeam, User as DbUser, db, teamMembers } from "@template/db";
+import { Team as DbTeam, User as DbUser, db, teamMembers, Invitation as DbInvitation } from "@template/db";
 import { and, eq } from "drizzle-orm";
 
 type User = {
@@ -9,6 +9,10 @@ type User = {
 type Team = {
   kind: "Team";
 } & DbTeam;
+
+type Invitation = {
+  kind: "Invitation";
+} & DbInvitation;
 
 type GetUserParams = { teamId: number; userId: string };
 
@@ -32,7 +36,11 @@ async function getUser({ teamId, userId }: GetUserParams) {
 
 type Member = { kind: "Member" } & Awaited<ReturnType<typeof getUser>>;
 type CRUD = "create" | "read" | "update" | "delete";
-type AppAbilities = ["update", User | "User"] | [CRUD, Team | "Team"] | ["invite" | "remove", Member | "Member"];
+type AppAbilities =
+  | ["update", User | "User"]
+  | [CRUD, Team | "Team"]
+  | ["invite" | "remove", Member | "Member"]
+  | ["revoke", Invitation | "Invitation"];
 
 export type AppAbility = MongoAbility<AppAbilities>;
 export const createAppAbility = createMongoAbility as CreateAbility<AppAbility>;
@@ -79,12 +87,14 @@ function defineOwnerRules({ can }: AbilityBuilder<AppAbility>, user: NonNullable
   can("update", "User", { id: { $eq: user.id } });
   can("invite", "Member");
   can("remove", "Member", { role: { $in: ["admin", "member"] } });
+  can("revoke", "Invitation");
 }
 
 function defineAdminRules({ can }: AbilityBuilder<AppAbility>, user: NonNullable<Member>) {
   can("update", "User", { id: { $eq: user.id } });
   can("invite", "Member");
   can("remove", "Member", { role: "member" });
+  can("revoke", "Invitation");
 }
 
 function defineMemberRules({ can }: AbilityBuilder<AppAbility>, user: NonNullable<Member>) {
