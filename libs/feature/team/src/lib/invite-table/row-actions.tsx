@@ -21,7 +21,7 @@ interface InviteTableRowActionsProps {
 export function InviteTableRowActions({ disabled, token }: InviteTableRowActionsProps) {
   const router = useRouter();
 
-  const { mutate, isLoading } = api.team.revokeInvite.useMutation({
+  const { mutate, isLoading } = api.invitation.revoke.useMutation({
     onSuccess: () => {
       router.refresh();
     },

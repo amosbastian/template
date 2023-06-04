@@ -1,18 +1,18 @@
-import { AbilityBuilder, CreateAbility, ForcedSubject, MongoAbility, createMongoAbility } from "@casl/ability";
-import { db, teamMembers } from "@template/db";
+import { AbilityBuilder, CreateAbility, MongoAbility, createMongoAbility } from "@casl/ability";
+import { Team as DbTeam, User as DbUser, db, teamMembers } from "@template/db";
 import { and, eq } from "drizzle-orm";
 
-const actions = ["manage", "read", "create", "delete", "update", "invite"] as const;
-const subjects = ["User", "all"] as const;
-type AppAbilities = [
-  (typeof actions)[number],
-  (typeof subjects)[number] | ForcedSubject<Exclude<(typeof subjects)[number], "all">>,
-];
+type User = {
+  kind: "User";
+} & DbUser;
 
-export type AppAbility = MongoAbility<AppAbilities>;
-export const createAppAbility = createMongoAbility as CreateAbility<AppAbility>;
+type Team = {
+  kind: "Team";
+} & DbTeam;
 
-async function getUser({ teamId, userId }: { teamId: number; userId: string }) {
+type GetUserParams = { teamId: number; userId: string };
+
+async function getUser({ teamId, userId }: GetUserParams) {
   const member = await db.query.teamMembers.findFirst({
     where: and(eq(teamMembers.userId, userId), eq(teamMembers.teamId, teamId)),
     with: {
@@ -30,43 +30,63 @@ async function getUser({ teamId, userId }: { teamId: number; userId: string }) {
   };
 }
 
-type User = Awaited<ReturnType<typeof getUser>>;
+type Member = { kind: "Member" } & Awaited<ReturnType<typeof getUser>>;
+type CRUD = "create" | "read" | "update" | "delete";
+type AppAbilities = ["update", User | "User"] | [CRUD, Team | "Team"] | ["invite" | "remove", Member | "Member"];
+
+export type AppAbility = MongoAbility<AppAbilities>;
+export const createAppAbility = createMongoAbility as CreateAbility<AppAbility>;
 
 let ANONYMOUS_ABILITY: AppAbility;
 
-export function defineAbilityFor(user?: User) {
-  if (user) return createAppAbility(defineRulesFor(user));
+export async function defineAbilityFor(params?: GetUserParams) {
+  if (!params || (params && !params.userId)) {
+    ANONYMOUS_ABILITY = ANONYMOUS_ABILITY || createAppAbility(defineRulesFor());
+    return ANONYMOUS_ABILITY;
+  }
 
-  ANONYMOUS_ABILITY = ANONYMOUS_ABILITY || createAppAbility(defineRulesFor());
-  return ANONYMOUS_ABILITY;
+  const user = await getUser(params);
+
+  if (!user) {
+    ANONYMOUS_ABILITY = ANONYMOUS_ABILITY || createAppAbility(defineRulesFor());
+    return ANONYMOUS_ABILITY;
+  }
+
+  return createAppAbility(defineRulesFor({ kind: "Member", ...user }));
 }
 
-export function defineRulesFor(user?: User) {
+export function defineRulesFor(user?: Member) {
   const builder = new AbilityBuilder<AppAbility>(createAppAbility);
   switch (user?.role) {
     case "admin":
-      defineAdminRules(builder);
+      defineAdminRules(builder, user);
       break;
     case "member":
-      defineAnonymousRules(builder);
       defineMemberRules(builder, user);
       break;
+    case "owner":
+      defineOwnerRules(builder, user);
+      break;
     default:
-      defineAnonymousRules(builder);
       break;
   }
 
   return builder.rules;
 }
 
-function defineAdminRules({ can }: AbilityBuilder<AppAbility>) {
-  can("manage", "all");
+function defineOwnerRules({ can }: AbilityBuilder<AppAbility>, user: NonNullable<Member>) {
+  can(["create", "read", "update", "delete"], "Team");
+  can("update", "User", { id: { $eq: user.id } });
+  can("invite", "Member");
+  can("remove", "Member", { role: { $in: ["admin", "member"] } });
 }
 
-function defineMemberRules({ can }: AbilityBuilder<AppAbility>, user: NonNullable<User>) {
-  can("manage", "all");
+function defineAdminRules({ can }: AbilityBuilder<AppAbility>, user: NonNullable<Member>) {
+  can("update", "User", { id: { $eq: user.id } });
+  can("invite", "Member");
+  can("remove", "Member", { role: "member" });
 }
 
-function defineAnonymousRules({ can }: AbilityBuilder<AppAbility>) {
-  can("manage", "all");
+function defineMemberRules({ can }: AbilityBuilder<AppAbility>, user: NonNullable<Member>) {
+  can("update", "User", { id: { $eq: user.id } });
 }
