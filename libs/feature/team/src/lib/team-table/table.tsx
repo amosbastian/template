@@ -34,7 +34,7 @@ const RolePopover = ({ role, isAdmin, isOwner, teamId, userId }: RolePopoverProp
   const [isOpen, setIsOpen] = React.useState<boolean>(false);
   const router = useRouter();
 
-  const { mutate: removeMember, isLoading: isRemoving } = api.team.removeMember.useMutation({
+  const { mutate: removeMember, isLoading: isRemoving } = api.member.remove.useMutation({
     onSuccess: () => {
       toast({ title: "Member removed" });
       router.refresh();
@@ -44,7 +44,7 @@ const RolePopover = ({ role, isAdmin, isOwner, teamId, userId }: RolePopoverProp
     },
   });
 
-  const { mutate: updateRole, isLoading: isUpdatingRole } = api.team.updateMemberRole.useMutation({
+  const { mutate: updateRole, isLoading: isUpdatingRole } = api.member.update.useMutation({
     onSuccess: () => {
       toast({ title: "Role updated" });
       router.refresh();
