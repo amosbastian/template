@@ -1,0 +1,16 @@
+{
+  "name": "authorisation",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/authorisation/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/authorisation/**/*.ts"]
+      }
+    }
+  },
+  "tags": ["type:utility"]
+}
