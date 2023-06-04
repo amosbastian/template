@@ -1,13 +1,14 @@
 import { BASE_URL } from "@template/configuration";
 import { db, insertTeamMemberSchema, invitations, teamMembers, teams, users } from "@template/db";
 // import sendEmail, { TeamInvitation } from "@template/utility/email";
+import { ForbiddenError } from "@casl/ability";
+import { defineAbilityFor } from "@template/authorisation";
 import { inviteMembersSchema } from "@template/utility/schema";
 import { generateToken } from "@template/utility/shared";
 import { TRPCError } from "@trpc/server";
 import { and, eq, ne } from "drizzle-orm";
 import * as z from "zod";
 import { protectedProcedure, router } from "../../createRouter";
-import { defineAbilityFor } from "@template/authorisation";
 
 export const memberRouter = router({
   update: protectedProcedure.input(insertTeamMemberSchema).mutation(async ({ input, ctx }) => {
@@ -22,6 +23,12 @@ export const memberRouter = router({
     const userId = ctx.session.user.id;
     const teamId = ctx.session.user.activeTeamId;
     const ability = await defineAbilityFor({ userId, teamId });
+
+    try {
+      ForbiddenError.from(ability).throwUnlessCan("invite", "Member");
+    } catch {
+      throw new TRPCError({ code: "FORBIDDEN", message: "You aren't allowed to invite members" });
+    }
 
     if (!input.teamSlug) {
       throw new TRPCError({ code: "INTERNAL_SERVER_ERROR" });
@@ -50,19 +57,7 @@ export const memberRouter = router({
       },
     });
 
-    const userAsMember = members.find((member) => member.userId === ctx.session.user.id);
-
-    if (!userAsMember) {
-      throw new TRPCError({ code: "UNAUTHORIZED", message: "Not a member of the team" });
-    }
-
-    // TODO: use rbac
-    if (userAsMember.role !== "admin") {
-      throw new TRPCError({ code: "UNAUTHORIZED", message: "Not an admin of the team" });
-    }
-
     const existingInvitations = await db.query.invitations.findMany({ where: eq(invitations.teamId, team.id) });
-
     const memberEmails = members.map((member) => member.user.email);
 
     for (let i = 0; i < input.invitations.length; i++) {
@@ -161,25 +156,19 @@ export const memberRouter = router({
         throw new TRPCError({ code: "NOT_FOUND", message: "Team not found" });
       }
 
-      const member = team.members.find((m) => m.userId === ctx.session.user.id);
-
-      if (!member) {
-        throw new TRPCError({ code: "FORBIDDEN", message: "You are not a member of the team" });
-      }
-
-      // TODO: use rbac
-      if (member.role !== "admin" && member.role !== "owner") {
-        throw new TRPCError({ code: "FORBIDDEN", message: "You are not an admin or owner of the team" });
-      }
-
+      const userId = ctx.session.user.id;
+      const teamId = ctx.session.user.activeTeamId;
+      const ability = await defineAbilityFor({ userId, teamId });
       const toBeRemovedMember = team.members.find((m) => m.userId === input.userId);
 
       if (!toBeRemovedMember) {
         throw new TRPCError({ code: "NOT_FOUND", message: "Could not find member" });
       }
 
-      if (toBeRemovedMember.role === "owner") {
-        throw new TRPCError({ code: "FORBIDDEN", message: "Can't remove owner" });
+      try {
+        ForbiddenError.from(ability).throwUnlessCan("remove", { kind: "Member", ...toBeRemovedMember });
+      } catch {
+        throw new TRPCError({ code: "FORBIDDEN", message: "You aren't allowed to remove this member" });
       }
 
       const user = await db.query.users.findFirst({

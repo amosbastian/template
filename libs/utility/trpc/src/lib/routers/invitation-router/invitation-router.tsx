@@ -16,28 +16,7 @@ export const invitationRouter = router({
     try {
       ForbiddenError.from(ability).throwUnlessCan("revoke", "Invitation");
     } catch {
-      throw new TRPCError({ code: "FORBIDDEN", message: "You aren't allowed to invite" });
-    }
-
-    const invitation = await db.query.invitations.findFirst({
-      where: eq(invitations.token, input.token),
-      columns: { teamId: true },
-      with: {
-        team: {
-          with: {
-            members: {
-              columns: {
-                userId: true,
-                role: true,
-              },
-            },
-          },
-        },
-      },
-    });
-
-    if (!invitation) {
-      throw new TRPCError({ code: "NOT_FOUND", message: "Could not find invitation" });
+      throw new TRPCError({ code: "FORBIDDEN", message: "You aren't allowed to revoke an invitation" });
     }
 
     return db.delete(invitations).where(eq(invitations.token, input.token));

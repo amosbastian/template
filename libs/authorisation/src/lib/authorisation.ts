@@ -4,15 +4,15 @@ import { and, eq } from "drizzle-orm";
 
 type User = {
   kind: "User";
-} & DbUser;
+} & Partial<DbUser>;
 
 type Team = {
   kind: "Team";
-} & DbTeam;
+} & Partial<DbTeam>;
 
 type Invitation = {
   kind: "Invitation";
-} & DbInvitation;
+} & Partial<DbInvitation>;
 
 type GetUserParams = { teamId: number; userId: string };
 
@@ -34,7 +34,7 @@ async function getUser({ teamId, userId }: GetUserParams) {
   };
 }
 
-type Member = { kind: "Member" } & Awaited<ReturnType<typeof getUser>>;
+type Member = { kind: "Member" } & Partial<Awaited<ReturnType<typeof getUser>>>;
 type CRUD = "create" | "read" | "update" | "delete";
 type AppAbilities =
   | ["update", User | "User"]
@@ -83,7 +83,8 @@ export function defineRulesFor(user?: Member) {
 }
 
 function defineOwnerRules({ can }: AbilityBuilder<AppAbility>, user: NonNullable<Member>) {
-  can(["create", "read", "update", "delete"], "Team");
+  can(["create"], "Team");
+  can(["read", "update", "delete"], "Team", { id: user.activeTeamId });
   can("update", "User", { id: { $eq: user.id } });
   can("invite", "Member");
   can("remove", "Member", { role: { $in: ["admin", "member"] } });
@@ -91,6 +92,8 @@ function defineOwnerRules({ can }: AbilityBuilder<AppAbility>, user: NonNullable
 }
 
 function defineAdminRules({ can }: AbilityBuilder<AppAbility>, user: NonNullable<Member>) {
+  can(["create"], "Team");
+  can(["read", "update"], "Team", { id: user.activeTeamId });
   can("update", "User", { id: { $eq: user.id } });
   can("invite", "Member");
   can("remove", "Member", { role: "member" });
@@ -98,5 +101,6 @@ function defineAdminRules({ can }: AbilityBuilder<AppAbility>, user: NonNullable
 }
 
 function defineMemberRules({ can }: AbilityBuilder<AppAbility>, user: NonNullable<Member>) {
+  can(["create"], "Team");
   can("update", "User", { id: { $eq: user.id } });
 }
