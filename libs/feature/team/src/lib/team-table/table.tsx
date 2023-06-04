@@ -22,17 +22,25 @@ import * as React from "react";
 
 dayjs.extend(relativeTime);
 
+type Ability = {
+  admin: boolean;
+  member: boolean;
+  owner: boolean;
+  remove: boolean;
+};
+
 type RolePopoverProps = {
+  ability: Ability;
   role: string;
-  isAdmin: boolean;
-  isOwner: boolean;
   teamId: number;
   userId: string;
 };
 
-const RolePopover = ({ role, isAdmin, isOwner, teamId, userId }: RolePopoverProps) => {
+const RolePopover = ({ ability, role, teamId, userId }: RolePopoverProps) => {
   const [isOpen, setIsOpen] = React.useState<boolean>(false);
   const router = useRouter();
+
+  console.log({ ability });
 
   const { mutate: removeMember, isLoading: isRemoving } = api.member.remove.useMutation({
     onSuccess: () => {
@@ -69,7 +77,11 @@ const RolePopover = ({ role, isAdmin, isOwner, teamId, userId }: RolePopoverProp
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger asChild>
-        <Button size="sm" variant="outline" disabled={isLoading || !isAdmin}>
+        <Button
+          size="sm"
+          variant="outline"
+          disabled={isLoading || Object.values(ability).every((value) => value === false)}
+        >
           <span className="capitalize">{role}</span> <ChevronDown className="ml-2 h-4 w-4 opacity-50" />
         </Button>
       </PopoverTrigger>
@@ -80,13 +92,13 @@ const RolePopover = ({ role, isAdmin, isOwner, teamId, userId }: RolePopoverProp
               <CommandItem
                 onSelect={() => handleUpdateRole("member")}
                 className="flex flex-col items-start gap-y-1 px-4 py-2 aria-disabled:cursor-not-allowed aria-disabled:opacity-40"
-                disabled={isLoading || role === "member"}
+                disabled={isLoading || role === "member" || !ability.member}
               >
                 <p>Member</p>
                 <p className="text-muted-foreground text-sm">Can create and publish posts</p>
               </CommandItem>
               <CommandItem
-                disabled={isLoading || role === "admin"}
+                disabled={isLoading || role === "admin" || !ability.admin}
                 onSelect={() => handleUpdateRole("admin")}
                 className="flex flex-col items-start gap-y-1 px-4 py-2 aria-disabled:cursor-not-allowed aria-disabled:opacity-40"
               >
@@ -94,9 +106,8 @@ const RolePopover = ({ role, isAdmin, isOwner, teamId, userId }: RolePopoverProp
                 <p className="text-muted-foreground text-sm">Can create and publish posts and manage members</p>
               </CommandItem>
               <CommandItem
-                disabled={isLoading || !isOwner}
-                // FIXME: remove ownerId, set role as owner
-                onSelect={() => console.log("owner")}
+                disabled={isLoading || role === "owner" || !ability.owner}
+                onSelect={() => handleUpdateRole("admin")}
                 className="flex flex-col items-start gap-y-1 px-4 py-2 aria-disabled:cursor-not-allowed aria-disabled:opacity-40"
               >
                 <p>Owner</p>
@@ -105,7 +116,7 @@ const RolePopover = ({ role, isAdmin, isOwner, teamId, userId }: RolePopoverProp
                 </p>
               </CommandItem>
               <CommandItem
-                disabled={isLoading || !isAdmin}
+                disabled={isLoading || !ability.remove}
                 onSelect={handleRemoveMember}
                 className="aria-selected:text-destructive-foreground aria-selected:bg-destructive group flex flex-col items-start gap-y-1 px-4 py-2 aria-disabled:cursor-not-allowed aria-disabled:opacity-40"
               >
@@ -124,12 +135,10 @@ const RolePopover = ({ role, isAdmin, isOwner, teamId, userId }: RolePopoverProp
 
 type TableProps = {
   data: any[];
-  isAdmin: boolean;
-  isOwner: boolean;
   userId: string;
 };
 
-export function Table({ data, isAdmin, userId, isOwner }: TableProps) {
+export function Table({ data, userId }: TableProps) {
   const columns = React.useMemo(
     () =>
       [
@@ -153,9 +162,8 @@ export function Table({ data, isAdmin, userId, isOwner }: TableProps) {
 
             return (
               <RolePopover
+                ability={row.original.ability}
                 role={role}
-                isAdmin={isAdmin}
-                isOwner={isOwner}
                 userId={row.original.user.id}
                 teamId={row.original.teamId}
               />
@@ -163,6 +171,7 @@ export function Table({ data, isAdmin, userId, isOwner }: TableProps) {
           },
         },
       ] as ColumnDef<{
+        ability: Ability;
         teamId: number;
         role: "admin" | "member" | null;
         user: {
@@ -173,7 +182,7 @@ export function Table({ data, isAdmin, userId, isOwner }: TableProps) {
           image: string | null;
         };
       }>[],
-    [isAdmin, userId, isOwner],
+    [userId],
   );
 
   return (

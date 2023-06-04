@@ -1,4 +1,5 @@
 import { getAuthentication } from "@template/authentication";
+import { defineAbilityFor } from "@template/authorisation";
 import { db, teams } from "@template/db";
 import { eq } from "drizzle-orm";
 import { Table } from "./table";
@@ -37,27 +38,23 @@ export async function TeamTable() {
     },
   });
 
-  const member = team?.members.find((m) => m.userId === user.id);
+  const ability = await defineAbilityFor({ userId: user.id, teamId: user.activeTeamId });
 
-  if (!member) {
-    return null;
-  }
-
-  const isOwner = member.role === "owner";
-
-  if (isOwner) {
-    return (
-      <div className="mx-auto">
-        <Table data={team?.members ?? []} isAdmin userId={user.id} isOwner />
-      </div>
-    );
-  }
-
-  const isAdmin = member.role === "admin";
+  const data = (team?.members ?? []).map((member) => {
+    return {
+      ability: {
+        admin: ability.can("update", { kind: "Member", role: "admin" }),
+        member: ability.can("update", { kind: "Member", role: "member" }),
+        owner: ability.can("update", { kind: "Member", role: "owner" }),
+        remove: ability.can("remove", { kind: "Member", ...member }),
+      },
+      ...member,
+    };
+  });
 
   return (
     <div className="mx-auto">
-      <Table data={team?.members ?? []} isAdmin={isAdmin} userId={user.id} isOwner={false} />
+      <Table data={data} userId={user.id} />
     </div>
   );
 }

@@ -39,7 +39,7 @@ type CRUD = "create" | "read" | "update" | "delete";
 type AppAbilities =
   | ["update", User | "User"]
   | [CRUD, Team | "Team"]
-  | ["invite" | "remove", Member | "Member"]
+  | ["update" | "invite" | "remove", Member | "Member"]
   | ["revoke", Invitation | "Invitation"];
 
 export type AppAbility = MongoAbility<AppAbilities>;
@@ -55,12 +55,16 @@ export async function defineAbilityFor(params?: GetUserParams) {
 
   const user = await getUser(params);
 
+  console.log(user);
+
   if (!user) {
     ANONYMOUS_ABILITY = ANONYMOUS_ABILITY || createAppAbility(defineRulesFor());
     return ANONYMOUS_ABILITY;
   }
 
-  return createAppAbility(defineRulesFor({ kind: "Member", ...user }));
+  return createAppAbility(defineRulesFor({ kind: "Member", ...user }), {
+    detectSubjectType: (object) => object.kind,
+  });
 }
 
 export function defineRulesFor(user?: Member) {
@@ -83,24 +87,45 @@ export function defineRulesFor(user?: Member) {
 }
 
 function defineOwnerRules({ can }: AbilityBuilder<AppAbility>, user: NonNullable<Member>) {
+  // Team
   can(["create"], "Team");
   can(["read", "update", "delete"], "Team", { id: user.activeTeamId });
+
+  // User
   can("update", "User", { id: { $eq: user.id } });
+
+  // Member
+  can("update", "Member", { role: { $eq: "owner" } });
+  can("update", "Member", { role: { $eq: "admin" } });
+  can("update", "Member", { role: { $eq: "member" } });
   can("invite", "Member");
   can("remove", "Member", { role: { $in: ["admin", "member"] } });
+
+  // Invitation
   can("revoke", "Invitation");
 }
 
 function defineAdminRules({ can }: AbilityBuilder<AppAbility>, user: NonNullable<Member>) {
+  // Team
   can(["create"], "Team");
   can(["read", "update"], "Team", { id: user.activeTeamId });
+
+  // User
   can("update", "User", { id: { $eq: user.id } });
+
+  // Member
+  can("update", "Member", { role: { $eq: "member" } });
   can("invite", "Member");
   can("remove", "Member", { role: "member" });
+
+  // Invitation
   can("revoke", "Invitation");
 }
 
 function defineMemberRules({ can }: AbilityBuilder<AppAbility>, user: NonNullable<Member>) {
+  // Team
   can(["create"], "Team");
+
+  // User
   can("update", "User", { id: { $eq: user.id } });
 }

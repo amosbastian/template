@@ -34,7 +34,11 @@ import * as z from "zod";
 type CardProps = React.ComponentProps<typeof Card>;
 type FormValue = z.infer<typeof inviteMembersSchema>;
 
-export function InviteMembersForm({ className, ...rest }: CardProps) {
+type InviteMembersFormProps = {
+  isDisabled: boolean;
+} & CardProps;
+
+export function InviteMembersForm({ className, isDisabled, ...rest }: InviteMembersFormProps) {
   const router = useRouter();
   const params = useParams();
   const teamSlug = params.teamSlug;
@@ -69,6 +73,8 @@ export function InviteMembersForm({ className, ...rest }: CardProps) {
     control: form.control,
   });
 
+  const disabled = isLoading || isDisabled;
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -90,7 +96,7 @@ export function InviteMembersForm({ className, ...rest }: CardProps) {
                           <FormItem className="flex-1 md:basis-1/2 lg:basis-2/3">
                             <FormLabel className={classnames(index !== 0 && "sr-only")}>Email address</FormLabel>
                             <FormControl>
-                              <Input type="email" placeholder="jane@example.com" disabled={isLoading} {...field} />
+                              <Input type="email" placeholder="jane@example.com" disabled={disabled} {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -105,7 +111,7 @@ export function InviteMembersForm({ className, ...rest }: CardProps) {
                         return (
                           <FormItem className="flex-1 md:basis-1/2 lg:basis-1/3">
                             <FormLabel className={classnames(index !== 0 && "sr-only")}>Role</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value} disabled={isLoading}>
+                            <Select onValueChange={field.onChange} defaultValue={field.value} disabled={disabled}>
                               <FormControl>
                                 <SelectTrigger>
                                   <SelectValue placeholder="Member" />
@@ -131,14 +137,14 @@ export function InviteMembersForm({ className, ...rest }: CardProps) {
               size="sm"
               className="mt-4"
               onClick={() => append({ email: "", role: MEMBER_ROLE })}
-              disabled={isLoading}
+              disabled={disabled}
             >
               <PlusCircleIcon className="mr-2 h-4 w-4" />
               Add more
             </Button>
           </CardContent>
           <CardFooter>
-            <Button isLoading={isLoading} size="sm">
+            <Button isLoading={isLoading} disabled={disabled} size="sm">
               Invite
             </Button>
           </CardFooter>
