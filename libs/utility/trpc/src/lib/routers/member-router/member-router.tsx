@@ -142,6 +142,7 @@ export const memberRouter = router({
     .input(z.object({ userId: z.string().length(15), teamId: z.number().min(1) }))
     .mutation(async ({ input, ctx }) => {
       if (input.userId === ctx.session.user.id) {
+        // Or maybe you can, but probably should check if there are other members :)
         throw new TRPCError({ code: "FORBIDDEN", message: "You can't remove yourself from a team" });
       }
 

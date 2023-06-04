@@ -40,7 +40,8 @@ type AppAbilities =
   | ["update", User | "User"]
   | [CRUD, Team | "Team"]
   | ["update" | "invite" | "remove", Member | "Member"]
-  | ["revoke", Invitation | "Invitation"];
+  | ["revoke", Invitation | "Invitation"]
+  | ["create" | "update", "Subscription"];
 
 export type AppAbility = MongoAbility<AppAbilities>;
 export const createAppAbility = createMongoAbility as CreateAbility<AppAbility>;
@@ -54,8 +55,6 @@ export async function defineAbilityFor(params?: GetUserParams) {
   }
 
   const user = await getUser(params);
-
-  console.log(user);
 
   if (!user) {
     ANONYMOUS_ABILITY = ANONYMOUS_ABILITY || createAppAbility(defineRulesFor());
@@ -103,6 +102,10 @@ function defineOwnerRules({ can }: AbilityBuilder<AppAbility>, user: NonNullable
 
   // Invitation
   can("revoke", "Invitation");
+
+  // Billing
+  can("create", "Subscription");
+  can("update", "Subscription");
 }
 
 function defineAdminRules({ can }: AbilityBuilder<AppAbility>, user: NonNullable<Member>) {

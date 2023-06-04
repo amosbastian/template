@@ -75,6 +75,15 @@ export async function createEmailVerificationToken(userId: string) {
     throw new Error("Could not find user");
   }
 
+  // const result = await db
+  //   .select({ count: sql<number>`count(*)` })
+  //   .from(schema.verificationTokens)
+  //   .where(eq(schema.verificationTokens.email, user.email));
+
+  // if (result[0].count > 0) {
+  //   return;
+  // }
+
   const token = generateToken();
   const oneDayFromNow = new Date(Date.now() + 60 * 60 * 24 * 1000);
 
