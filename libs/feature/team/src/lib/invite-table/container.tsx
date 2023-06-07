@@ -33,7 +33,7 @@ export async function InviteTable() {
 
   return (
     <div className="mx-auto">
-      <Table data={team?.invitations ?? []} disabled={ability.can("revoke", "Invitation")} />
+      <Table data={team?.invitations ?? []} disabled={!ability.can("revoke", "Invitation")} />
     </div>
   );
 }

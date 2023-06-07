@@ -40,7 +40,6 @@ export function Table({ data, disabled }: TableProps) {
           header: "Sent at",
           cell: ({ row }) => {
             const createdAt = row.getValue("createdAt") as Date;
-            console.log({ createdAt, now: new Date() });
             return <time dateTime={createdAt.toISOString()}>{dayjs(createdAt).fromNow()}</time>;
           },
         },
