@@ -34,7 +34,7 @@ export function UserButton({ user, ...props }: UserButtonProps) {
   const trpcContext = api.useContext();
   const { setTheme, theme } = useTheme();
 
-  const teamSlug = params.teamSlug;
+  const teamSlug = params!.teamSlug as string;
 
   return (
     <DropdownMenu>

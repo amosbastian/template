@@ -12,21 +12,23 @@ type CardProps = React.ComponentProps<typeof Card>;
 export async function PlanCard({ className, ...rest }: CardProps) {
   const { user } = await getAuthentication();
 
-  const result = await db.query.users.findFirst({
-    where: eq(users.id, user.id),
-    with: {
-      activeTeam: {
-        columns: {
-          id: true,
-          name: true,
-          createdAt: true,
-        },
+  const result = user
+    ? await db.query.users.findFirst({
+        where: eq(users.id, user.id),
         with: {
-          subscription: true,
+          activeTeam: {
+            columns: {
+              id: true,
+              name: true,
+              createdAt: true,
+            },
+            with: {
+              subscription: true,
+            },
+          },
         },
-      },
-    },
-  });
+      })
+    : null;
 
   const activeTeam = result?.activeTeam;
 

@@ -60,6 +60,10 @@ interface ProviderAccordionProps {
 const EmailAccordion = async ({ id }: ProviderAccordionProps) => {
   const { user } = await getAuthentication();
 
+  if (!user) {
+    return null;
+  }
+
   const keyId = id.split(":")[1];
 
   return (
@@ -98,6 +102,10 @@ type GithubAccount = {
 
 const GithubAccordion = async ({ id }: ProviderAccordionProps) => {
   const { user } = await getAuthentication();
+
+  if (!user) {
+    return null;
+  }
 
   const keyId = id.split(":")[1];
   const response = await fetch(`https://api.github.com/user/${keyId}`);

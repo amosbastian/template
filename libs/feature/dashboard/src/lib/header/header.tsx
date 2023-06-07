@@ -17,30 +17,32 @@ const navigation = [
 export async function Header() {
   const { user } = await getAuthentication();
 
-  const result = await db.query.users.findFirst({
-    where: eq(users.id, user.id),
-    with: {
-      activeTeam: {
-        columns: {
-          id: true,
-          name: true,
-          slug: true,
-        },
-      },
-      teams: {
-        columns: {},
+  const result = user
+    ? await db.query.users.findFirst({
+        where: eq(users.id, user.id),
         with: {
-          team: {
+          activeTeam: {
             columns: {
               id: true,
               name: true,
               slug: true,
             },
           },
+          teams: {
+            columns: {},
+            with: {
+              team: {
+                columns: {
+                  id: true,
+                  name: true,
+                  slug: true,
+                },
+              },
+            },
+          },
         },
-      },
-    },
-  });
+      })
+    : null;
 
   const activeTeam = result?.activeTeam;
   const teams = (result?.teams ?? []).map(({ team }) => team);

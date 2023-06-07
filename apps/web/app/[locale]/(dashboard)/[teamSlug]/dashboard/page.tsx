@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 
-export default async function Page({ children }: { children?: React.ReactNode }) {
-  return <>{children}</>;
+export default async function Page() {
+  return null;
 }
 
 export const metadata: Metadata = {

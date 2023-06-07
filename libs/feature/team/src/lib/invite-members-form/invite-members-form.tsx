@@ -41,7 +41,7 @@ type InviteMembersFormProps = {
 export function InviteMembersForm({ className, isDisabled, ...rest }: InviteMembersFormProps) {
   const router = useRouter();
   const params = useParams();
-  const teamSlug = params.teamSlug;
+  const teamSlug = params!.teamSlug as string;
 
   const defaultValues: Partial<FormValue> = {
     teamSlug,

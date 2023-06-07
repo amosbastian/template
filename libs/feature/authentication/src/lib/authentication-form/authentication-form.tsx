@@ -34,8 +34,8 @@ export const AuthenticationForm = ({ action, className }: { action: string; clas
 
   const trpcContext = api.useContext();
   const searchParams = useSearchParams();
-  const email = searchParams.get("email");
-  const token = searchParams.get("token");
+  const email = searchParams?.get("email");
+  const token = searchParams?.get("token");
 
   const form = useForm<z.infer<typeof authenticationSchema>>({
     resolver: zodResolver(authenticationSchema),

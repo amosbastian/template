@@ -59,20 +59,6 @@ export function TeamForm({ className, defaultValues }: TeamFormProps) {
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name="image"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Image</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
-              <FormDescription></FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
         <Button type="submit" size="sm" isLoading={isUpdatingTeam}>
           Update team
         </Button>

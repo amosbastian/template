@@ -43,9 +43,9 @@ export const TeamInvitation = ({
   invitedByEmail,
   invitedByName,
   name,
-  teamImage = `https://avatar.vercel.sh/random.png`,
+  teamImage,
   teamName,
-  userImage = `https://avatar.vercel.sh/amosbastian.png`,
+  userImage,
   userEmail,
 }: TeamInvitationProps) => {
   return (
@@ -82,7 +82,13 @@ export const TeamInvitation = ({
           <MjmlGroup>
             <MjmlColumn width="40%">
               <Text align="right">
-                <img height={64} width={64} src={userImage} alt="" style={{ borderRadius: "50%" }} />
+                <img
+                  height={64}
+                  width={64}
+                  src={userImage ?? "https://avatar.vercel.sh/amosbastian.png"}
+                  alt=""
+                  style={{ borderRadius: "50%" }}
+                />
               </Text>
             </MjmlColumn>
             <MjmlColumn width="20%">
@@ -92,7 +98,13 @@ export const TeamInvitation = ({
             </MjmlColumn>
             <MjmlColumn width="40%">
               <Text align="left">
-                <img height={64} width={64} src={teamImage} alt="" style={{ borderRadius: "50%" }} />
+                <img
+                  height={64}
+                  width={64}
+                  src={teamImage ?? "https://avatar.vercel.sh/random.png"}
+                  alt=""
+                  style={{ borderRadius: "50%" }}
+                />
               </Text>
             </MjmlColumn>
           </MjmlGroup>
