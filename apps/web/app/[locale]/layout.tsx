@@ -1,8 +1,6 @@
 import { BASE_URL, BRAND_DESCRIPTION, BRAND_NAME } from "@template/configuration";
 import type { Metadata } from "next";
-import { useLocale } from "next-intl";
 import { Inter } from "next/font/google";
-import { notFound } from "next/navigation";
 import { ClientProviders } from "../client-providers";
 import "../styles.css";
 
@@ -25,19 +23,12 @@ export default function RootLayout({
     locale: string;
   };
 }) {
-  const locale = useLocale();
-
-  // Show a 404 error if the user requests an unknown locale
-  if (params.locale !== locale) {
-    notFound();
-  }
-
   return (
     // Note! If you do not add suppressHydrationWarning to your <html> you will get warnings
     // because next-themes updates that element. This property only applies one level deep,
     // so it won't block hydration warnings on other elements.
     <html
-      lang={locale}
+      lang={params.locale}
       suppressHydrationWarning
       className={`bg-background flex h-full min-h-screen flex-col antialiased ${inter.className}`}
     >

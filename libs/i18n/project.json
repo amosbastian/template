@@ -1,14 +1,14 @@
 {
-  "name": "locales",
+  "name": "i18n",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/locales/src",
+  "sourceRoot": "libs/i18n/src",
   "projectType": "library",
   "targets": {
     "lint": {
       "executor": "@nx/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["libs/locales/**/*.ts"]
+        "lintFilePatterns": ["libs/i18n/**/*.ts"]
       }
     }
   },
