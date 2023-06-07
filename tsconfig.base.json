@@ -43,6 +43,6 @@
       "@template/utility/trpc-next-server/server": ["libs/utility/trpc-next-server/src/server.ts"]
     }
   },
-  "include": ["./types/lucia.d.ts"],
+  "include": ["./types/*.d.ts"],
   "exclude": ["node_modules", "tmp"]
 }

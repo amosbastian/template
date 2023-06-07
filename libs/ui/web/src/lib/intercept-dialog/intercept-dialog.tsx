@@ -14,7 +14,7 @@ export function InterceptDialog({ children, pathname }: InterceptDialogProps) {
 
   return (
     <Dialog
-      open={currentPathname === pathname}
+      open={currentPathname.includes(pathname)}
       onOpenChange={(open) => {
         if (!open) {
           router.back();
