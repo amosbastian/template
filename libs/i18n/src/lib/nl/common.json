@@ -1,3 +1,8 @@
 {
-  "title": "Hallo, wereld!"
+  "footer": {
+    "all-rights-reserved": "All rights reserved."
+  },
+  "header": {},
+  "title": "Hallo, wereld!",
+  "meta-description": "A Next.js 13 application with authentication and payments, built with PlanetScale, Drizzle ORM, Lucia and Tailwind"
 }

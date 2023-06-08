@@ -1,4 +1,5 @@
 import { BASE_URL, BRAND_DESCRIPTION, BRAND_NAME } from "@template/configuration";
+import { Footer } from "@template/ui/web";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { ClientProviders } from "../client-providers";
@@ -37,6 +38,7 @@ export default function RootLayout({
           {children}
           {signInModal}
           {signUpModal}
+          <Footer />
         </ClientProviders>
       </body>
     </html>

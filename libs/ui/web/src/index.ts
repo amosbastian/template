@@ -12,6 +12,7 @@ export * from "./lib/data-table/data-table";
 export * from "./lib/date-range-picker/date-range-picker";
 export * from "./lib/dialog/dialog";
 export * from "./lib/dropdown-menu/dropdown-menu";
+export * from "./lib/footer/footer";
 export * from "./lib/form/form";
 export * from "./lib/input/input";
 export * from "./lib/intercept-dialog/intercept-dialog";
