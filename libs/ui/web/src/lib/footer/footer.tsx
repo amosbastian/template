@@ -1,5 +1,4 @@
-import { BRAND_NAME } from "@template/configuration";
-import useTranslation from "next-translate/useTranslation";
+import { BRAND_DESCRIPTION, BRAND_NAME } from "@template/configuration";
 
 const navigation = {
   group1: [
@@ -53,8 +52,6 @@ const navigation = {
 };
 
 export function Footer() {
-  const { t } = useTranslation("common");
-
   return (
     <footer className="bg-background" aria-labelledby="footer-heading">
       <h2 id="footer-heading" className="sr-only">
@@ -68,7 +65,7 @@ export function Footer() {
               src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
               alt="Company name"
             />
-            <p className="text-muted-foreground text-sm leading-6">{t("meta-description")}</p>
+            <p className="text-muted-foreground text-sm leading-6">{BRAND_DESCRIPTION}</p>
             <div className="flex space-x-6">
               {navigation.social.map((item) => (
                 <a key={item.name} href={item.href} className="hover:text-foreground text-muted-foreground">
@@ -133,9 +130,9 @@ export function Footer() {
             </div>
           </div>
         </div>
-        <div className="mt-16 border-t pt-8 sm:mt-20 lg:mt-24">
+        <div className="mt-16 flex flex-row justify-between border-t pt-8 sm:mt-20 lg:mt-24">
           <p className="text-muted-foreground text-xs leading-5">
-            &copy; {new Date().getFullYear()} {BRAND_NAME}. {t("footer.all-rights-reserved")}
+            &copy; {new Date().getFullYear()} {BRAND_NAME}. All rights reserved.
           </p>
         </div>
       </div>

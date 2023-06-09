@@ -7,6 +7,13 @@ import { Dialog, DialogContent, DialogTrigger } from "../dialog/dialog";
 import { Logo } from "../logo/logo";
 import { UserButton } from "../user-button/user-button";
 
+const navigation = [
+  { name: "Link 1", href: "#" },
+  { name: "Link 2", href: "#" },
+  { name: "Link 3", href: "#" },
+  { name: "Link 4", href: "#" },
+];
+
 export async function Header() {
   const { user } = await getAuthentication();
 
@@ -19,12 +26,11 @@ export async function Header() {
           </Link>
         </div>
         <div className="hidden lg:flex lg:gap-x-12">
-          <Link href="/about" className="text-secondary-foreground text-sm font-medium">
-            About
-          </Link>
-          <Link href="/blog" className="text-secondary-foreground text-sm font-medium">
-            Blog
-          </Link>
+          {navigation.map((item) => (
+            <Link key={item.name} href={item.href} className="text-secondary-foreground text-sm font-medium">
+              {item.name}
+            </Link>
+          ))}
         </div>
         <div className="flex flex-1 items-center justify-end gap-x-6">
           {user ? (
@@ -60,18 +66,15 @@ export async function Header() {
               <div className="mt-6 flow-root">
                 <div className="-my-6 divide-y divide-slate-500/10">
                   <div className="space-y-2 py-6">
-                    <Link
-                      href="/about"
-                      className={classnames(buttonVariants({ variant: "ghost", size: "sm" }), "w-full justify-start")}
-                    >
-                      About
-                    </Link>
-                    <Link
-                      href="/blog"
-                      className={classnames(buttonVariants({ variant: "ghost", size: "sm" }), "w-full justify-start")}
-                    >
-                      Blog
-                    </Link>
+                    {navigation.map((item) => (
+                      <Link
+                        key={item.name}
+                        href={item.href}
+                        className={classnames(buttonVariants({ variant: "ghost", size: "sm" }), "w-full justify-start")}
+                      >
+                        {item.name}
+                      </Link>
+                    ))}
                   </div>
                   {user ? null : (
                     <div className="py-6">

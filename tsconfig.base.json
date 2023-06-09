@@ -29,7 +29,6 @@
       "@template/feature/settings/server": ["libs/feature/settings/src/server.ts"],
       "@template/feature/team": ["libs/feature/team/src/index.ts"],
       "@template/feature/team/server": ["libs/feature/team/src/server.ts"],
-      "@template/i18n": ["libs/i18n/src/index.ts"],
       "@template/ui/email": ["libs/ui/email/src/index.ts"],
       "@template/ui/web": ["libs/ui/web/src/index.ts"],
       "@template/ui/web/server": ["libs/ui/web/src/server.ts"],

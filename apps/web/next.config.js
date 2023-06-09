@@ -2,7 +2,6 @@
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { composePlugins, withNx } = require("@nx/next");
-const nextTranslate = require("next-translate-plugin");
 
 /**
  * @type {import('@nx/next/plugins/with-nx').WithNxOptions}
@@ -24,9 +23,7 @@ const nextConfig = {
 
 const plugins = [
   // Add more Next.js plugins to this list if needed.
-  nextTranslate,
   withNx,
 ];
 
-// @ts-expect-error: ...?
 module.exports = composePlugins(...plugins)(nextConfig);
