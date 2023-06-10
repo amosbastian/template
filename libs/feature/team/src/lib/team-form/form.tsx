@@ -21,12 +21,13 @@ import * as z from "zod";
 
 type FormValues = z.infer<typeof updateTeamSchema>;
 
-type TeamFormProps = {
+export type TeamFormInnerProps = {
   className?: string;
   defaultValues?: Partial<FormValues>;
+  isDisabled?: boolean;
 };
 
-export function TeamForm({ className, defaultValues }: TeamFormProps) {
+export function TeamFormInner({ className, defaultValues, isDisabled }: TeamFormInnerProps) {
   const form = useForm<FormValues>({
     resolver: zodResolver(updateTeamSchema),
     defaultValues,
@@ -42,6 +43,8 @@ export function TeamForm({ className, defaultValues }: TeamFormProps) {
     updateTeam(data);
   }
 
+  const disabled = isUpdatingTeam || isDisabled;
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className={classnames("space-y-8", className)}>
@@ -52,14 +55,14 @@ export function TeamForm({ className, defaultValues }: TeamFormProps) {
             <FormItem>
               <FormLabel>Name</FormLabel>
               <FormControl>
-                <Input placeholder="My team" {...field} />
+                <Input placeholder="My team" disabled={disabled} {...field} />
               </FormControl>
               <FormDescription>This is your team's name</FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
-        <Button type="submit" size="sm" isLoading={isUpdatingTeam}>
+        <Button type="submit" size="sm" isLoading={isUpdatingTeam} disabled={disabled}>
           Update team
         </Button>
       </form>
