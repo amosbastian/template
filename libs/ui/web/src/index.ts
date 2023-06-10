@@ -21,6 +21,7 @@ export * from "./lib/popover/popover";
 export * from "./lib/radio-group/radio-group";
 export * from "./lib/select/select";
 export * from "./lib/sign-out-button/sign-out-button";
+export * from "./lib/skeleton/skeleton";
 export * from "./lib/tabs/tabs";
 export * from "./lib/theme-provider/theme-provider";
 export * from "./lib/toaster/toaster";
