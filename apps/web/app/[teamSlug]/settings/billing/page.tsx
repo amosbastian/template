@@ -1,5 +1,6 @@
-import { PlanCard } from "@template/feature/billing/server";
+import { PlanCard, PlanCardLoading } from "@template/feature/billing/server";
 import { Metadata } from "next";
+import { Suspense } from "react";
 
 export default async function NotificationsSettings() {
   return (
@@ -7,7 +8,9 @@ export default async function NotificationsSettings() {
       <h2 className="mt-10 scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0">
         Billing
       </h2>
-      <PlanCard />
+      <Suspense fallback={<PlanCardLoading />}>
+        <PlanCard />
+      </Suspense>
     </div>
   );
 }

@@ -1,11 +1,11 @@
 import { getAuthentication } from "@template/authentication";
 import { BRAND_NAME } from "@template/configuration";
 import { db, users } from "@template/db";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@template/ui/web";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, Skeleton } from "@template/ui/web";
 import { getPlans } from "@template/utility/payment";
 import { addDays, formatDistance } from "date-fns";
 import { eq } from "drizzle-orm";
-import { PlanForm } from "../plan-form/plan-form";
+import { PlanForm, PlanFormLoading } from "../plan-form/plan-form";
 
 type CardProps = React.ComponentProps<typeof Card>;
 
@@ -64,6 +64,23 @@ export async function PlanCard({ className, ...rest }: CardProps) {
       </CardHeader>
       <CardContent>
         <PlanForm defaultValues={activePlan ? { plan: activePlan?.productSlug } : undefined} plans={plans} />
+      </CardContent>
+    </Card>
+  );
+}
+
+export function PlanCardLoading() {
+  // Added p-5 here because for some reason that makes it look nicer when transitioning from loading to loaded
+  return (
+    <Card>
+      <CardHeader className="pb-5">
+        <CardTitle>Plan</CardTitle>
+        <CardDescription>
+          <Skeleton className="mt-1.5 h-[12px] w-[256px]" />
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <PlanFormLoading />
       </CardContent>
     </Card>
   );
