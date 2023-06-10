@@ -2,7 +2,7 @@ import { getAuthentication } from "@template/authentication";
 import { defineAbilityFor } from "@template/authorisation";
 import { db, teams } from "@template/db";
 import { eq } from "drizzle-orm";
-import { Table } from "./table";
+import { Table, TableLoading } from "./table";
 
 export async function TeamTable() {
   const { user } = await getAuthentication();
@@ -55,6 +55,14 @@ export async function TeamTable() {
   return (
     <div className="mx-auto">
       <Table data={data} userId={user.id} />
+    </div>
+  );
+}
+
+export function TeamTableLoading() {
+  return (
+    <div className="mx-auto">
+      <TableLoading />
     </div>
   );
 }

@@ -11,6 +11,7 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
+  Skeleton,
   toast,
 } from "@template/ui/web";
 import { api } from "@template/utility/trpc-next-client";
@@ -197,4 +198,35 @@ export function Table({ data, userId }: TableProps) {
       }
     />
   );
+}
+
+export function TableLoading() {
+  const columns = React.useMemo(
+    () => [
+      {
+        accessorKey: "user.name",
+        header: "Name",
+        cell: () => {
+          return <Skeleton className="h-4 w-[128px]" />;
+        },
+      },
+      {
+        accessorKey: "user.email",
+        header: "Email",
+        cell: () => {
+          return <Skeleton className="h-4 w-[128px]" />;
+        },
+      },
+      {
+        accessorKey: "role",
+        header: "Role",
+        cell: () => {
+          return <Skeleton className="h-4 w-[128px]" />;
+        },
+      },
+    ],
+    [],
+  );
+
+  return <DataTable columns={columns} data={[{ user: { name: "Name", email: "Email" }, role: "Role" }]} />;
 }

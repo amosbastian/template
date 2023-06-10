@@ -38,7 +38,7 @@ type InviteMembersFormProps = {
   isDisabled: boolean;
 } & CardProps;
 
-export function InviteMembersForm({ className, isDisabled, ...rest }: InviteMembersFormProps) {
+export function InviteMembersFormInner({ className, isDisabled, ...rest }: InviteMembersFormProps) {
   const router = useRouter();
   const params = useParams();
   const teamSlug = params!.teamSlug as string;

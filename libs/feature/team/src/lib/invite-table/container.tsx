@@ -37,3 +37,11 @@ export async function InviteTable() {
     </div>
   );
 }
+
+export function InviteTableLoading() {
+  return (
+    <div className="mx-auto">
+      <Table data={[]} disabled />
+    </div>
+  );
+}

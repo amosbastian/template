@@ -70,10 +70,9 @@ export async function PlanCard({ className, ...rest }: CardProps) {
 }
 
 export function PlanCardLoading() {
-  // Added p-5 here because for some reason that makes it look nicer when transitioning from loading to loaded
   return (
     <Card>
-      <CardHeader className="pb-5">
+      <CardHeader>
         <CardTitle>Plan</CardTitle>
         <CardDescription>
           <Skeleton className="mt-1.5 h-[12px] w-[256px]" />
