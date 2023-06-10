@@ -66,9 +66,10 @@ type ProfileFormProps = {
   className?: string;
   defaultValues?: Partial<FormValues>;
   emailVerified?: Date | null;
+  isDisabled?: boolean;
 };
 
-export function ProfileForm({ className, defaultValues, emailVerified }: ProfileFormProps) {
+export function ProfileFormInner({ className, defaultValues, emailVerified, isDisabled }: ProfileFormProps) {
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues,
@@ -80,14 +81,15 @@ export function ProfileForm({ className, defaultValues, emailVerified }: Profile
     },
   });
 
-  const { mutate: sendEmailVerification } = api.user.sendEmailVerification.useMutation({
-    onSuccess: async () => {
-      toast({ title: "Verification email sent", description: "Please check your inbox" });
-    },
-    onError: (error) => {
-      toast({ title: error.message, variant: "destructive" });
-    },
-  });
+  const { mutate: sendEmailVerification, isLoading: isSendingEmailVerification } =
+    api.user.sendEmailVerification.useMutation({
+      onSuccess: async () => {
+        toast({ title: "Verification email sent", description: "Please check your inbox" });
+      },
+      onError: (error) => {
+        toast({ title: error.message, variant: "destructive" });
+      },
+    });
 
   function onSubmit(data: FormValues) {
     updateUser({
@@ -97,6 +99,8 @@ export function ProfileForm({ className, defaultValues, emailVerified }: Profile
       emailVerified: defaultValues?.email !== data.email ? null : undefined,
     });
   }
+
+  const disabled = isUpdatingUser || isDisabled;
 
   return (
     <Form {...form}>
@@ -108,7 +112,7 @@ export function ProfileForm({ className, defaultValues, emailVerified }: Profile
             <FormItem>
               <FormLabel>Name</FormLabel>
               <FormControl>
-                <Input placeholder="Amos Bastian" {...field} />
+                <Input placeholder="Amos Bastian" disabled={disabled} {...field} />
               </FormControl>
               <FormDescription>
                 This is your public display name. It can be your real name or a pseudonym.
@@ -125,7 +129,12 @@ export function ProfileForm({ className, defaultValues, emailVerified }: Profile
               <FormLabel>Email address</FormLabel>
               <FormControl>
                 <div className="relative">
-                  <Input placeholder="jane@example.com" type="email" {...field} />
+                  <Input
+                    placeholder="jane@example.com"
+                    type="email"
+                    disabled={disabled || isSendingEmailVerification}
+                    {...field}
+                  />
                   <TooltipProvider>
                     <Tooltip>
                       <TooltipTrigger className="absolute right-3 top-3">
@@ -158,7 +167,7 @@ export function ProfileForm({ className, defaultValues, emailVerified }: Profile
             </FormItem>
           )}
         />
-        <Button type="submit" size="sm" isLoading={isUpdatingUser}>
+        <Button type="submit" size="sm" isLoading={isUpdatingUser} disabled={disabled}>
           Update profile
         </Button>
       </form>

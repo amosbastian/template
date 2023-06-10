@@ -1,11 +1,9 @@
-import { getAuthentication } from "@template/authentication";
-import { ProfileForm } from "@template/feature/settings";
+import { ProfileForm, ProfileFormLoading } from "@template/feature/settings/server";
 import { Card, CardContent, CardHeader, CardTitle } from "@template/ui/web";
 import { Metadata } from "next";
+import { Suspense } from "react";
 
 export default async function ProfileSettings() {
-  const { user } = await getAuthentication();
-
   return (
     <div className="flex flex-col gap-4">
       <h2 className="mt-10 scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0">
@@ -16,11 +14,9 @@ export default async function ProfileSettings() {
           <CardTitle>Profile</CardTitle>
         </CardHeader>
         <CardContent>
-          <ProfileForm
-            className="max-w-[360px]"
-            defaultValues={user ?? undefined}
-            emailVerified={user?.emailVerified}
-          />
+          <Suspense fallback={<ProfileFormLoading />}>
+            <ProfileForm />
+          </Suspense>
         </CardContent>
       </Card>
     </div>
