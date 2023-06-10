@@ -1,5 +1,6 @@
-import { ConnectedAccounts } from "@template/feature/settings/server";
+import { ConnectedAccounts, ConnectedAccountsLoading } from "@template/feature/settings/server";
 import { Metadata } from "next";
+import { Suspense } from "react";
 
 export default async function AccountsSettings() {
   return (
@@ -7,7 +8,9 @@ export default async function AccountsSettings() {
       <h2 className="mt-10 scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0">
         Connected accounts
       </h2>
-      <ConnectedAccounts />
+      <Suspense fallback={<ConnectedAccountsLoading />}>
+        <ConnectedAccounts />
+      </Suspense>
     </div>
   );
 }

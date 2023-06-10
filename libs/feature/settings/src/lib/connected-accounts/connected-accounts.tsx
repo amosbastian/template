@@ -8,6 +8,7 @@ import {
   Avatar,
   AvatarFallback,
   AvatarImage,
+  Skeleton,
 } from "@template/ui/web";
 import { eq } from "drizzle-orm";
 import { UserIcon } from "lucide-react";
@@ -142,3 +143,18 @@ const GithubAccordion = async ({ id }: ProviderAccordionProps) => {
     </AccordionItem>
   );
 };
+
+export function ConnectedAccountsLoading() {
+  return (
+    <div>
+      <Accordion type="single" collapsible>
+        <AccordionItem value="email">
+          <AccordionTrigger>
+            <Skeleton className="h-6 w-[256px]" />
+          </AccordionTrigger>
+        </AccordionItem>
+      </Accordion>
+      <AddConnectedAccount providers={[]} />
+    </div>
+  );
+}
