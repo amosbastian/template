@@ -34,11 +34,11 @@ import * as z from "zod";
 type CardProps = React.ComponentProps<typeof Card>;
 type FormValue = z.infer<typeof inviteMembersSchema>;
 
-type InviteMembersFormProps = {
+export type InviteMembersFormInnerProps = {
   isDisabled: boolean;
 } & CardProps;
 
-export function InviteMembersFormInner({ className, isDisabled, ...rest }: InviteMembersFormProps) {
+export function InviteMembersFormInner({ className, isDisabled, ...rest }: InviteMembersFormInnerProps) {
   const router = useRouter();
   const params = useParams();
   const teamSlug = params!.teamSlug as string;

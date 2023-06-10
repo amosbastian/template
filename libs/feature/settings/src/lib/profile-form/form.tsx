@@ -62,14 +62,14 @@ const formSchema = z.object({
 
 type FormValues = z.infer<typeof formSchema>;
 
-type ProfileFormProps = {
+export type ProfileFormInnerProps = {
   className?: string;
   defaultValues?: Partial<FormValues>;
   emailVerified?: Date | null;
   isDisabled?: boolean;
 };
 
-export function ProfileFormInner({ className, defaultValues, emailVerified, isDisabled }: ProfileFormProps) {
+export function ProfileFormInner({ className, defaultValues, emailVerified, isDisabled }: ProfileFormInnerProps) {
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues,

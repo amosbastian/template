@@ -1,13 +1,13 @@
 import { getAuthentication } from "@template/authentication";
 import { defineAbilityFor } from "@template/authorisation";
-import { InviteMembersFormInner } from "./form";
+import { InviteMembersFormInner, InviteMembersFormInnerProps } from "./form";
 
-export async function InviteMembersForm() {
+export async function InviteMembersForm(props: InviteMembersFormInnerProps) {
   const { user } = await getAuthentication();
 
   const ability = await defineAbilityFor(user ? { userId: user.id, teamId: user.activeTeamId } : undefined);
 
-  return <InviteMembersFormInner isDisabled={ability.cannot("invite", "Member")} />;
+  return <InviteMembersFormInner {...props} isDisabled={ability.cannot("invite", "Member")} />;
 }
 
 export function InviteMembersFormLoading() {

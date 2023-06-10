@@ -14,8 +14,8 @@ export default async function ProfileSettings() {
           <CardTitle>Profile</CardTitle>
         </CardHeader>
         <CardContent>
-          <Suspense fallback={<ProfileFormLoading />}>
-            <ProfileForm />
+          <Suspense fallback={<ProfileFormLoading className="max-w-[360px]" />}>
+            <ProfileForm className="max-w-[360px]" />
           </Suspense>
         </CardContent>
       </Card>
