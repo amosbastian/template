@@ -16,6 +16,7 @@ import {
 import { updateTeamSchema } from "@template/utility/schema";
 import { classnames } from "@template/utility/shared";
 import { api } from "@template/utility/trpc-next-client";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
@@ -28,6 +29,7 @@ export type TeamFormInnerProps = {
 };
 
 export function TeamFormInner({ className, defaultValues, isDisabled }: TeamFormInnerProps) {
+  const router = useRouter();
   const form = useForm<FormValues>({
     resolver: zodResolver(updateTeamSchema),
     defaultValues,
@@ -36,6 +38,7 @@ export function TeamFormInner({ className, defaultValues, isDisabled }: TeamForm
   const { mutate: updateTeam, isLoading: isUpdatingTeam } = api.team.update.useMutation({
     onSuccess: () => {
       toast({ title: "Team updated" });
+      router.refresh();
     },
   });
 

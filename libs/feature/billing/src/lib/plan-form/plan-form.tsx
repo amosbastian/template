@@ -29,9 +29,10 @@ type FormValues = z.infer<typeof formSchema>;
 interface PlanFormProps {
   defaultValues?: Partial<FormValues>;
   plans: Awaited<ReturnType<typeof getPlans>>;
+  isDisabled?: boolean;
 }
 
-export function PlanForm({ defaultValues = {}, plans }: PlanFormProps) {
+export function PlanForm({ defaultValues = {}, plans, isDisabled }: PlanFormProps) {
   const interval = "month";
 
   const { mutate, isLoading } = api.billing.checkout.useMutation({
@@ -57,6 +58,8 @@ export function PlanForm({ defaultValues = {}, plans }: PlanFormProps) {
 
   const filteredPlans = plans.filter((plan) => plan.interval === interval);
 
+  const disabled = isLoading || isDisabled;
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="w-2/3 space-y-6">
@@ -68,7 +71,7 @@ export function PlanForm({ defaultValues = {}, plans }: PlanFormProps) {
               <FormLabel className="sr-only">Pick a plan</FormLabel>
               <FormControl>
                 <RadioGroup
-                  disabled={isLoading}
+                  disabled={disabled}
                   onValueChange={field.onChange}
                   defaultValue={field.value}
                   className="flex flex-col space-y-1"
@@ -89,7 +92,7 @@ export function PlanForm({ defaultValues = {}, plans }: PlanFormProps) {
             </FormItem>
           )}
         />
-        <Button isLoading={isLoading} type="submit" size="sm">
+        <Button isLoading={isLoading} disabled={disabled} type="submit" size="sm">
           Update
         </Button>
       </form>

@@ -6,6 +6,7 @@ import { getPlans } from "@template/utility/payment";
 import { addDays, formatDistance } from "date-fns";
 import { eq } from "drizzle-orm";
 import { PlanForm, PlanFormLoading } from "../plan-form/plan-form";
+import { defineAbilityFor } from "@template/authorisation";
 
 type CardProps = React.ComponentProps<typeof Card>;
 
@@ -46,6 +47,8 @@ export async function PlanCard({ className, ...rest }: CardProps) {
       )
     : undefined;
 
+  const ability = await defineAbilityFor(user ? { userId: user.id, teamId: user.activeTeamId } : undefined);
+
   return (
     <Card className={className} {...rest}>
       <CardHeader>
@@ -63,7 +66,11 @@ export async function PlanCard({ className, ...rest }: CardProps) {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <PlanForm defaultValues={activePlan ? { plan: activePlan?.productSlug } : undefined} plans={plans} />
+        <PlanForm
+          defaultValues={activePlan ? { plan: activePlan?.productSlug } : undefined}
+          plans={plans}
+          isDisabled={ability.cannot("create", "Subscription") || ability.cannot("update", "Subscription")}
+        />
       </CardContent>
     </Card>
   );

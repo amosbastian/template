@@ -2,6 +2,7 @@ import { getAuthentication } from "@template/authentication";
 import { db, teams } from "@template/db";
 import { eq } from "drizzle-orm";
 import { TeamFormInner, TeamFormInnerProps } from "./form";
+import { defineAbilityFor } from "@template/authorisation";
 
 export async function TeamForm(props: TeamFormInnerProps) {
   const { user } = await getAuthentication();
@@ -23,7 +24,9 @@ export async function TeamForm(props: TeamFormInnerProps) {
     return null;
   }
 
-  return <TeamFormInner {...props} defaultValues={team} />;
+  const ability = await defineAbilityFor({ userId: user.id, teamId: user.activeTeamId });
+
+  return <TeamFormInner {...props} defaultValues={team} isDisabled={ability.cannot("update", "Team")} />;
 }
 
 export function TeamFormLoading(props: { className?: string }) {
