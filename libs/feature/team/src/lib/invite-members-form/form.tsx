@@ -35,7 +35,7 @@ type CardProps = React.ComponentProps<typeof Card>;
 type FormValue = z.infer<typeof inviteMembersSchema>;
 
 export type InviteMembersFormInnerProps = {
-  isDisabled: boolean;
+  isDisabled?: boolean;
 } & CardProps;
 
 export function InviteMembersFormInner({ className, isDisabled, ...rest }: InviteMembersFormInnerProps) {

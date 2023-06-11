@@ -8,7 +8,7 @@ import { Logo } from "../logo/logo";
 import { UserButton } from "../user-button/user-button";
 
 const navigation = [
-  { name: "Link 1", href: "#" },
+  { name: "Blog", href: "/blog" },
   { name: "Link 2", href: "#" },
   { name: "Link 3", href: "#" },
   { name: "Link 4", href: "#" },
