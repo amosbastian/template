@@ -7,12 +7,13 @@ function extractHostname(url: string): string {
   return parsedUrl.hostname;
 }
 
+// https://www.mailing.run/docs/sending-email
 const transactionalTransport = nodemailer.createTransport({
-  host: "smtp.mailersend.net",
-  port: 587,
+  host: process.env["SMTP_HOST"] as string,
+  port: Number.parseInt(process.env["SMTP_PORT"] as string, 10),
   auth: {
-    user: process.env["MAILER_SEND_USERNAME"],
-    pass: process.env["MAILER_SEND_PASSWORD"],
+    user: process.env["SMTP_USERNAME"],
+    pass: process.env["SMTP_PASSWORD"],
   },
 });
 
