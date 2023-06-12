@@ -98,6 +98,11 @@ You can run Mailing to get a preview of the email in development mode instead of
 npx mailing
 ```
 
+### Thanks to
+
+- [shadcn](https:twitter.com/shadcn)'s amazing example repositories and UI library
+- Copied a lot of design & emails from Vercel
+
 ## License
 
 Licensed under the [MIT license](https://github.com/amosbastian/template/blob/main/LICENSE.md).
