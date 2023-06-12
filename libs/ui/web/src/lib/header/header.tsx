@@ -4,7 +4,7 @@ import { Menu } from "lucide-react";
 import Link from "next/link";
 import { Button, buttonVariants } from "../button/button";
 import { Dialog, DialogContent, DialogTrigger } from "../dialog/dialog";
-import { Logo } from "../logo/logo";
+import { Logo, LogoMark } from "../logo/logo";
 import { UserButton } from "../user-button/user-button";
 
 const navigation = [
@@ -22,7 +22,8 @@ export async function Header() {
       <nav className="mx-auto flex max-w-7xl items-center justify-between gap-x-6 p-6 lg:px-8" aria-label="Global">
         <div className="flex lg:flex-1">
           <Link href="/" className="-m-1.5 p-1.5">
-            <Logo className="h-6 w-auto" />
+            <Logo className="hidden h-6 w-auto lg:block" />
+            <LogoMark className="w-auto scale-50 lg:hidden" />
           </Link>
         </div>
         <div className="hidden lg:flex lg:gap-x-12">
@@ -60,7 +61,7 @@ export async function Header() {
             <DialogContent>
               <div className="flex items-center gap-x-6">
                 <Link href="/" className="-m-1.5 p-1.5">
-                  <Logo className="h-8 w-auto" />
+                  <LogoMark className="h-6 w-auto" />
                 </Link>
               </div>
               <div className="mt-6 flow-root">
@@ -77,7 +78,7 @@ export async function Header() {
                     ))}
                   </div>
                   {user ? null : (
-                    <div className="py-6">
+                    <div className="flex flex-col gap-2">
                       <Link
                         href="/sign-in"
                         className={classnames(buttonVariants({ variant: "secondary", size: "sm" }))}

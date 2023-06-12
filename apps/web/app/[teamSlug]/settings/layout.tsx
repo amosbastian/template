@@ -29,15 +29,15 @@ export default async function SettingsLayout({ children, params }: SettingsLayou
   return (
     <div className="mx-auto max-w-7xl pt-16 lg:flex lg:gap-x-16 lg:px-8">
       <aside className="flex overflow-x-auto border-b py-4 lg:block lg:w-64 lg:flex-none lg:border-0 lg:py-20">
-        <nav className="flex-none px-4 sm:px-6 lg:px-0">
-          <div className="mb-4 flex flex-row gap-x-2 px-3">
+        <nav className="flex flex-none flex-row items-center gap-x-3 gap-y-3 px-4 sm:px-6 lg:flex-col lg:items-stretch lg:px-0">
+          <div className="hidden flex-row gap-x-2 px-3 lg:flex">
             <Avatar className="h-5 w-5">
               <AvatarImage src={`https://avatar.vercel.sh/random.png`} alt={params.teamSlug} />
               <AvatarFallback>AB</AvatarFallback>
             </Avatar>
             <p className="text-muted-foreground text-sm">Team</p>
           </div>
-          <ul role="list" className="mb-6 flex gap-x-3 gap-y-1 whitespace-nowrap lg:flex-col">
+          <ul role="list" className="flex gap-x-3 gap-y-1 whitespace-nowrap lg:mt-1.5 lg:flex-col">
             {teamNavigation.map((item) => (
               <li key={item.name}>
                 <AsideLink href={item.href}>
@@ -47,33 +47,33 @@ export default async function SettingsLayout({ children, params }: SettingsLayou
               </li>
             ))}
           </ul>
+          {user ? (
+            <>
+              <div className="hidden flex-row gap-x-2 px-3 lg:mt-4 lg:flex">
+                <Avatar className="h-5 w-5">
+                  <AvatarImage
+                    src={user.image ?? `https://avatar.vercel.sh/amosbastian.png`}
+                    alt={user.name ?? user.email}
+                  />
+                  <AvatarFallback>{user.name ?? user.email}</AvatarFallback>
+                </Avatar>
+                <p className="text-muted-foreground text-sm">Account</p>
+              </div>
+              <ul role="list" className="flex gap-x-3 gap-y-1 whitespace-nowrap lg:mt-1.5 lg:flex-col">
+                {accountNavigation.map((item) => (
+                  <li key={item.name}>
+                    <AsideLink href={item.href}>
+                      <item.icon className="mr-4 h-4 w-4 shrink-0" aria-hidden="true" />
+                      {item.name}
+                    </AsideLink>
+                  </li>
+                ))}
+              </ul>
+            </>
+          ) : null}
         </nav>
-        {user ? (
-          <>
-            <div className="mb-4 flex flex-row gap-x-2 px-3">
-              <Avatar className="h-5 w-5">
-                <AvatarImage
-                  src={user.image ?? `https://avatar.vercel.sh/amosbastian.png`}
-                  alt={user.name ?? user.email}
-                />
-                <AvatarFallback>{user.name ?? user.email}</AvatarFallback>
-              </Avatar>
-              <p className="text-muted-foreground text-sm">Account</p>
-            </div>
-            <ul role="list" className="mb-6 flex gap-x-3 gap-y-1 whitespace-nowrap lg:flex-col">
-              {accountNavigation.map((item) => (
-                <li key={item.name}>
-                  <AsideLink href={item.href}>
-                    <item.icon className="mr-4 h-4 w-4 shrink-0" aria-hidden="true" />
-                    {item.name}
-                  </AsideLink>
-                </li>
-              ))}
-            </ul>
-          </>
-        ) : null}
       </aside>
-      <main className="px-4 py-16 sm:px-6 lg:flex-auto lg:px-0 lg:py-20">
+      <main className="px-4 py-8 sm:px-6 lg:flex-auto lg:px-0 lg:py-20">
         <div className="mx-auto max-w-2xl space-y-16 sm:space-y-20 lg:mx-0 lg:max-w-none">{children}</div>
       </main>
     </div>
