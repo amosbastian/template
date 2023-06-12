@@ -2,6 +2,8 @@
 
 A Next.js 13 application with authentication and payments, built with PlanetScale, Drizzle ORM, Lucia, Tailwind and LemonSqueezy
 
+https://github.com/amosbastian/template/assets/9199433/ec672969-dd51-42ee-9dc6-4c3b69877e35
+
 ## About this project
 
 I used this as a way to play around with the new Next.js app directory, so it is more than likely that things aren't optimal / implemented correctly, so **keep this in mind if you decide to fork it and use it for a real app**
