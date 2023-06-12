@@ -4,9 +4,9 @@ A Next.js 13 application with authentication and payments, built with PlanetScal
 
 ## About this project
 
-I used this as a way to play around with the new Next.js app directory, so it is more than likely that things aren't optimal / implemented correctly, so **keep this in mind if you decide to fork it**
+I used this as a way to play around with the new Next.js app directory, so it is more than likely that things aren't optimal / implemented correctly, so **keep this in mind if you decide to fork it and use it for a real app**
 
-If you encounter something that's broken, you can message me [@amosbastian](https://twitter.com/amosbastian) or create an issue here
+If you encounter something that's broken, you can message me [@amosbastian](https://twitter.com/amosbastian) or create an issue here. Contributions are also very much welcome! 😁
 
 ## Features
 
@@ -31,6 +31,7 @@ A list of things not working or implemented right now:
 1. Sometimes MySQL will complain about too many connections: restart your Next.js app and it will go away
 2. Pricing plans currently aren't synced to the database, which would be ideal
 3. RBAC might not work as intended and I haven't tested it enough
+4. Not using tRPC in RSCs, so not sure if that works properly
 
 ## Running Locally
 
@@ -102,6 +103,7 @@ npx mailing
 
 - [shadcn](https:twitter.com/shadcn)'s amazing example repositories and UI library
 - Copied a lot of design & emails from Vercel
+- Copied tRPC stuff from [@ploskovytskyy's repository](https://github.com/ploskovytskyy/next-app-router-trpc-drizzle-planetscale-edge)
 
 ## License
 
