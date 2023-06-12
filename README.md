@@ -32,6 +32,7 @@ A list of things not working or implemented right now:
 2. Pricing plans currently aren't synced to the database, which would be ideal
 3. RBAC might not work as intended and I haven't tested it enough
 4. Not using tRPC in RSCs, so not sure if that works properly
+5. [Importing MJML breaks the new app router](https://github.com/vercel/next.js/issues/50042), which is why we put the email sending part in the `/pages` directory
 
 ## Running Locally
 
