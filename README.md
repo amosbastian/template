@@ -102,6 +102,24 @@ You can run Mailing to get a preview of the email in development mode instead of
 npx mailing
 ```
 
+### Payments
+
+We are using LemonSqueezy for payments and syncing subscriptions via a webhook (`lemonsqueezy/route.ts`). If you want to test this locally, then you will need to use something like ngrok to expose the webhook:
+
+```bash
+npx ngrok http 4200
+```
+
+And then add the webhook URL (e.g. `https://abc.eu.ngrok.io/api/lemonsqueezy`) to [your webhook settings in LemonSqueezy](https://app.lemonsqueezy.com/settings/webhooks)
+
+### Asset generation
+
+To generate assets (favicon etc.) with your own logo you can replace `logo-mark.svg` with your and then use the following command
+
+```bash
+npm run asset-generator
+```
+
 ### Thanks to
 
 - [shadcn](https:twitter.com/shadcn)'s amazing example repositories and UI library
