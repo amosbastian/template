@@ -41,8 +41,6 @@ const RolePopover = ({ ability, role, teamId, userId }: RolePopoverProps) => {
   const [isOpen, setIsOpen] = React.useState<boolean>(false);
   const router = useRouter();
 
-  console.log({ ability });
-
   const { mutate: removeMember, isLoading: isRemoving } = api.member.remove.useMutation({
     onSuccess: () => {
       toast({ title: "Member removed" });

@@ -20,6 +20,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         invitedByName={invitedByName}
         name={name}
         inviteLink={inviteLink}
+        teamImage={teamImage}
+        userImage={userImage}
       />
     ),
   });

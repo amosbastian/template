@@ -101,7 +101,7 @@ export const TeamInvitation = ({
                 <img
                   height={64}
                   width={64}
-                  src={teamImage ?? "https://avatar.vercel.sh/random.png"}
+                  src={teamImage ?? "https://avatar.vercel.sh/template.png"}
                   alt=""
                   style={{ borderRadius: "50%" }}
                 />

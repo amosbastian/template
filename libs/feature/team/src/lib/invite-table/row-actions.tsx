@@ -34,7 +34,6 @@ export function InviteTableRowActions({ disabled, token }: InviteTableRowActions
     mutate({ token });
   };
 
-  console.log({ isLoading });
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild disabled={disabled || isLoading}>
