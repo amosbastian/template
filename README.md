@@ -24,7 +24,7 @@ If you encounter something that's broken, you can message me [@amosbastian](http
 - Email verification
 - Teams with team member management
 - RBAC using [**CASL**](https://github.com/stalniy/casl)
-- Emails using [**Mailing**](https://github.com/sofn-xyz/mailing)
+- Emails using [**Mailing**](https://github.com/sofn-xyz/mailing) and [Resend](https://resend.com)
 
 ## Known Issues
 
@@ -101,6 +101,8 @@ You can run Mailing to get a preview of the email in development mode instead of
 ```bash
 npx mailing
 ```
+
+In production it will use [Resend](resend.com), so you will need to get an API key and verify your domain.
 
 ### Payments
 

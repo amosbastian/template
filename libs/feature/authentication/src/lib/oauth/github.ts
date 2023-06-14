@@ -26,7 +26,7 @@ export async function githubOauth(request: Request) {
     if (!existingUser) {
       currentUser = await db.query.users
         .findFirst({
-          where: eq(users.email, providerUser.email),
+          where: eq(users.email, providerUser.email!),
         })
         .execute();
 
