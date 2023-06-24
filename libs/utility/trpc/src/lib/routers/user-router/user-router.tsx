@@ -25,7 +25,7 @@ export const userRouter = router({
   sendEmailVerification: protectedProcedure.mutation(async ({ ctx }) => {
     const { user, token } = await createEmailVerificationToken(ctx.session.user.id);
     console.log(`${BASE_URL}/api/verify-email/${token}`);
-    await fetch(`${BASE_URL}/api/verification-email`, {
+    await fetch(`${BASE_URL}/api/email-verification`, {
       method: "POST",
       body: JSON.stringify({
         email: user.email,
